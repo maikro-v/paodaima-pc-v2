@@ -1,0 +1,26 @@
+{
+  "name": "paodaima-pc-v2",
+  "version": "1.0.0",
+  "description": "paodaima技术博客",
+  "author": "hsgzhuanyong",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.10.3",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "cross-env": "^5.2.0",
+    "element-ui": "^2.4.11",
+    "express": "^4.16.4",
+    "node-sass": "^4.14.1",
+    "nuxt": "^2.0.0",
+    "sass-loader": "^8.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

@@ -1,0 +1,8 @@
+$textColorPrimary: #a593e0;
+$titleColor: #566270;
+$textColor: #86858f;
+
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
