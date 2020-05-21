@@ -23,20 +23,22 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '@/styles/element.scss',
-    '@/styles/index.scss'
+    '~/styles/element.scss',
+    '~/styles/index.scss'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui.js',
-    '@/plugins/axios.js'
+    '~/plugins/element-ui',
+    '~/plugins/request'
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    // Doc: https://github.com/nuxt-community/eslint-module
+    '@nuxtjs/eslint-module'
   ],
   /*
   ** Nuxt.js modules
@@ -44,6 +46,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Axios module configuration
@@ -56,7 +59,7 @@ module.exports = {
    * 跨域处理
    */
   proxy: {
-    '/api/': 'http://maikro.cn/api',
+    '/api/': 'http://maikro.cn/api'
   },
   /*
   ** Build configuration
@@ -69,10 +72,7 @@ module.exports = {
     extend (config, ctx) {
     }
   },
-  modules: [
-    '@nuxtjs/style-resources'
-  ],
   styleResources: {
-    scss: './styles/global.scss',
+    scss: './styles/global.scss'
   }
 }

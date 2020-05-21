@@ -1,4 +1,5 @@
 import request from './request'
+const createRequest = new Request()
 
 export const list = (data) => {
   return request({
@@ -7,7 +8,6 @@ export const list = (data) => {
     data
   })
 }
-
 
 export const tagList = (data) => {
   return request({

@@ -1,6 +1,6 @@
-# paodaima-pc-v2
+# paodaima-pc-v3
 
-> paodaima技术博客
+> My ultimate Nuxt.js project
 
 ## Build Setup
 
