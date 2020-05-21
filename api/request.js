@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/plugins/axios'
 
 export default (options) => {
   let { url, method = 'get', data } = options
@@ -13,6 +13,6 @@ export default (options) => {
       params = data
     }
   }
-  
+
   return axios[method](url, params)
 }

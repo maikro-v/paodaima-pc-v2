@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import * as classify from '@/api/classify'
 export default {
-  layout: 'common'
+  layout: 'common',
+  async fetch ({ store, params }) {
+    let { data } = await classify.list()
+    console.log(data)
+  }
 }
 </script>
 
