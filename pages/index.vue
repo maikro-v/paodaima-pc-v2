@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  layout: 'common'
+  layout: 'common',
+  async asyncData({ app }) {
+    // console.log(await app.$api.classify.list())
+    return {}
+  }
 }
 </script>
 

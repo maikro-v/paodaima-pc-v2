@@ -31,7 +31,7 @@ module.exports = {
   */
   plugins: [
     '~/plugins/element-ui',
-    '~/plugins/request'
+    '~/plugins/axios'
   ],
   /*
   ** Nuxt.js dev-modules

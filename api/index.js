@@ -1,5 +1,5 @@
-import request from './request'
+import Classify from './Classify'
 
-export default (axios) => {
-  const createRequest = request(axios)
-}
+export default (axios) => ({
+  classify: new Classify(axios)
+})
