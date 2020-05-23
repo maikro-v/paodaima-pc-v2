@@ -1,4 +1,4 @@
-export default class Api {
+export default class Request {
   constructor(http) {
     this.http = http
   }
@@ -11,28 +11,24 @@ export default class Api {
         return reject(new Error('非法的method参数，method需在get,post,delete,put范围内'))
       }
       if (requestMethod === 'get' || requestMethod === 'delete') {
-        console.log('get请求')
-        return this._requestGet(url, data, header).then(res => {
-          console.log(res)
-        })
+        return this.get(url, data, header).then(resolve).catch(reject)
       } else if (requestMethod === 'post' || requestMethod === 'put') {
-        console.log('post请求')
-        // return this._requestPost(url, data, header)
+        return this.post(url, data, header).then(resolve).catch(reject)
       } else {
         return reject(new Error('非法的method参数，method需在get,post,delete,put范围内'))
       }
     })
   }
 
-  _requestGet(url, data, header) {
+  get(url, data, header) {
     return this.http.get(url, { params: data, header })
-       .then(res => Promise.resolve(res))
-       .catch(err => Promise.reject(err))
+      .then(res => Promise.resolve(res))
+      .catch(err => Promise.reject(err))
   }
 
-  _requestPost(url, data, header) {
+  post(url, data, header) {
     return this.http.post(url, data, header)
-       .then(res => Promise.resolve(res))
-       .catch(err => Promise.reject(err))
+      .then(res => Promise.resolve(res))
+      .catch(err => Promise.reject(err))
   }
 }

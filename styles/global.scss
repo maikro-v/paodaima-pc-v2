@@ -1,8 +1,47 @@
-$textColorPrimary: #a593e0;
+$colorPrimary: rgba(170, 152, 230, 1);
 $titleColor: #566270;
 $textColor: #86858f;
 
+$titleFontSize: 16px;
+$mainFontSize: 14px;
+$assistFontSize: 12px;
+
+$transition: all .2s ease;
+
+$border: 1px solid #dddddd;
+
+// 容器
 @mixin container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+// 标题
+@mixin fontTitle {
+  font-size: $titleFontSize;
+  font-weight: bold;
+  color: #566270;
+}
+
+// 正文
+@mixin fontMain {
+  font-size: $mainFontSize;
+  color: #86858F;
+  font-weight: normal;
+}
+
+// 辅助块
+@mixin fontAssist {
+  font-size: $assistFontSize;
+  color: #999999;
+  font-weight: normal;
+}
+
+// 阴影
+@mixin shadow {
+  box-shadow: 0 0 8px rgba(143, 134, 193, 0.2)
+}
+
+@mixin card {
+  border-radius: 4px;
 }

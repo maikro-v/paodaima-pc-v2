@@ -1,6 +1,75 @@
+@import './layout.scss';
+@import './fonts/iconfont.css';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   line-height: 1;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+    border-radius: 4px;
+    box-shadow: 0 0 2px rgba($colorPrimary, 1) inset;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($colorPrimary, .6);
+    border-radius: 4px;
+  }
+}
+
+html,
+body {
+  background-color: #f4f9f1;
+  color: #566270;
+  min-height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #333333;
+  &:hover {
+    opacity: .8;
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-over {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-overs {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.lf {
+  float: left;
+}
+
+.rf {
+  float: right;
+}
+
+.clear::after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
 }

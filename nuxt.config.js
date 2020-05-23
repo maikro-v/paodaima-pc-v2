@@ -23,15 +23,18 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '~/styles/element.scss',
-    '~/styles/index.scss'
+    '@/styles/element.scss',
+    '@/styles/index.scss'
   ],
+  styleResources: {
+    scss: './styles/global.scss'
+  },
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/element-ui',
-    '~/plugins/axios'
+    '@/plugins/element-ui',
+    '@/plugins/axios'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -59,7 +62,7 @@ module.exports = {
    * 跨域处理
    */
   proxy: {
-    '/api/': 'http://maikro.cn/api'
+    '/api': 'http://maikro.cn'
   },
   /*
   ** Build configuration
@@ -71,8 +74,5 @@ module.exports = {
     */
     extend (config, ctx) {
     }
-  },
-  styleResources: {
-    scss: './styles/global.scss'
   }
 }

@@ -1,5 +1,5 @@
 const TOKEN = 'token'
 
-function getToken() {
+export function getToken() {
   return window.localStorage.getItem(TOKEN)
 }
