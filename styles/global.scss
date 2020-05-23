@@ -1,4 +1,4 @@
-$colorPrimary: rgba(170, 152, 230, 1);
+$primary: rgba(170, 152, 230, 1);
 $titleColor: #566270;
 $textColor: #86858f;
 
@@ -13,7 +13,8 @@ $border: 1px solid #dddddd;
 // 容器
 @mixin container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 // 标题

@@ -65,7 +65,7 @@ export default {
         this.articleList.push(...data.data)
         return Promise.resolve()
       } catch (err) {
-        console.log(err)
+        // console.log(err)
         // this.$message.error(err)
       }
     },
@@ -83,7 +83,6 @@ export default {
         this.getData()
         this.page++
         this.canScroll = true
-        console.log('滚动加载')
       }
     }
   }

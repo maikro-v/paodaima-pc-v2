@@ -67,13 +67,13 @@ export default {
       display: block;
       width: 20px;
       height: 2px;
-      background: $colorPrimary;
+      background: $primary;
       transform: translateX(-50%);
       border-radius: 1px;
       transition: $transition;
     }
     &:hover {
-      color: $colorPrimary;
+      color: $primary;
       &::before {
         bottom: 2px;
       }
