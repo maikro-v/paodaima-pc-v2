@@ -47,11 +47,14 @@
             </el-badge>
           </div>
         </el-card>
+        <side-menu title="相关文章" :show-footer="false" class="mt">
+          <article-item v-for="item in articleList" :key="item.id" :data="item" :show-image="false" class="recommend" />
+        </side-menu>
       </el-col>
       <el-col class="hidden-sm-and-down" :lg="6" :xl="6">
         <!-- 作者信息 -->
         <article-author />
-        <side-menu title="相关文章" :show-footer="false" class="side__list">
+        <side-menu title="相关文章" :show-footer="false" class="mt">
           <side-menu-item>相关文章相关文章相关文章相关文章相关文章相关文章相关文章相关文章相关文章相关文章相关文章</side-menu-item>
         </side-menu>
       </el-col>
@@ -66,19 +69,30 @@ import articleComment from '@/components/article-comment'
 import articleCommentList from '@/components/article-comment-list'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
+import articleItem from '@/components/article-item'
 export default {
   layout: 'common',
-  components: { articleAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem },
-  // asyncData({ params }) {
-  // },
+  components: { articleAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem },
+  async asyncData({ app }) {
+    let page = 1
+    try {
+      const { data } = await app.$api.article.page({
+        page
+      })
+      return {
+        page: ++page,
+        totalPage: data.page.total_page,
+        articleList: data.data
+      }
+    } catch (err) {
+      return err
+    }
+  },
   data() {
     return {
-      articlePage: {
-        current: 1,
-        totalPage: 0
-      },
-      input2: '',
-      commentList: []
+      page: 1,
+      totalPage: 0,
+      articleList: []
     }
   },
   computed: {
@@ -115,6 +129,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .mt {
+    margin-top: 16px;
+  }
   .detail{
    position: relative;
    margin-top: 30px;
@@ -170,5 +187,9 @@ export default {
   }
   .side__list {
     margin-top: 16px;
+  }
+  /deep/ .recommend.article-item {
+    border-color: transparent !important;
+    border-bottom-color: #EBEEF5 !important;
   }
 </style>

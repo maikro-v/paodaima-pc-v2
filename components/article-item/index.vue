@@ -1,15 +1,17 @@
 <template>
-  <el-card class="article-item" shadow="hover" @click.native="toDetail">
+  <el-card class="article-item" shadow="hover" :body-style="bodyStyle">
     <el-row type="flex" justify="center" class="header">
-      <el-col class="header__title">
-        <el-tag
-          v-if="data.classify"
-          effect="dark"
-          size="mini"
-        >
-          {{ data.classify }}
-        </el-tag>
-        {{ data.title }}
+      <el-col>
+        <h5 class="header__title" @click="toDetail">
+          <el-tag
+            v-if="data.classify"
+            effect="dark"
+            size="mini"
+          >
+            {{ data.classify }}
+          </el-tag>
+          {{ data.title }}
+        </h5>
       </el-col>
       <el-popover
         v-if="isEdit"
@@ -26,13 +28,13 @@
             删除
           </el-button>
           <el-button type="text" size="small" class="more__block">
-            隐藏
+            下架
           </el-button>
         </div>
         <i slot="reference" class="el-icon-more more__icon" />
       </el-popover>
     </el-row>
-    <el-row type="flex" class="main">
+    <el-row type="flex" class="main" @click.native="toDetail">
       <el-col class="row column justify-between">
         <p class="text-overs main__text">
           {{ data.description }}
@@ -43,7 +45,7 @@
           </tag>
         </div>
       </el-col>
-      <img :src="data.image" :alt="data.title" class="main__img">
+      <img v-if="showImage" :src="data.image" :alt="data.title" class="main__img">
     </el-row>
     <el-row type="flex" align="middle" class="footer">
       <el-col :span="12">
@@ -84,6 +86,16 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    showImage: {
+      type: Boolean,
+      default: true
+    },
+    bodyStyle: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   computed: {
@@ -103,7 +115,7 @@ export default {
       // })
     },
     toDetail() {
-      this.$router.push(`/article/detail/${this.data.id}`)
+      this.$emit('on-click', this.data)
     }
   }
 }
@@ -111,12 +123,15 @@ export default {
 
 <style lang="scss" scoped>
   .article-item{
-    cursor: pointer;
-    margin-bottom: 10px;
+    & + & {
+      margin-top: 10px;
+    }
   }
   .header {
     &__title {
+      display: inline-block;
       @include fontTitle;
+      cursor: pointer;
     }
   }
 
@@ -139,7 +154,8 @@ export default {
   }
   .main {
     @include fontMain;
-    margin-top: 20px;
+    padding-top: 20px;
+    cursor: pointer;
     &__text {
       line-height: 1.4;
       text-align: justify;

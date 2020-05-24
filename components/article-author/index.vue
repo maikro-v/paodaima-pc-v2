@@ -11,7 +11,7 @@
       <i class="iconfont icon-github contact__icon" />
       <i class="iconfont icon-email contact__icon" />
     </div>
-    <el-card :body-style="{ padding: 0 }" class="footer">
+    <el-card :body-style="{ padding: 0 }" class="statis-wrap">
       <el-row type="flex" align="middle" class="statis">
         <el-col :span="12" class="text-center">
           <p class="statis__label">
@@ -31,6 +31,11 @@
         </el-col>
       </el-row>
     </el-card>
+    <!-- <footer class="text-center footer">
+      <el-button type="primary" size="small">
+        添加文章
+      </el-button>
+    </footer> -->
   </el-card>
 </template>
 
@@ -75,11 +80,11 @@ export default {
       }
     }
   }
-  .footer {
-    margin-top: 20px;
-  }
   .statis {
     height: 70px;
+    &-wrap {
+      margin-top: 20px;
+    }
     &__label {
       @include fontMain;
     }
@@ -88,5 +93,8 @@ export default {
       font-size: 18px;
       margin-top: 6px;
     }
+  }
+  .footer {
+    padding: 10px 0;
   }
 </style>

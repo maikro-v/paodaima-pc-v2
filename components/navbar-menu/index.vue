@@ -1,7 +1,7 @@
 <template>
   <el-menu
     router
-    default-active="1"
+    :default-active="_active"
     class="navbar-menu"
     mode="horizontal"
     background-color="#566270"
@@ -29,6 +29,9 @@ export default {
   computed: {
     _menuData() {
       return this.data
+    },
+    _active() {
+      return this.$route.params.type ? this.$route.params.type.toString() : '0'
     }
   },
   methods: {

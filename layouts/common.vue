@@ -3,12 +3,11 @@
     <navbar>
       <el-row type="flex" align="middle" class="navbar-wrap">
         <logo />
-        <el-col>
-          <navbar-menu class="menu" :data="menuNavList" />
+        <el-col class="menu col">
+          <navbar-menu :data="menuNavList" />
         </el-col>
-        <span>
-          <el-button type="primary" size="mini">发表文章</el-button>
-        </span>
+        <a class="nav__item">登录</a>
+        <user class="user-wrap" />
       </el-row>
     </navbar>
     <nuxt />
@@ -19,8 +18,9 @@
 import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'
+import user from '@/components/user'
 export default {
-  components: { navbar, logo, navbarMenu },
+  components: { navbar, logo, navbarMenu, user },
   data() {
     return {
       menuNavList: []
@@ -32,6 +32,10 @@ export default {
   methods: {
     getMenuNav() {
       this.$api.classify.list().then(({ data }) => {
+        data.unshift({
+          name: '首页',
+          id: 0
+        })
         this.menuNavList = data
       }).catch((err) => {
         this.$message.error(err)
@@ -48,7 +52,12 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-  /deep/ .menu {
+  .menu {
     margin-left: 30px;
+  }
+  .nav__item {
+    display: inline-block;
+    cursor: pointer;
+    color: #e0e3da;
   }
 </style>

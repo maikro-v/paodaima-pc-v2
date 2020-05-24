@@ -1,13 +1,10 @@
 <template>
-  <div class="home">
-    <header class="banner">
-      <img src="@/assets/svg/1.svg" class="banner__img">
-    </header>
+  <div class="article-type">
     <main class="main">
       <el-row type="flex" :gutter="14">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
-            <article-item v-for="item in articleList" :key="item.id" :data="item" @on-click="toArticleDetail(item.id)" />
+            <article-item v-for="item in articleList" :key="item.id" :data="item" />
           </section>
         </el-col>
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
@@ -84,29 +81,14 @@ export default {
         this.page++
         this.canScroll = true
       }
-    },
-    toArticleDetail(id) {
-      this.$router.push({
-        name: 'article-detail-id',
-        params: {
-          id
-        }
-      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .banner {
-    height: 400px;
-    padding: 10px 0;
-    &__img {
-      width: 100%;
-      height: 100%;
-      object-position: center;
-      object-fit: contain;
-    }
+  .article-type {
+    margin-top: 20px;
   }
   .main {
     width: 100%;

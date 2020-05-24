@@ -1,20 +1,15 @@
 <template>
-  <div class="home">
-    <header class="banner">
-      <img src="@/assets/svg/1.svg" class="banner__img">
-    </header>
+  <div class="my">
     <main class="main">
       <el-row type="flex" :gutter="14">
+        <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
+          <!-- 作者信息 -->
+          <article-author />
+        </el-col>
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
-            <article-item v-for="item in articleList" :key="item.id" :data="item" @on-click="toArticleDetail(item.id)" />
+            <article-item v-for="item in articleList" :key="item.id" :data="item" is-edit :show-image="false" />
           </section>
-        </el-col>
-        <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
-          <aside>
-            <hot-article class="side-menu__list" />
-            <side-menu title="推荐" class="side-menu__list" />
-          </aside>
         </el-col>
       </el-row>
     </main>
@@ -23,12 +18,11 @@
 
 <script>
 import articleItem from '@/components/article-item'
-import sideMenu from '@/components/side-menu'
-import hotArticle from '@/components/hot-article'
+import articleAuthor from '@/components/article-author'
 import { throttle } from '@/libs/tools'
 export default {
   layout: 'common',
-  components: { articleItem, sideMenu, hotArticle },
+  components: { articleItem, articleAuthor },
   async asyncData({ app }) {
     let page = 1
     try {
@@ -84,29 +78,14 @@ export default {
         this.page++
         this.canScroll = true
       }
-    },
-    toArticleDetail(id) {
-      this.$router.push({
-        name: 'article-detail-id',
-        params: {
-          id
-        }
-      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .banner {
-    height: 400px;
-    padding: 10px 0;
-    &__img {
-      width: 100%;
-      height: 100%;
-      object-position: center;
-      object-fit: contain;
-    }
+  .my {
+    margin-top: 20px;
   }
   .main {
     width: 100%;

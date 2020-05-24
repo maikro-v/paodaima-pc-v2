@@ -1,5 +1,5 @@
 <template>
-  <el-menu-item :index="data.id.toString()">
+  <el-menu-item :index="data.id.toString()" @click="toArticleList">
     {{ data.name }}
   </el-menu-item>
 </template>
@@ -11,6 +11,22 @@ export default {
     data: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    toArticleList() {
+      if (this.data.id === 0) {
+        this.$router.push({
+          name: 'index'
+        })
+      } else {
+        this.$router.push({
+          name: 'article-type',
+          params: {
+            type: this.data.id
+          }
+        })
+      }
     }
   }
 }
