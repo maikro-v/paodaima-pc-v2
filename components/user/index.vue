@@ -2,10 +2,10 @@
   <el-dropdown trigger="hover" :show-timeout="50" @command="action">
     <div class="user row align-center">
       <div class="col">
-        <el-avatar size="medium" />
+        <el-avatar :src="_avatar" size="medium" />
       </div>
       <div class="user__name text-over">
-        用户名
+        {{ _userName }}
       </div>
     </div>
     <el-dropdown-menu slot="dropdown">
@@ -24,10 +24,28 @@
 
 <script>
 export default {
+  props: {
+    avatar: {
+      type: String,
+      default: ''
+    },
+    userName: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    _avatar() {
+      return this.avatar
+    },
+    _userName() {
+      return this.userName
+    }
+  },
   methods: {
     action(command) {
       if (command === 'logout') {
-        console.log('退出登录')
+        this.$emit('on-logout')
       } else {
         this.$router.push({
           name: command

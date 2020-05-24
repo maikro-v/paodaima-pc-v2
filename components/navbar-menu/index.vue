@@ -31,7 +31,12 @@ export default {
       return this.data
     },
     _active() {
-      return this.$route.params.type ? this.$route.params.type.toString() : '0'
+      const type = this.$route.params.type
+      if (type) {
+        return String(type)
+      } else {
+        return ''
+      }
     }
   },
   methods: {

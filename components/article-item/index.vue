@@ -57,17 +57,17 @@
           <i class="iconfont icon-xiaoxi footer__action_icon" />
           <span class="footer__action_number">{{ data.comment_count }}</span>
         </span>
-        <span class="footer__action">
-          <i class="iconfont icon-dianzan footer__action_icon" />
-          <span class="footer__action_number">15</span>
-        </span>
+<!--        <span class="footer__action">-->
+<!--          <i class="iconfont icon-dianzan footer__action_icon" />-->
+<!--          <span class="footer__action_number">{{ data.link_count }}</span>-->
+<!--        </span>-->
         <span class="footer__action">
           <i class="iconfont icon-yulan footer__action_icon" />
           <span class="footer__action_number">{{ data.visitor_count }}</span>
         </span>
-        <span class="footer__action">
-          <i class="iconfont icon-fenxiang footer__action_icon" />
-        </span>
+<!--        <span class="footer__action">-->
+<!--          <i class="iconfont icon-fenxiang footer__action_icon" />-->
+<!--        </span>-->
       </el-col>
     </el-row>
   </el-card>

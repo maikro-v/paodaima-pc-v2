@@ -4,7 +4,12 @@
       <el-row type="flex" :gutter="14">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
-            <article-item v-for="item in articleList" :key="item.id" :data="item" />
+            <template v-if="articleList && articleList.length > 0">
+              <article-item v-for="item in articleList" :key="item.id" :data="item" />
+            </template>
+            <template v-else>
+              <empty />
+            </template>
           </section>
         </el-col>
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
@@ -22,14 +27,17 @@
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import hotArticle from '@/components/hot-article'
-import { throttle } from '@/libs/tools'
+import empty from '@/components/empty'
+import scroll from '@/mixins/scroll'
 export default {
   layout: 'common',
-  components: { articleItem, sideMenu, hotArticle },
-  async asyncData({ app }) {
+  mixins: [scroll],
+  components: { articleItem, sideMenu, hotArticle, empty },
+  async asyncData({ app, params }) {
     let page = 1
     try {
       const { data } = await app.$api.article.page({
+        classify_id: params.type,
         page
       })
       return {
@@ -43,20 +51,14 @@ export default {
   },
   data() {
     return {
-      page: 1,
-      totalPage: 0,
-      articleList: [],
-      canScroll: true
+      articleList: []
     }
-  },
-  mounted() {
-    const scroll = throttle(this.handleScroll, 100)
-    window.onscroll = scroll
   },
   methods: {
     async getData() {
       try {
         const { data } = await this.$api.article.page({
+          classify_id: this.$route.params.type,
           page: this.page
         })
         this.articleList.push(...data.data)
@@ -66,21 +68,8 @@ export default {
         // this.$message.error(err)
       }
     },
-    handleScroll() {
-      if (!this.canScroll || this.page > this.countPage) {
-        return false
-      }
-      const distance = 20 // 触发加载的距离阈值
-      const contentHeight = document.documentElement.scrollHeight
-      const viewHeight = document.documentElement.clientHeight
-      const scrollTop = document.documentElement.scrollTop
-
-      if (viewHeight + scrollTop >= contentHeight - distance) {
-        this.canScroll = false
-        this.getData()
-        this.page++
-        this.canScroll = true
-      }
+    onScrollLoad() {
+      return this.getData()
     }
   }
 }

@@ -70,7 +70,7 @@ export default {
       }
     },
     handleScroll() {
-      if (!this.canScroll || this.page > this.countPage) {
+      if (!this.canScroll || this.page > this.totalPage) {
         return false
       }
       const distance = 20 // 触发加载的距离阈值

@@ -3,7 +3,7 @@
     title="登录"
     width="360px"
     :visible.sync="_value"
-    :before-close="handleClose"
+    :before-close="handleBeforeClose"
   >
     <el-form ref="form" :model="form" :rules="rules" class="form">
       <el-form-item prop="email">
@@ -64,7 +64,7 @@ export default {
     }
   },
   methods: {
-    handleClose() {
+    handleBeforeClose() {
       this._value = false
     },
     handleSubmit(name) {

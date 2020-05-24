@@ -6,7 +6,7 @@
         <el-col class="menu col">
           <navbar-menu :data="menuNavList" />
         </el-col>
-        <user v-if="hasLogin" class="user-wrap" />
+        <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
         <a v-else class="nav__item" @click="toLogin">登录</a>
       </el-row>
     </navbar>
@@ -17,7 +17,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { setToken } from '@/libs/utils'
+import { getToken } from '../libs/utils'
 import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'
@@ -32,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['hasLogin']),
+    ...mapState('user', ['hasLogin', 'name', 'avatar']),
     canShowLogin: {
       get() {
         return this.$store.state.canShowLogin
@@ -44,10 +44,16 @@ export default {
   },
   created() {
     this.getMenuNav()
+    this.setUserInfo()
   },
   methods: {
     ...mapMutations(['SET_CAN_SHOW_LOGIN']),
-    ...mapActions('user', ['login']),
+    ...mapActions('user', ['login', 'getUserInfo', 'logout']),
+    setUserInfo() {
+      if (getToken() && !this.hasLogin) {
+        this.getUserInfo()
+      }
+    },
     getMenuNav() {
       this.$api.classify.list().then(({ data }) => {
         data.unshift({
@@ -64,16 +70,20 @@ export default {
     },
     handleSubmit({ email, password }) {
       this.loginLoading = true
-      this.$api.user.login({
+      this.login({
         email,
         password
-      }).then(({ data }) => {
-        setToken(data)
+      }).then((data) => {
         this.$message.success('登录成功')
-        // window.location.reload()
+        window.location.reload()
       }).catch((err) => {
         this.$message.error(err)
+      }).finally(() => {
+        this.loginLoading = false
       })
+    },
+    handlerLogout() {
+      this.logout()
     }
   }
 }

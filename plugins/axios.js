@@ -1,6 +1,5 @@
-import Cookies from 'js-cookie'
 import api from '@/api'
-// import { getToken } from '@/libs/utils'
+import { getToken } from '@/libs/utils'
 
 export default ({ $axios, redirect }, inject) => {
   const createRequest = api($axios)
@@ -8,7 +7,9 @@ export default ({ $axios, redirect }, inject) => {
   inject('api', createRequest)
 
   $axios.onRequest((config) => {
-    console.log(Cookies.get('token'))
+    if (getToken()) {
+      config.headers.Authorization = getToken()
+    }
     return config
   })
   $axios.onResponse(({ data }) => {
@@ -18,9 +19,10 @@ export default ({ $axios, redirect }, inject) => {
       return Promise.reject(data.msg)
     }
   })
-  $axios.onError((error) => {
-    if (error.response.status === 500) {
-      redirect('/')
-    }
-  })
+  // $axios.onError((error) => {
+  //   console.log(error)
+  //   if (error.response.status === 500) {
+  //     redirect('/')
+  //   }
+  // })
 }
