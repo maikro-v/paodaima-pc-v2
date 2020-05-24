@@ -1,36 +1,22 @@
-import http from '~/libs/Axios/Axios.request'
+import Api from './Api'
+export default class User {
+  constructor(http) {
+    this.http = new Api(http)
+    this.base = '/api/user'
+  }
 
-export const login = (p) => {
-  return http.request({
-    url: '/api/user/login',
-    method: 'post',
-    data: p
-  })
-}
+  // 登录
+  login() {
+    return this.http.post(`${this.base}/login`, data)
+  }
 
-/**
- * 游客登录
- */
-export const visitorLogin = (p) => {
-  return http.request({
-    url: '/api/user/visitorLogin',
-    method: 'post',
-    data: p
-  })
-}
+  // 游客登录
+  visitorLogin(data) {
+    return this.http.post(`${this.base}/visitorLogin`, data)
+  }
 
-export const register = (p) => {
-  return http.request({
-    url: '/api/user/register',
-    method: 'post',
-    data: p
-  })
-}
-
-export const userInfo = (p) => {
-  return http.request({
-    url: '/api/user/userInfo',
-    method: 'get',
-    data: p
-  })
+  // 用户信息
+  userInfo(data) {
+    return this.http.get(`${this.base}/userInfo`, data)
+  }
 }
