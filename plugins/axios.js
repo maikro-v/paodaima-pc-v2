@@ -1,5 +1,6 @@
-// import Vue from 'vue'
+import Cookies from 'js-cookie'
 import api from '@/api'
+// import { getToken } from '@/libs/utils'
 
 export default ({ $axios, redirect }, inject) => {
   const createRequest = api($axios)
@@ -7,6 +8,7 @@ export default ({ $axios, redirect }, inject) => {
   inject('api', createRequest)
 
   $axios.onRequest((config) => {
+    console.log(Cookies.get('token'))
     return config
   })
   $axios.onResponse(({ data }) => {

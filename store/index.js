@@ -1,4 +1,25 @@
-export const state = () => ({})
+export const state = () => ({
+  token: '',
+  canShowLogin: false // 是否显示登录框
+})
 export const getters = {}
-export const mutations = {}
-export const actions = {}
+export const mutations = {
+  SET_API(state, n) {
+    state.api = n
+  },
+  SET_TOKEN(state, n) {
+    state.token = n
+  },
+  SET_CAN_SHOW_LOGIN(state, n) {
+    state.canShowLogin = n
+  }
+}
+export const actions = {
+  nuxtServerInit({ commit }, { req }) {
+    // 从请求头中获取token
+    const token = req.headers.cookie
+    if (token) {
+      commit('SET_TOKEN', token)
+    }
+  }
+}

@@ -17,6 +17,7 @@
     "dayjs": "^1.8.27",
     "element-ui": "^2.4.11",
     "express": "^4.16.4",
+    "js-cookie": "^2.2.1",
     "mavon-editor": "^2.9.0",
     "nuxt": "^2.0.0"
   },

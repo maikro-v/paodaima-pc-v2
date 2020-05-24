@@ -86,12 +86,13 @@ export default {
       }
     },
     toArticleDetail(id) {
-      this.$router.push({
+      const { href } = this.$router.resolve({
         name: 'article-detail-id',
         params: {
           id
         }
       })
+      window.open(href, '_blank')
     }
   }
 }

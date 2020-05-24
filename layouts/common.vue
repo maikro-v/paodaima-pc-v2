@@ -6,30 +6,48 @@
         <el-col class="menu col">
           <navbar-menu :data="menuNavList" />
         </el-col>
-        <a class="nav__item">登录</a>
-        <user class="user-wrap" />
+        <user v-if="hasLogin" class="user-wrap" />
+        <a v-else class="nav__item" @click="toLogin">登录</a>
       </el-row>
     </navbar>
+    <login v-model="canShowLogin" :loading="loginLoading" @on-confirm="handleSubmit" />
     <nuxt />
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { setToken } from '@/libs/utils'
 import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'
 import user from '@/components/user'
+import login from '@/components/login'
 export default {
-  components: { navbar, logo, navbarMenu, user },
+  components: { navbar, logo, navbarMenu, user, login },
   data() {
     return {
-      menuNavList: []
+      menuNavList: [],
+      loginLoading: false
+    }
+  },
+  computed: {
+    ...mapState('user', ['hasLogin']),
+    canShowLogin: {
+      get() {
+        return this.$store.state.canShowLogin
+      },
+      set(val) {
+        this.SET_CAN_SHOW_LOGIN(val)
+      }
     }
   },
   created() {
     this.getMenuNav()
   },
   methods: {
+    ...mapMutations(['SET_CAN_SHOW_LOGIN']),
+    ...mapActions('user', ['login']),
     getMenuNav() {
       this.$api.classify.list().then(({ data }) => {
         data.unshift({
@@ -37,6 +55,22 @@ export default {
           id: 0
         })
         this.menuNavList = data
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
+    toLogin() {
+      this.SET_CAN_SHOW_LOGIN(true)
+    },
+    handleSubmit({ email, password }) {
+      this.loginLoading = true
+      this.$api.user.login({
+        email,
+        password
+      }).then(({ data }) => {
+        setToken(data)
+        this.$message.success('登录成功')
+        // window.location.reload()
       }).catch((err) => {
         this.$message.error(err)
       })

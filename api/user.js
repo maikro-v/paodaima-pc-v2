@@ -6,7 +6,7 @@ export default class User {
   }
 
   // 登录
-  login() {
+  login(data) {
     return this.http.post(`${this.base}/login`, data)
   }
 
