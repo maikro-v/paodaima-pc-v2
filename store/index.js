@@ -4,9 +4,6 @@ export const state = () => ({
 })
 export const getters = {}
 export const mutations = {
-  SET_API(state, n) {
-    state.api = n
-  },
   SET_TOKEN(state, n) {
     state.token = n
   },
@@ -16,7 +13,7 @@ export const mutations = {
 }
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
-    // 从请求头中获取token
+    // 从请求头中获取token，记录当前用户
     const token = req.headers.cookie
     if (token) {
       commit('SET_TOKEN', token)

@@ -45,7 +45,7 @@
           </tag>
         </div>
       </el-col>
-      <img v-if="showImage" :src="data.image" :alt="data.title" class="main__img">
+      <img v-if="showImage && data.image" :src="data.image" :alt="data.title" class="main__img">
     </el-row>
     <el-row type="flex" align="middle" class="footer">
       <el-col :span="12">

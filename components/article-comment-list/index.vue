@@ -1,54 +1,60 @@
 <template>
   <div class="article-comment-list">
-    <div class="row">
-      <el-avatar size="medium" :src="require('@/assets/images/avatar.jpg')" />
+    <div v-for="item in _datas" :key="item.id" class="row list">
+      <el-avatar size="medium" :src="item.avatar" />
       <div class="col detail">
         <p class="name">
-          用户名
+          {{ item.name }}
         </p>
         <main class="main">
-          评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
+          <template v-if="item.comment_id">
+            回复<span class="main__user">{{ item.target_name }}：</span>
+          </template>
+          {{ item.content }}
         </main>
         <footer class="footer clear">
-          <span class="time lf">2020-05-23</span>
-          <span class="rf footer__action">
+          <span class="time lf">{{ item.create_time | time }}</span>
+          <span class="rf footer__action" @click="handleReply(item.id, item)">
             <i class="el-icon-chat-square" />
             回复
           </span>
         </footer>
-        <!-- <article-comment-list /> -->
-        <div class="article-comment-list">
-          <div class="row">
-            <el-avatar size="medium" :src="require('@/assets/images/avatar.jpg')" />
-            <div class="col detail">
-              <p class="name">
-                用户名
-              </p>
-              <main class="main">
-                回复<span class="main__user">用户名：</span>
-                评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容
-              </main>
-              <footer class="footer clear">
-                <span class="time lf">2020-05-23</span>
-                <span class="rf footer__action">
-                  <i class="el-icon-chat-square" />
-                  回复
-                </span>
-              </footer>
-              <!-- <article-comment-list /> -->
-            </div>
-          </div>
-        </div>
+        <article-comment-list v-if="item.children && item.children.length" :data="item.children" @on-reply="(row) => handleReply(item.id, row)" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import dayjs from 'dayjs'
 export default {
   name: 'ArticleCommentList',
+  props: {
+    data: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
+    }
+  },
+  computed: {
+    _datas() {
+      return this.data || []
+    }
+  },
+  methods: {
+    handleReply(root, row) {
+      this.$emit('on-reply', {
+        root,
+        target: row
+      })
+    }
+  },
+  filters: {
+    time(val) {
+      return val ? dayjs(val).format('YYYY-MM-DD hh:mm:ss') : ''
     }
   }
 }
@@ -63,6 +69,9 @@ export default {
       background: #f8f8f8;
       border-radius: 6px;
     }
+  }
+  .list {
+    padding: 6px 0;
   }
   .detail {
     width: 100%;

@@ -1,30 +1,47 @@
 <template>
   <article class="article-content">
     <div class="user row align-center">
-      <el-avatar size="medium" :src="require('@/assets/images/avatar.jpg')" />
+      <el-avatar size="medium" :src="_datas.author.avatar" />
       <div class="col user__detail">
         <p class="user__name">
-          用户名
+          {{ _datas.author.name }}
         </p>
         <p class="user__time">
-          2020-03-28 12:00:00 阅读：1234
+          {{ _datas.time }} 阅读：{{ _datas.visitorCount }}
         </p>
       </div>
     </div>
     <h1 class="title">
-      文章标题
+      {{ _datas.title }}
     </h1>
-    <section class="content">
-      <img :src="require('@/assets/images/avatar.jpg')">
-      <p>
-        React毫无疑问是前端界主流的框架，而框架本身就是热点。课程以讲解React实现原理为主，并在实现过程中讲解这么做的原因，带来的好处以及规避了哪些问题。理解源码之后对于React开发过程中出现的一系列问题都可以非常轻松得进行解决，也是能力提升，晋升高级开发工程师的必备技能。
-      </p>
-    </section>
+    <article class="content" v-html="_datas.content" />
   </article>
 </template>
 
 <script>
+import dayjs from 'dayjs'
 export default {
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    _datas() {
+      const data = this.data
+      return {
+        author: data.author || {
+          name: '',
+          avatar: ''
+        },
+        content: data.content || '',
+        time: data.create_time ? dayjs(data.create_time).format('YYYY-MM-DD hh:mm:ss') : '',
+        title: data.title || '',
+        visitorCount: data.visitor_count || 0
+      }
+    }
+  }
 }
 </script>
 

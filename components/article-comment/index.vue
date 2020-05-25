@@ -5,7 +5,8 @@
     </p>
     <section class="form">
       <el-input
-        v-model="form.content"
+        ref="input"
+        v-model="_value"
         :show-word-limit="true"
         :maxlength="200"
         :rows="5"
@@ -14,7 +15,7 @@
         placeholder="说点什么吧..."
       />
       <footer class="form__footer">
-        <el-button type="primary" size="mini" @click="handlerSubmit">
+        <el-button :loading="_loading" type="primary" size="mini" @click="handlerSubmit">
           评论
         </el-button>
       </footer>
@@ -24,16 +25,35 @@
 
 <script>
 export default {
-  data() {
-    return {
-      form: {
-        content: ''
+  props: {
+    value: {
+      type: String,
+      required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    _value: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
       }
+    },
+    _loading() {
+      return this.loading
     }
   },
   methods: {
     handlerSubmit() {
-      this.$emit('on-submit', this.form)
+      this.$emit('on-submit', this.value)
+    },
+    focus() {
+      this.$refs.input.focus()
     }
   }
 }

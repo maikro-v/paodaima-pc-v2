@@ -5,7 +5,7 @@
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
             <template v-if="articleList && articleList.length > 0">
-              <article-item v-for="item in articleList" :key="item.id" :data="item" />
+              <article-item v-for="item in articleList" :key="item.id" :data="item" @on-click="toArticleDetail(item.id)" />
             </template>
             <template v-else>
               <empty />
@@ -70,6 +70,15 @@ export default {
     },
     onScrollLoad() {
       return this.getData()
+    },
+    toArticleDetail(id) {
+      const { href } = this.$router.resolve({
+        name: 'article-detail-id',
+        params: {
+          id
+        }
+      })
+      window.open(href, '_blank')
     }
   }
 }

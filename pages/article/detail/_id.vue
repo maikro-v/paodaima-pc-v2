@@ -4,14 +4,14 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
         <el-card shadow="hover" class="main">
           <!-- 文章内容 -->
-          <article-content />
+          <article-content :data="info" />
           <!-- 评论 -->
-          <article-comment class="main__comment" />
+          <article-comment ref="comment" v-model="commentContent" :loading="canShowCommentLoading" class="main__comment" @on-submit="handleCommentSubmit" />
           <!-- 评论列表 -->
-          <article-comment-list />
+          <article-comment-list :data="commentList" @on-reply="handleCommentReply" />
           <!-- 查看更多评论 -->
           <div class="main__btn">
-            <el-button type="primary" size="mini">
+            <el-button v-show="isHideMoreComment" type="primary" size="mini" @click="loadComment">
               查看更多
             </el-button>
           </div>
@@ -48,7 +48,7 @@
           </div>
         </el-card>
         <side-menu title="相关文章" :show-footer="false" class="mt">
-          <article-item v-for="item in articleList" :key="item.id" :data="item" :show-image="false" class="recommend" />
+<!--          <article-item v-for="item in articleList" :key="item.id" :data="item" :show-image="false" class="recommend" />-->
         </side-menu>
       </el-col>
       <el-col class="hidden-sm-and-down" :lg="6" :xl="6">
@@ -69,20 +69,22 @@ import articleComment from '@/components/article-comment'
 import articleCommentList from '@/components/article-comment-list'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
-import articleItem from '@/components/article-item'
 export default {
   layout: 'common',
-  components: { articleAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem },
-  async asyncData({ app }) {
-    let page = 1
+  components: { articleAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem },
+  async asyncData({ app, params }) {
+    // let page = 1
     try {
-      const { data } = await app.$api.article.page({
-        page
-      })
+      // const { data } = await app.$api.article.page({
+      //   page
+      // })
+      const detailData = await app.$api.article.detail(params.id)
       return {
-        page: ++page,
-        totalPage: data.page.total_page,
-        articleList: data.data
+        // page: ++page,
+        // totalPage: data.page.total_page,
+        // articleList: data.data,
+        id: params.id,
+        info: detailData.data
       }
     } catch (err) {
       return err
@@ -90,39 +92,73 @@ export default {
   },
   data() {
     return {
-      page: 1,
-      totalPage: 0,
-      articleList: []
+      // page: 1,
+      // totalPage: 0,
+      // articleList: [],
+      id: null, // 文章id
+      info: {}, // 详情
+      commentList: [], // 评论列表
+      commentContent: '', // 评论内容
+      canShowCommentLoading: false, // 控制评论加载
+      commentPage: 1, // 评论分页
+      commentTotalPage: 0, // 评论总分页
+      commentReply: null // 回复评论对象
     }
   },
   computed: {
-    isMore() {
-      return this.articlePage.current <= this.articlePage.totalPage
+    isHideMoreComment() {
+      return this.commentPage > this.commentTotalPage
     }
   },
   created() {
-    // this.getMomentList()
+    this.getCommentList()
   },
   methods: {
-    // 获取列表
-    getMomentList(params) {
-      // commentPage({page:++this.articlePage.current,topic_id:this.articleInfo.id}).then(res=>{
-      //   this.commentList.push(...res.data.data)
-      //   this.articlePage.current=res.data['current_page']
-      //   this.articlePage.totalPage=res.data['total_page']
-      // })
-    },
-    // 加载更多
-    loadMore() {
-      // if(this.isMore){
-      //   this.getMomentList()
-      // }
+    // 回复评论
+    handleCommentReply(row) {
+      this.commentReply = row
+      this.$refs.comment.focus()
     },
     // 评论
-    createComment(form) {
-      // commentCreate({topic_id:this.articleInfo.id,...form}).then(res=>{
-      //   console.log(res)
-      // })
+    handleCommentSubmit() {
+      const data = {
+        topic_id: this.id,
+        content: this.commentContent
+      }
+      console.log(this.commentReply)
+      if (this.commentReply) {
+        data.target_id = this.commentReply.target.id
+        data.target_user_id = this.commentReply.target.user_id
+        data.comment_id = this.commentReply.root
+      }
+      this.canShowCommentLoading = true
+      this.$api.comment.add(data).then(() => {
+        this.$message.success('提交成功')
+        this.commentContent = ''
+        // this.getCommentList()
+      }).catch((err) => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.canShowCommentLoading = false
+      })
+    },
+    getCommentList() {
+      this.$api.comment.page({
+        page: this.commentPage,
+        topic_id: this.id
+      }).then(({ data }) => {
+        this.commentList.push(...data.data)
+        this.commentTotalPage = data.page.total_page
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
+    loadComment() {
+      if (this.commentPage > this.commentTotalPage) {
+        return
+      }
+      this.commentPage++
+      this.getCommentList()
     }
   }
 }
