@@ -19,4 +19,9 @@ export default class Article {
   detail(data) {
     return this.http.detail(this.base, data)
   }
+
+  // 相关推荐
+  recommend(data) {
+    return this.http.get(`${this.base}/recommend`, data)
+  }
 }
