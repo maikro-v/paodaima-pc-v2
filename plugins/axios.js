@@ -1,5 +1,5 @@
 import api from '@/api'
-import { getToken } from '@/libs/utils'
+import { getToken, setToken } from '@/libs/utils'
 
 export default ({ $axios, redirect }, inject) => {
   const createRequest = api($axios)
@@ -15,6 +15,10 @@ export default ({ $axios, redirect }, inject) => {
   $axios.onResponse(({ data }) => {
     if (data.status === 200) {
       return data
+    } else if (data.status === 401) {
+      // 登录失效
+      setToken(null)
+      return Promise.reject(new Error('登录失效'))
     } else {
       return Promise.reject(data.msg)
     }

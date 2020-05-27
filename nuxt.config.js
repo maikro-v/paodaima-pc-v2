@@ -74,7 +74,12 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
+    }
+  },
+  router: {
+    scrollBehavior(to, from, savedPosition) {
+      return { x: 0, y: 0 }
     }
   }
 }

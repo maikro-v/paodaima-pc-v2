@@ -50,7 +50,7 @@ export default {
     ...mapMutations(['SET_CAN_SHOW_LOGIN']),
     ...mapActions('user', ['login', 'getUserInfo', 'logout']),
     setUserInfo() {
-      if (getToken() && !this.hasLogin) {
+      if (getToken() && this.hasLogin) {
         this.getUserInfo()
       }
     },

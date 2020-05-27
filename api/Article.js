@@ -24,4 +24,9 @@ export default class Article {
   recommend(data) {
     return this.http.get(`${this.base}/recommend`, data)
   }
+
+  // 增加访客
+  addVisitor(data) {
+    return this.http.post(`${this.base}/visitor`, data)
+  }
 }

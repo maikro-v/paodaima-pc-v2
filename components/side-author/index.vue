@@ -1,11 +1,11 @@
 <template>
   <el-card shadow="hover" class="article-author" :body-style="{ padding: 0 }">
-    <img class="avatar" src="@/assets/images/avatar.jpg">
+    <img class="avatar" :src="_author.avatar">
     <h6 class="title">
-      前端小弟
+      {{ _author.name }}
     </h6>
     <p class="desc">
-      刚刚入门前端的小菜鸟
+      {{ _author.description }}
     </p>
     <div class="contact text-center">
       <i class="iconfont icon-github contact__icon" />
@@ -18,7 +18,7 @@
             文章总数
           </p>
           <p class="statis__number">
-            10
+            {{ _author.articleCount }}
           </p>
         </el-col>
         <el-col :span="12" class="text-center">
@@ -26,7 +26,7 @@
             获赞总数
           </p>
           <p class="statis__number">
-            10
+            {{ _author.linkCount }}
           </p>
         </el-col>
       </el-row>
@@ -41,6 +41,24 @@
 
 <script>
 export default {
+  props: {
+    author: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    _author() {
+      const author = this.author
+      return {
+        avatar: author.avatar || '',
+        name: author.name || '',
+        description: author.description || '',
+        articleCount: author.article_count || 0,
+        linkCount: author.link_count || 0
+      }
+    }
+  }
 }
 </script>
 

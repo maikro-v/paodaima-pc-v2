@@ -35,6 +35,11 @@
 import dayjs from 'dayjs'
 export default {
   name: 'ArticleCommentList',
+  filters: {
+    time(val) {
+      return val ? dayjs(val).format('YYYY-MM-DD hh:mm:ss') : ''
+    }
+  },
   props: {
     data: {
       type: Array,
@@ -89,11 +94,6 @@ export default {
         target: this.target
       })
       this.replyContent = ''
-    }
-  },
-  filters: {
-    time(val) {
-      return val ? dayjs(val).format('YYYY-MM-DD hh:mm:ss') : ''
     }
   }
 }

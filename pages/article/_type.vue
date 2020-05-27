@@ -31,8 +31,8 @@ import empty from '@/components/empty'
 import scroll from '@/mixins/scroll'
 export default {
   layout: 'common',
-  mixins: [scroll],
   components: { articleItem, sideMenu, hotArticle, empty },
+  mixins: [scroll],
   async asyncData({ app, params }) {
     let page = 1
     try {

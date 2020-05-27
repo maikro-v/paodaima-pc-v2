@@ -4,7 +4,7 @@
       <el-row type="flex" :gutter="14">
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
           <!-- 作者信息 -->
-          <article-author />
+          <side-author />
         </el-col>
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
@@ -18,11 +18,11 @@
 
 <script>
 import articleItem from '@/components/article-item'
-import articleAuthor from '@/components/article-author'
+import sideAuthor from '@/components/side-author'
 import { throttle } from '@/libs/tools'
 export default {
   layout: 'common',
-  components: { articleItem, articleAuthor },
+  components: { articleItem, sideAuthor },
   async asyncData({ app }) {
     let page = 1
     try {

@@ -18,23 +18,34 @@ export default {
         return false
       }
       try {
-        console.log('滚动中')
         const distance = 20 // 触发加载的距离阈值
         const contentHeight = document.documentElement.scrollHeight
         const viewHeight = document.documentElement.clientHeight
         const scrollTop = document.documentElement.scrollTop
 
         if (viewHeight + scrollTop >= contentHeight - distance) {
-          console.log('请求数据')
+          this.beforeLoad()
           this.canScrollLoad = false
-          await this.onScrollLoad()
-          console.log('数据请求完成')
+          // 加载中
+          await this.onScrollLoad({
+            page: this.page,
+            totalPage: this.totalPage
+          })
           this.page++
           this.canScrollLoad = true
+          this.LoadEnd()
         }
       } catch (err) {
         console.log(err)
       }
+    },
+    // 滚动加载之前
+    beforeLoad() {
+      this.$emit('scroll-before-load')
+    },
+    // 滚动加载完成
+    LoadEnd() {
+      this.$emit('scroll-load-end', ths.page > this.totalPage)
     }
   },
   beforeDestroy() {

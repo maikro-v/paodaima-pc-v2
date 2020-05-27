@@ -61,6 +61,7 @@ export default {
     cursor: pointer;
     &__name {
       max-width: 80px;
+      line-height: 1.4;
       @include fontMain;
       margin-left: 10px;
       color: #e0e3da;

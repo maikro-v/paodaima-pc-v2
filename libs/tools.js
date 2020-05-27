@@ -11,9 +11,9 @@ export function throttle(callback, time) {
       return
     }
     vaild = true
-    callback && callback()
     setTimeout(() => {
       vaild = false
+      callback && callback()
     }, time)
   }
 }

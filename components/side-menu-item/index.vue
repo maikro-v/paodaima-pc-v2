@@ -1,18 +1,23 @@
 <template>
-  <div class="side-menu-item text-overs">
+  <div class="side-menu-item text-overs" @click="onClick">
     <slot />
   </div>
 </template>
 
 <script>
 export default {
+  methods: {
+    onClick() {
+      this.$emit('on-click')
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .side-menu-item {
   position: relative;
-  min-height: 30px;
+  // min-height: 30px;
   line-height: 1.4;
   cursor: pointer;
   padding: 0 20px;
