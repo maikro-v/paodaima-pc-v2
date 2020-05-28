@@ -1,4 +1,4 @@
-import { setToken } from '@/libs/utils'
+import { setToken, setVisitorToken } from '@/libs/utils'
 
 export const state = () => ({
   name: '',
@@ -6,6 +6,7 @@ export const state = () => ({
   email: '',
   articleCount: 0,
   likeCount: 0,
+  role: [],
   hasLogin: false
 })
 export const getters = {}
@@ -27,17 +28,18 @@ export const mutations = {
   },
   SET_LINK_COUNT(state, n) {
     state.linkCount = n
+  },
+  SET_ROLE(state, n) {
+    state.role = n
   }
 }
 export const actions = {
   // 访客登录
-  visitorLogin({ commit }) {
+  visitorLogin({ commit }, token) {
     return new Promise((resolve, reject) => {
-      console.log('游客登录')
-      this.$api.user.visitorLogin().then(({ data }) => {
-        setToken(data)
-        // 访客不设置已登录状态
-        commit('SET_HAS_LOGIN', false)
+      this.$api.user.visitorLogin({ header: { Authorization: token } }).then(({ data }) => {
+        // setToken(data)
+        setVisitorToken(data)
         resolve(data)
       }).catch((err) => {
         console.log(err)
@@ -62,7 +64,7 @@ export const actions = {
   },
   logout({ commit }) {
     this.$api.user.userInfo().then(({ data }) => {
-      setToken('')
+      setToken(null)
       commit('SET_HAS_LOGIN', false)
     })
   },
@@ -74,7 +76,7 @@ export const actions = {
         commit('SET_EMAIL', data.email)
         commit('SET_ARTICLE_COUNT', data.articleCount)
         commit('SET_LINK_COUNT', data.linkCount)
-        commit('SET_HAS_LOGIN', true)
+        commit('SET_ROLE', data.role)
         resolve(data)
       }).catch(reject)
     })

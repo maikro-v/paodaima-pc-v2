@@ -11,8 +11,8 @@ export default class User {
   }
 
   // 游客登录
-  visitorLogin(data) {
-    return this.http.post(`${this.base}/visitorLogin`, data)
+  visitorLogin({ data, header }) {
+    return this.http.post(`${this.base}/visitorLogin`, data, header)
   }
 
   // 用户信息

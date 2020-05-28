@@ -48,10 +48,13 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_CAN_SHOW_LOGIN']),
+    ...mapMutations('user', ['SET_HAS_LOGIN']),
     ...mapActions('user', ['login', 'getUserInfo', 'logout']),
     setUserInfo() {
-      if (getToken() && this.hasLogin) {
-        this.getUserInfo()
+      if (getToken()) {
+        this.getUserInfo().then(() => {
+          // this.SET_HAS_LOGIN(true)
+        })
       }
     },
     getMenuNav() {

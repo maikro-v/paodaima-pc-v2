@@ -80,7 +80,7 @@
 <script>
 import dayjs from 'dayjs'
 import { mapActions, mapMutations } from 'vuex'
-import { getToken } from '@/libs/utils'
+import { getToken, getVisitorToken } from '@/libs/utils'
 import sideAuthor from '@/components/side-author'
 import articleContent from '@/components/article-content'
 import articleComment from '@/components/article-comment'
@@ -149,7 +149,7 @@ export default {
     this.getCommentList()
   },
   mounted() {
-    this.init()
+    // this.init()
   },
   methods: {
     ...mapMutations('user', ['SET_HAS_LOGIN']),
@@ -158,12 +158,11 @@ export default {
     async init() {
       try {
         // 如果用户没有登录，需要先登录，增加访客接口需要
-        if (!getToken()) {
-          await this.visitorLogin()
-          await this.getUserInfo()
-          // 访客不设置已登录状态
-          this.SET_HAS_LOGIN(false)
+        // 用户优先级大于游客优先级
+        if ((!getToken() && !getVisitorToken()) || (!getToken() && getVisitorToken())) {
+          await this.visitorLogin(getVisitorToken())
         }
+        // await this.getUserInfo()
       } catch (err) {
         this.$message.error(err)
       }
