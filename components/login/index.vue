@@ -1,9 +1,9 @@
 <template>
   <el-dialog
     title="登录"
-    width="360px"
     :visible.sync="_value"
     :before-close="handleBeforeClose"
+    class="login"
   >
     <el-form ref="form" :model="form" :rules="rules" class="form">
       <el-form-item prop="email">
@@ -101,15 +101,9 @@ export default {
     @include position;
     background: rgba(0, 0, 0, .4);
   }
-  .content {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 101;
-    width: 350px;
-    background: white;
-    border-radius: 6px;
-    transform: translate(-50%, -50%);
+  /deep/ .el-dialog {
+    width: 80%;
+    max-width: 350px;
   }
   /deep/ .el-dialog__body {
     padding: 10px 20px 30px;

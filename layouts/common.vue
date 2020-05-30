@@ -1,13 +1,21 @@
 <template>
-  <div class="container">
+  <div class="container-wrap">
     <navbar>
-      <el-row type="flex" align="middle" class="navbar-wrap">
-        <logo />
-        <el-col class="menu col">
-          <navbar-menu :data="menuNavList" />
+      <el-row type="flex" align="middle" class="container navbar-wrap">
+        <logo class="logo-wrap" />
+        <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
+        <el-col class="col text-right">
+          <el-input
+            v-model="keyword"
+            placeholder="请输入内容"
+            size="small"
+            class="search hidden-sm-and-down"
+          >
+            <i slot="suffix" class="el-input__icon el-icon-search search__icon" />
+          </el-input>
+          <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
+          <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
         </el-col>
-        <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-        <a v-else class="nav__item" @click="toLogin">登录</a>
       </el-row>
     </navbar>
     <login v-model="canShowLogin" :loading="loginLoading" @on-confirm="handleSubmit" />
@@ -28,11 +36,12 @@ export default {
   data() {
     return {
       menuNavList: [],
-      loginLoading: false
+      loginLoading: false,
+      keyword: ''
     }
   },
   computed: {
-    ...mapState('user', ['hasLogin', 'name', 'avatar']),
+    ...mapState('user', ['name', 'avatar']),
     canShowLogin: {
       get() {
         return this.$store.state.canShowLogin
@@ -40,6 +49,9 @@ export default {
       set(val) {
         this.SET_CAN_SHOW_LOGIN(val)
       }
+    },
+    hasLogin() {
+      return getToken()
     }
   },
   created() {
@@ -93,18 +105,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .container {
+  $height: 60px;
+  .container-wrap {
     width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
+  .logo-wrap {
+    height: $height;
+    line-height: $height;
+  }
+  .navbar-wrap {
+    height: $height;
+  }
+  .user-wrap {
+    vertical-align: middle;
+  }
   .menu {
     margin-left: 30px;
   }
-  .nav__item {
+  .btn {
+    height: $height;
+    line-height: $height;
     display: inline-block;
     cursor: pointer;
     color: #e0e3da;
+    padding: 0 10px;
+  }
+  .search {
+    width: 180px;
+    display: inline-block;
+    margin-right: 30px;
+    margin-left: 30px;
+    vertical-align: middle;
+    &__icon {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    /deep/ .el-input__inner {
+      background: #677483;
+      border-color: transparent;
+      color: rgb(231, 231, 231);
+      &:focus {
+        border-color: white;
+      }
+    }
   }
 </style>

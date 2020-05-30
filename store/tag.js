@@ -1,17 +1,17 @@
 export const state = () => ({
-  classifyList: []
+  tagList: []
 })
 export const getters = {}
 export const mutations = {
-  SET_CLASSIFY_LIST(state, n) {
-    state.classifyList = n
+  SET_TAG_LIST(state, n) {
+    state.tagList = n
   }
 }
 export const actions = {
-  getClassifyList({ commit }) {
+  getTagList({ commit }) {
     return new Promise((resolve, reject) => {
-      this.$api.classify.list().then(({ data }) => {
-        commit('SET_CLASSIFY_LIST', data)
+      this.$api.tag.list().then(({ data }) => {
+        commit('SET_TAG_LIST', data)
         resolve(data)
       })
     })

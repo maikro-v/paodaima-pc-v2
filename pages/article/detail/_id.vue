@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <el-row type="flex" :gutter="14">
-      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
+      <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
         <el-card shadow="hover" class="main">
           <!-- 文章内容 -->
           <article-content :data="info" />
@@ -33,9 +33,9 @@
           没有更多数据了
         </el-divider>
       </el-col>
-      <el-col class="hidden-sm-and-down" :lg="6" :xl="6">
+      <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
         <!-- 作者信息 -->
-        <side-author :author="info.author" />
+        <side-author :author="info.author || {}" />
         <side-menu v-if="articleRecommendList && articleRecommendList.length > 0" title="相关推荐" :show-footer="false" class="mt">
           <side-menu-item v-for="item in articleRecommendList" :key="item.id" @on-click="toArticleDetail(item.id)">
             {{ item.title }}
@@ -80,7 +80,7 @@
 <script>
 import dayjs from 'dayjs'
 import { mapActions, mapMutations } from 'vuex'
-import { getToken, getVisitorToken } from '@/libs/utils'
+import { getToken } from '@/libs/utils'
 import sideAuthor from '@/components/side-author'
 import articleContent from '@/components/article-content'
 import articleComment from '@/components/article-comment'
@@ -149,19 +149,20 @@ export default {
     this.getCommentList()
   },
   mounted() {
-    // this.init()
+    this.init()
   },
   methods: {
-    ...mapMutations('user', ['SET_HAS_LOGIN']),
     ...mapActions('user', ['visitorLogin', 'getUserInfo']),
+    ...mapMutations('user', ['SET_HAS_LOGIN']),
     // 初始化
     async init() {
+      if (getToken()) {
+        return
+      }
+      // 如果用户没有登录，需要先登录，增加访客接口需要
       try {
-        // 如果用户没有登录，需要先登录，增加访客接口需要
-        // 用户优先级大于游客优先级
-        if ((!getToken() && !getVisitorToken()) || (!getToken() && getVisitorToken())) {
-          await this.visitorLogin(getVisitorToken())
-        }
+        // 游客身份登录
+        await this.visitorLogin()
         // await this.getUserInfo()
       } catch (err) {
         this.$message.error(err)

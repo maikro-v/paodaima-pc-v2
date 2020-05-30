@@ -35,10 +35,9 @@ export const mutations = {
 }
 export const actions = {
   // 访客登录
-  visitorLogin({ commit }, token) {
+  visitorLogin({ commit }) {
     return new Promise((resolve, reject) => {
-      this.$api.user.visitorLogin({ header: { Authorization: token } }).then(({ data }) => {
-        // setToken(data)
+      this.$api.user.visitorLogin().then(({ data }) => {
         setVisitorToken(data)
         resolve(data)
       }).catch((err) => {
@@ -63,9 +62,18 @@ export const actions = {
     })
   },
   logout({ commit }) {
-    this.$api.user.userInfo().then(({ data }) => {
-      setToken(null)
-      commit('SET_HAS_LOGIN', false)
+    return new Promise((resolve, reject) => {
+      this.$api.user.userInfo().then(() => {
+        setToken(null)
+        commit('SET_NAME', '')
+        commit('SET_AVATAR', '')
+        commit('SET_EMAIL', '')
+        commit('SET_ARTICLE_COUNT', 0)
+        commit('SET_LINK_COUNT', 0)
+        commit('SET_ROLE', [])
+        commit('SET_HAS_LOGIN', false)
+        resolve()
+      }).catch(reject)
     })
   },
   getUserInfo({ commit }) {

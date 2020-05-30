@@ -96,6 +96,17 @@ export default {
       default() {
         return {}
       }
+    },
+    target: {
+      type: String,
+      default: '_self'
+    },
+    method: {
+      type: String,
+      default: 'push'
+    },
+    to: {
+      type: String || Object
     }
   },
   computed: {
@@ -115,7 +126,14 @@ export default {
       // })
     },
     toDetail() {
-      this.$emit('on-click', this.data)
+      if (typeof this.to === 'string' || typeof this.to === 'object') {
+        if (this.target === '_blank') {
+          const { href } = this.$router.resolve(this.to)
+          window.open(href, '_blank')
+        } else {
+          this.$router[this.method](this.to)
+        }
+      }
     }
   }
 }
@@ -161,8 +179,8 @@ export default {
       text-align: justify;
     }
     &__img {
-      width: 152px;
-      height: 96px;
+      width: 100px;
+      height: 70px;
       object-fit: cover;
       object-position: center;
       margin-left: 10px;

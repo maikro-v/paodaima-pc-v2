@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="article-author" :body-style="{ padding: 0 }">
-    <img class="avatar" :src="_author.avatar">
+    <img class="avatar" :src="_author.avatar" @click="toAuthor">
     <h6 class="title">
       {{ _author.name }}
     </h6>
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     _author() {
-      const author = this.author
+      const author = this.author || {}
       return {
         avatar: author.avatar || '',
         name: author.name || '',
@@ -58,6 +58,9 @@ export default {
         linkCount: author.link_count || 0
       }
     }
+  },
+  methods: {
+    toAuthor() {}
   }
 }
 </script>
@@ -75,6 +78,7 @@ export default {
     border: 4px solid white;
     margin: 70px auto 0;
     display: block;
+    cursor: pointer;
   }
   .title {
     @include fontTitle;

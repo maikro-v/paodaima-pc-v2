@@ -2,13 +2,17 @@ import api from '@/api'
 import { getToken, getVisitorToken } from '@/libs/utils'
 
 export default ({ $axios, redirect, store }, inject) => {
+  const isClient = process.client // 是否客户端环境
   const createRequest = api($axios)
   // 将api字段注入到vue.prototype中，会在第一个参数前加上$符号
   inject('api', createRequest)
 
   $axios.onRequest((config) => {
     if (getToken()) {
+      console.log(getToken())
       config.headers.Authorization = getToken()
+    } else if (isClient && getVisitorToken()) { // 服务端没有window对象，无法操作loacaStorage
+      config.headers.Authorization = getVisitorToken()
     }
     return config
   })
@@ -16,25 +20,27 @@ export default ({ $axios, redirect, store }, inject) => {
     if (response.data.status === 200) {
       return response.data
     } else {
-      return Promise.reject(response.data.msg)
+      return Promise.reject(response)
     }
   })
-  $axios.onError(({ response }) => {
-    if (response.status === 401) {
-      // 登录失效
-      // 如果是游客自动登录
-      console.log('登录失效')
-      console.log(getVisitorToken())
-      if (store.state.user.role[0].id === 2) {
-        store.dispatch('visitorLogin')
-      } else {
-        // 用户退出登录
+  $axios.onError(({ data }) => {
+    console.log(data)
+    const status = data.status
+    if (status === 401) {
+      if (getToken()) {
+        // 用户身份登录失效
         store.dispatch('logout')
+        return Promise.resolve(data)
+      } else {
+        // 游客身份登录失效
+        return store.dispatch('visitorLogin').then(({ data }) => {
+          return Promise.resolve(data)
+        })
       }
-      return Promise.reject(new Error('登录失效'))
+    } else if (status === 400) {
+      return Promise.reject(data.msg)
+    } else {
+      redirect('/')
     }
-    // if (error.response.status === 500) {
-    //   redirect('/')
-    // }
   })
 }

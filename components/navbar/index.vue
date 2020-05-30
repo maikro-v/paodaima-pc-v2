@@ -6,10 +6,7 @@
 
 <style lang="scss" scoped>
   .navbar {
-    height: 60px;
+    // height: 60px;
     background: #566270;
-    &-wrap {
-      @include container;
-    }
   }
 </style>

@@ -20,13 +20,23 @@ export default class Article {
     return this.http.detail(this.base, data)
   }
 
-  // 相关推荐
+  // 推荐的文章
   recommend(data) {
     return this.http.get(`${this.base}/recommend`, data)
+  }
+
+  // 相关文章
+  similar(data) {
+    return this.http.get(`${this.base}/similar`, data)
   }
 
   // 增加访客
   addVisitor(data) {
     return this.http.post(`${this.base}/visitor`, data)
+  }
+
+  // 增加文章
+  add(data) {
+    return this.http.post(`${this.base}`, data)
   }
 }

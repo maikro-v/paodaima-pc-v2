@@ -6,9 +6,30 @@
 
 <script>
 export default {
+  props: {
+    to: {
+      type: String || Object,
+      required: true
+    },
+    method: {
+      type: String,
+      default: 'push'
+    },
+    target: {
+      type: String,
+      default: '_self'
+    }
+  },
   methods: {
     onClick() {
-      this.$emit('on-click')
+      if (typeof this.to === 'string' || typeof this.to === 'object') {
+        if (this.target === '_blank') {
+          const { href } = this.$router.resolve(this.to)
+          window.open(href, '_blank')
+        } else {
+          this.$router[this.method](this.to)
+        }
+      }
     }
   }
 }

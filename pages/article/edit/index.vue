@@ -10,15 +10,15 @@
             <mavon-editor v-model="forms.content" class="editor" />
           </no-ssr>
         </el-form-item>
-        <el-form-item prop="image" label="封面图：" size="small">
+        <el-form-item label="封面图：" size="small">
           <el-upload
-            class="upload-demo"
             drag
-            action="/api/upload"
             :show-file-list="false"
-            :on-success="handleUploadSuccess"
+            :before-upload="beforeUpload"
+            action="/api/upload"
+            class="upload-demo"
           >
-            <img v-if="forms.image" :src="forms.image" class="upload-img">
+            <img v-if="forms.image" :src="forms.image" class="upload__img">
             <div v-else class="upload-text">
               <i class="el-icon-upload" />
               <div class="el-upload__text">
@@ -30,19 +30,19 @@
             </div>
           </el-upload>
         </el-form-item>
-        <el-form-item prop="type" label="分类：" size="small">
-          <el-select v-model="forms.classify_id" clearable placeholder="选择文章类型" class="form__item">
-            <!-- <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id" /> -->
+        <el-form-item prop="classify_id" label="分类：" size="small">
+          <el-select v-model="forms.classify_id" clearable placeholder="选择文章分类" class="form__item">
+            <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="tagList" label="标签：" size="small">
-          <el-select v-model="forms.tag_id" multiple clearable placeholder="选择文章类型" class="form__item">
-            <!-- <el-option :label="item.name" :value="item.id" v-for="(item, index) in tagList" :key="index"></el-option> -->
+        <el-form-item prop="tag_id" label="标签：" size="small">
+          <el-select v-model="forms.tag_id" multiple clearable placeholder="选择所属标签" class="form__item">
+            <el-option v-for="(item, index) in tagList" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="describe" label="文章描述：" size="small">
+        <el-form-item prop="description" label="文章描述：" size="small">
           <el-input
-            v-model="forms.describe"
+            v-model="forms.description"
             type="textarea"
             :rows="7"
             :maxlength="250"
@@ -50,6 +50,26 @@
             placeholder="输入描述"
             class="form__item"
           />
+        </el-form-item>
+        <el-form-item prop="is_elite" label="推荐：" size="small">
+          <el-radio-group v-model="forms.is_elite">
+            <el-radio :label="2">
+              推荐
+            </el-radio>
+            <el-radio :label="1">
+              不推荐
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item prop="is_top" label="顶置：" size="small">
+          <el-radio-group v-model="forms.is_top">
+            <el-radio :label="2">
+              顶置
+            </el-radio>
+            <el-radio :label="1">
+              不顶置
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
       </section>
     </el-form>
@@ -62,67 +82,60 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
+import { mapState, mapActions } from 'vuex'
 export default {
   layout: 'common',
   data() {
-    const validateTitle = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入标题'))
-      } else {
-        if (this.forms.title !== '') {
-          this.$refs.form.validateField()
-        }
-        callback()
-      }
-    }
-    const validateContent = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入文章内容'))
-      } else {
-        if (this.forms.content !== '') {
-          this.$refs.form.validateField()
-        }
-        callback()
-      }
-    }
     return {
-      typeData: [],
-      tagList: [],
-      handbook: '',
       forms: {
         title: '',
         content: '',
         image: '',
-        type: null,
         classify_id: '',
-        describe: '',
-        tag_id: []
+        description: '',
+        tag_id: [],
+        is_top: 1,
+        is_elite: 1
       },
       rules: {
         title: [
-          { validator: validateTitle, trigger: 'blur' }
+          { required: true, message: '请输入文章标题', trigger: 'blur' },
+          { max: 20, message: '标题长度不能大于20个字符', trigger: 'blur' }
         ],
         content: [
-          { validator: validateContent, trigger: 'blur' }
+          { required: true, message: '请输入图文', trigger: 'blur' }
+        ],
+        classify_id: [
+          { type: 'number', required: true, message: '请选择分类', trigger: 'blur' }
+        ],
+        tag_id: [
+          { type: 'array', required: true, message: '请选择标签', trigger: 'blur' },
+          { type: 'array', max: 6, min: 1, message: '标签在1 - 6个之间', trigger: 'change' }
+        ],
+        is_top: [
+          { type: 'number', required: true, message: '选项不能为空', trigger: 'blur' }
+        ],
+        is_elite: [
+          { type: 'number', required: true, message: '选项不能为空', trigger: 'blur' }
         ]
       }
     }
   },
   computed: {
-    ...mapState('classify', ['classifyList'])
+    ...mapState('classify', ['classifyList']),
+    ...mapState('tag', ['tagList'])
   },
   created() {
-    // tagList().then((res) => {
-    //   this.tagList = res.data
-    // })
+    this.getClassifyList()
+    this.getTagList()
   },
   methods: {
+    ...mapActions('classify', ['getClassifyList']),
+    ...mapActions('tag', ['getTagList']),
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          add({ ...this.forms, tag_id: this.forms.tag_id }).then((res) => {
+          this.$api.article.add(this.forms).then((res) => {
             this.$message.success(res.msg)
           }).catch((err) => {
             this.$notify.error({
@@ -135,10 +148,17 @@ export default {
         }
       })
     },
-    addArticle() {
-
-    },
-    handleUploadSuccess() {
+    beforeUpload(res) {
+      const formdata = new FormData()
+      formdata.append('files', res)
+      this.$api.upload.upload(formdata).then(({ data }) => {
+        this.forms.image = data[0].url
+      }).catch((err) => {
+        this.$notify.error({
+          title: '错误',
+          message: err
+        })
+      })
     }
   }
 }
@@ -149,33 +169,33 @@ export default {
     @include container;
     padding: 10px 0 70px;
   }
-
   .main {
     background: white;
     padding-bottom: 70px;
     border-radius: 6px;
   }
-
   .editor {
     height: 700px;
   }
-
   .form {
     &__item {
       width: 360px;
     }
-
     & .title {
       margin-bottom: 18px;
     }
   }
-
   .tag {
     &__item {
       margin-right: 10px;
     }
   }
-
+  .upload {
+    &__img {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .footer {
     position: fixed;
     left: 0;
