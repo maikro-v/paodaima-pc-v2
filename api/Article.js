@@ -39,4 +39,9 @@ export default class Article {
   add(data) {
     return this.http.post(`${this.base}`, data)
   }
+
+  // 点赞文章
+  like(data) {
+    return this.http.post(`${this.base}/like`, data)
+  }
 }

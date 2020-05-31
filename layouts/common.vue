@@ -11,7 +11,7 @@
             size="small"
             class="search hidden-sm-and-down"
           >
-            <i slot="suffix" class="el-input__icon el-icon-search search__icon" />
+            <i slot="suffix" @enter="goSearch" @click="goSearch" class="el-input__icon el-icon-search search__icon" />
           </el-input>
           <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
           <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
@@ -68,6 +68,20 @@ export default {
           // this.SET_HAS_LOGIN(true)
         })
       }
+    },
+    goSearch() {
+      this.$router.push({
+        name: 'article',
+        query: {
+          keyword: this.keyword
+        }
+      })
+      // this.$router.push({
+      //     name:'article',
+      //     query:{
+      //       type:1
+      //     }
+      // })
     },
     getMenuNav() {
       this.$api.classify.list().then(({ data }) => {
