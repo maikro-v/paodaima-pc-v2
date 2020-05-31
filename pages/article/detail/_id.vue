@@ -68,7 +68,7 @@
       </el-col>
       <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
         <!-- 作者信息 -->
-        <side-author :author="info.author || {}" />
+        <side-author :author="info.author || {}" link />
         <side-menu v-if="articleRecommendList && articleRecommendList.length > 0" title="相关推荐" :show-footer="false" class="mt">
           <side-menu-item
             v-for="item in articleRecommendList"

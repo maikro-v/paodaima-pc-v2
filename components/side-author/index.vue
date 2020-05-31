@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="article-author" :body-style="{ padding: 0 }">
-    <img class="avatar" :src="_author.avatar" @click="toAuthor">
+    <img class="avatar" :src="_author.avatar" @click="link && toAuthor()">
     <h6 class="title">
       {{ _author.name }}
     </h6>
@@ -45,6 +45,10 @@ export default {
     author: {
       type: Object,
       required: true
+    },
+    link: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
