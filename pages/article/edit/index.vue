@@ -88,6 +88,7 @@ export default {
   data() {
     return {
       forms: {
+        id: null,
         title: '',
         content: '',
         image: '',
@@ -126,17 +127,45 @@ export default {
     ...mapState('tag', ['tagList'])
   },
   created() {
+    if (this.$route.query.id) {
+      this.forms.id = this.$route.query.id
+      this.getData()
+    }
     this.getClassifyList()
     this.getTagList()
   },
   methods: {
     ...mapActions('classify', ['getClassifyList']),
     ...mapActions('tag', ['getTagList']),
+    getData() {
+      this.$api.article.detail(this.forms.id).then(({ data }) => {
+        this.forms = { ...this.forms, ...data }
+      }).catch((err) => {
+        this.$notify.error({
+          title: '错误',
+          message: err
+        })
+      })
+    },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$api.article.add(this.forms).then((res) => {
-            this.$message.success(res.msg)
+          const target = this.forms.id ? this.$api.article.update(this.forms) : this.$api.article.add(this.forms)
+          target.then((res) => {
+            if (this.forms.id) {
+              this.$message.success('修改成功')
+              this.$router.go(-1)
+            } else {
+              this.$confirm('添加成功，是否继续添加?', '提示', {
+                confirmButtonText: '继续',
+                cancelButtonText: '返回',
+                type: 'success'
+              }).then(() => {
+                this.resetForm(formName)
+              }).catch(() => {
+                this.$router.go(-1)
+              })
+            }
           }).catch((err) => {
             this.$notify.error({
               title: '错误',
@@ -147,6 +176,9 @@ export default {
           return false
         }
       })
+    },
+    resetForm(name) {
+      this.$refs[name].resetFields()
     },
     beforeUpload(res) {
       const formdata = new FormData()

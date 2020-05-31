@@ -25,7 +25,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { getToken } from '../libs/utils'
+import { getToken } from '@/libs/utils'
 import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'

@@ -20,7 +20,7 @@ export default class User {
     return this.http.get(`${this.base}/userInfo`, data)
   }
 
-  // 用户信息
+  // 通过id获取用户信息
   userInfoById(data) {
     return this.http.get(`${this.base}/userInfo/${data}`)
   }

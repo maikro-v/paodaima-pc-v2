@@ -44,14 +44,4 @@ export default class Api extends Request {
   add(url, data) {
     return this.post(url, data)
   }
-
-  /**
-   * 更新
-   */
-  update() {}
-
-  /**
-   * 删除
-   */
-  remove() {}
 }

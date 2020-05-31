@@ -3,7 +3,7 @@ import { throttle } from '@/libs/tools'
 export default {
   data() {
     return {
-      page: 0,
+      page: 1,
       totalPage: 0,
       canScrollLoad: true
     }
@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     async handleScroll() {
-      if (!this.canScrollLoad || this.page > this.totalPage) {
+      if (!this.canScrollLoad || this.page >= this.totalPage) {
         return false
       }
       try {
@@ -41,11 +41,11 @@ export default {
     },
     // 滚动加载之前
     beforeLoad() {
-      this.$emit('scroll-before-load')
+      this.scrollBeforeLoad && this.scrollBeforeLoad()
     },
     // 滚动加载完成
     LoadEnd() {
-      this.$emit('scroll-load-end', ths.page > this.totalPage)
+      this.scrollBeforeEnd && this.scrollBeforeEnd(ths.page > this.totalPage)
     }
   },
   beforeDestroy() {

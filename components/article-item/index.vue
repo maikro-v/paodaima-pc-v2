@@ -14,22 +14,29 @@
         </h5>
       </el-col>
       <el-popover
-        v-if="isEdit"
+        v-if="actions && actions.length > 0"
         placement="bottom"
         trigger="click"
         width="130"
         class="more"
       >
         <div>
-          <el-button type="text" size="small" class="ml-10 more__block">
-            编辑
+          <el-button
+            v-for="(item, index) in actions"
+            :key="index"
+            type="text"
+            size="small"
+            class="ml-10 more__block"
+            @click="handleAction(index, item)"
+          >
+            {{ actionKey ? item[actionKey] : item }}
           </el-button>
-          <el-button type="text" size="small" class="more__block" @click="delArticle(article.id)">
-            删除
-          </el-button>
-          <el-button type="text" size="small" class="more__block">
+          <!-- <el-button type="text" size="small" class="more__block" @click="handleAction(1)">
             下架
           </el-button>
+          <el-button slot="reference" type="text" size="small" class="more__block" @click="handleAction(2)">
+            删除
+          </el-button> -->
         </div>
         <i slot="reference" class="el-icon-more more__icon" />
       </el-popover>
@@ -83,10 +90,6 @@ export default {
       type: Object,
       required: true
     },
-    isEdit: {
-      type: Boolean,
-      default: false
-    },
     showImage: {
       type: Boolean,
       default: true
@@ -107,6 +110,15 @@ export default {
     },
     to: {
       type: [String, Object]
+    },
+    actions: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    actionKey: {
+      type: String
     }
   },
   computed: {
@@ -115,15 +127,8 @@ export default {
     }
   },
   methods: {
-    handleAction() {
-      this.action = true
-    },
-    delArticle(id) {
-      // remove({id}).then(res=>{
-      //   console.log(res)
-      // }).catch(err=>{
-      //   console.log(err)
-      // })
+    handleAction(index) {
+      this.$emit('on-active', index)
     },
     toDetail() {
       if (typeof this.to === 'string' || typeof this.to === 'object') {

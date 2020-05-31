@@ -64,7 +64,7 @@ export const actions = {
   logout({ commit }) {
     return new Promise((resolve, reject) => {
       this.$api.user.userInfo().then(() => {
-        setToken(null)
+        setToken('')
         commit('SET_NAME', '')
         commit('SET_AVATAR', '')
         commit('SET_EMAIL', '')

@@ -39,4 +39,14 @@ export default class Article {
   add(data) {
     return this.http.post(`${this.base}`, data)
   }
+
+  // 删除文章
+  remove(id) {
+    return this.http.delete(`${this.base}/${id}`)
+  }
+
+  // 修改文章
+  update(data) {
+    return this.http.put(this.base, data)
+  }
 }

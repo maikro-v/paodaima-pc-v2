@@ -52,7 +52,7 @@ export default {
   components: { articleItem, sideMenu, empty, sideMenuItem },
   mixins: [scroll],
   async asyncData({ app, query }) {
-    let page = 1
+    const page = 1
     try {
       const { data } = await app.$api.article.page({
         classify_id: query.type,
@@ -67,7 +67,7 @@ export default {
         page
       })
       return {
-        page: ++page,
+        page,
         totalPage: data.page.total_page,
         articleList: data.data,
         recommendArticleList: recommendArticle.data.data,
