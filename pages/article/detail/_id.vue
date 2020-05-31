@@ -26,7 +26,7 @@
             :data="item"
             :show-image="false"
             class="recommend"
-            @on-click="toArticleDetail(item.id)"
+            :to="item.id | toPath"
           />
         </side-menu>
         <el-divider v-if="isHideMoreHotArticle">
@@ -37,7 +37,11 @@
         <!-- 作者信息 -->
         <side-author :author="info.author || {}" />
         <side-menu v-if="articleRecommendList && articleRecommendList.length > 0" title="相关推荐" :show-footer="false" class="mt">
-          <side-menu-item v-for="item in articleRecommendList" :key="item.id" @on-click="toArticleDetail(item.id)">
+          <side-menu-item
+            v-for="item in articleRecommendList"
+            :key="item.id"
+            :to="item.id | toPath"
+          >
             {{ item.title }}
           </side-menu-item>
         </side-menu>
@@ -252,6 +256,16 @@ export default {
     scrollBeforeLoad() {},
     // 滚动加载完成
     scrollLoadEnd() {}
+  },
+  filters: {
+    toPath(id) {
+      return {
+        name: 'article-detail-id',
+        params: {
+          id
+        }
+      }
+    }
   },
   beforeDestroy() {
     this.addVisitor()

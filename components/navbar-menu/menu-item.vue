@@ -21,8 +21,8 @@ export default {
         })
       } else {
         this.$router.push({
-          name: 'article-type',
-          params: {
+          name: 'article',
+          query: {
             type: this.data.id
           }
         })

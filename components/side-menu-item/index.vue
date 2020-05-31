@@ -8,7 +8,7 @@
 export default {
   props: {
     to: {
-      type: String || Object,
+      type: [String, Object],
       required: true
     },
     method: {

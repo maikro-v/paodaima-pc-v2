@@ -106,7 +106,7 @@ export default {
       default: 'push'
     },
     to: {
-      type: String || Object
+      type: [String, Object]
     }
   },
   computed: {

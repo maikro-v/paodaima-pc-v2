@@ -5,7 +5,7 @@
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
             <template v-if="articleList && articleList.length > 0">
-              <article-item v-for="item in articleList" :key="item.id" :data="item" @on-click="toArticleDetail(item.id)" />
+              <article-item v-for="item in articleList" :key="item.id" :data="item" :to="item.id | toPath" target="_blank" />
             </template>
             <template v-else>
               <empty />
@@ -14,8 +14,26 @@
         </el-col>
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
           <aside>
-            <hot-article class="side-menu__list" />
-            <side-menu title="推荐" class="side-menu__list" />
+            <side-menu title="热门" class="side-menu__list">
+              <side-menu-item
+                v-for="item in hotArticleList"
+                :key="item.id"
+                :to="item.id | toPath"
+                target="_blank"
+              >
+                {{ item.title }}
+              </side-menu-item>
+            </side-menu>
+            <side-menu title="推荐" class="side-menu__list">
+              <side-menu-item
+                v-for="item in recommendArticleList"
+                :key="item.id"
+                :to="item.id | toPath"
+                target="_blank"
+              >
+                {{ item.title }}
+              </side-menu-item>
+            </side-menu>
           </aside>
         </el-col>
       </el-row>
@@ -26,24 +44,34 @@
 <script>
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
-import hotArticle from '@/components/hot-article'
+import sideMenuItem from '@/components/side-menu-item'
 import empty from '@/components/empty'
 import scroll from '@/mixins/scroll'
 export default {
   layout: 'common',
-  components: { articleItem, sideMenu, hotArticle, empty },
+  components: { articleItem, sideMenu, empty, sideMenuItem },
   mixins: [scroll],
-  async asyncData({ app, params }) {
+  async asyncData({ app, query }) {
     let page = 1
     try {
       const { data } = await app.$api.article.page({
-        classify_id: params.type,
+        classify_id: query.type,
+        page
+      })
+      // 推荐的文章
+      const recommendArticle = await app.$api.article.recommend({
+        page
+      })
+      // 热门文章
+      const hotArticle = await app.$api.article.hot({
         page
       })
       return {
         page: ++page,
         totalPage: data.page.total_page,
-        articleList: data.data
+        articleList: data.data,
+        recommendArticleList: recommendArticle.data.data,
+        hotArticleList: hotArticle.data.data
       }
     } catch (err) {
       return err
@@ -51,14 +79,16 @@ export default {
   },
   data() {
     return {
-      articleList: []
+      articleList: [],
+      recommendArticleList: [], // 推荐文章列表
+      hotArticleList: [] // 热门文章列表
     }
   },
   methods: {
     async getData() {
       try {
         const { data } = await this.$api.article.page({
-          classify_id: this.$route.params.type,
+          classify_id: this.$route.query.type,
           page: this.page
         })
         this.articleList.push(...data.data)
@@ -79,6 +109,22 @@ export default {
         }
       })
       window.open(href, '_blank')
+    }
+  },
+  filters: {
+    toPath(id) {
+      return {
+        name: 'article-detail-id',
+        params: {
+          id
+        }
+      }
+    }
+  },
+  watch: {
+    '$route'(val) {
+      this.articleList = []
+      this.getData()
     }
   }
 }

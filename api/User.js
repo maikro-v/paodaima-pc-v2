@@ -19,4 +19,9 @@ export default class User {
   userInfo(data) {
     return this.http.get(`${this.base}/userInfo`, data)
   }
+
+  // 用户信息
+  userInfoById(data) {
+    return this.http.get(`${this.base}/userInfo/${data}`)
+  }
 }

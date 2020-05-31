@@ -4,11 +4,16 @@
       <el-row type="flex" :gutter="14">
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
           <!-- 作者信息 -->
-          <side-author />
+          <side-author :author="author" />
         </el-col>
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
-            <article-item v-for="item in articleList" :key="item.id" :data="item" is-edit :show-image="false" />
+            <template v-if="articleList && articleList.length > 0">
+              <article-item v-for="item in articleList" :key="item.id" :data="item" :is-edit="isAdmin" :show-image="false" />
+            </template>
+            <template v-else>
+              <empty />
+            </template>
           </section>
         </el-col>
       </el-row>
@@ -17,22 +22,28 @@
 </template>
 
 <script>
+import { getToken } from '../libs/utils'
+import { throttle } from '@/libs/tools'
 import articleItem from '@/components/article-item'
 import sideAuthor from '@/components/side-author'
-import { throttle } from '@/libs/tools'
+import empty from '@/components/empty'
 export default {
   layout: 'common',
-  components: { articleItem, sideAuthor },
-  async asyncData({ app }) {
+  components: { articleItem, sideAuthor, empty },
+  async asyncData({ app, query }) {
     let page = 1
     try {
       const { data } = await app.$api.article.page({
+        author_id: query.id,
         page
       })
+      const authorData = query.id ? await app.$api.user.userInfoById(query.id) : await app.$api.user.userInfo()
       return {
         page: ++page,
         totalPage: data.page.total_page,
-        articleList: data.data
+        articleList: data.data,
+        author: authorData.data,
+        isAdmin: (!query.id && getToken()) // 没有指定用户id，并且有token就是管理员状态
       }
     } catch (err) {
       return err
@@ -43,7 +54,9 @@ export default {
       page: 1,
       totalPage: 0,
       articleList: [],
-      canScroll: true
+      author: {}, // 用户信息
+      canScroll: true,
+      isAdmin: false // 是否管理员，管理员可对文章进行删除编辑等操作
     }
   },
   mounted() {
@@ -54,6 +67,7 @@ export default {
     async getData() {
       try {
         const { data } = await this.$api.article.page({
+          author_id: this.$route.query.id,
           page: this.page
         })
         this.articleList.push(...data.data)

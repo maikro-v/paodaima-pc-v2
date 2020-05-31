@@ -60,7 +60,14 @@ export default {
     }
   },
   methods: {
-    toAuthor() {}
+    toAuthor() {
+      this.$router.push({
+        name: 'my',
+        query: {
+          id: this.author.id
+        }
+      })
+    }
   }
 }
 </script>
