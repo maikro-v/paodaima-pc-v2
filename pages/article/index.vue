@@ -14,7 +14,7 @@
         </el-col>
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
           <aside>
-            <side-menu title="热门" class="side-menu__list">
+            <side-menu title="热门" :show-footer="false" class="side-menu__list">
               <side-menu-item
                 v-for="item in hotArticleList"
                 :key="item.id"
@@ -24,7 +24,7 @@
                 {{ item.title }}
               </side-menu-item>
             </side-menu>
-            <side-menu title="推荐" class="side-menu__list">
+            <side-menu title="推荐" :show-footer="false" class="side-menu__list">
               <side-menu-item
                 v-for="item in recommendArticleList"
                 :key="item.id"

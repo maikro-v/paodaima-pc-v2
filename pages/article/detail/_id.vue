@@ -3,12 +3,12 @@
     <div class="detail__fix_top">
       <!-- 操作 -->
       <div class="action">
-        <el-badge class="action__box" :value="12" type="primary">
+        <el-badge class="action__box" :value="info.like_count || 0" type="primary">
           <span class="action__item" @click="goFabulous">
             <i class="action__icon iconfont icon-dianzan" />
           </span>
         </el-badge>
-        <el-badge class="action__box" :value="19" type="primary">
+        <el-badge class="action__box" :value="info.comment_count || 0" type="primary">
           <span class="action__item" @click="goComment">
             <i class="action__icon iconfont icon-pinglun" />
           </span>
