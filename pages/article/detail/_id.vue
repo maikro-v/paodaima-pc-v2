@@ -1,12 +1,45 @@
 <template>
   <div class="detail">
-    <el-row type="flex" :gutter="14">
+    <div class="detail__fix_top">
+      <!-- 操作 -->
+      <div class="action">
+        <el-badge class="action__box" :value="12" type="primary">
+          <span class="action__item" @click="goFabulous">
+            <i class="action__icon iconfont icon-dianzan" />
+          </span>
+        </el-badge>
+        <el-badge class="action__box" :value="19" type="primary">
+          <span class="action__item" @click="goComment">
+            <i class="action__icon iconfont icon-pinglun" />
+          </span>
+        </el-badge>
+        <p class="action__title">
+          分享
+        </p>
+        <el-badge class="action__box" :value="0" hidden>
+          <span class="action__item">
+            <i class="action__icon iconfont icon-weibo" />
+          </span>
+        </el-badge>
+        <el-badge class="action__box" :value="0" hidden>
+          <span class="action__item">
+            <i class="action__icon iconfont icon-qq" />
+          </span>
+        </el-badge>
+        <el-badge class="action__box" :value="0" hidden>
+          <span class="action__item">
+            <i class="action__icon iconfont icon-weixin" />
+          </span>
+        </el-badge>
+      </div>
+    </div>
+    <el-row ref="detail" type="flex" :gutter="14">
       <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
         <el-card shadow="hover" class="main">
           <!-- 文章内容 -->
           <article-content :data="info" />
           <!-- 评论 -->
-          <article-comment v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
+          <article-comment ref="comment" v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
           <!-- 评论列表 -->
           <article-comment-list :loading="isShowReplyLoading" :data="commentList" @on-submit="handleCommentReply" />
           <!-- 查看更多评论 -->
@@ -47,37 +80,6 @@
         </side-menu>
       </el-col>
     </el-row>
-    <!-- 操作 -->
-    <div class="action">
-      <el-badge class="action__box" :value="12" type="primary">
-        <span class="action__item">
-          <i class="action__icon iconfont icon-dianzan" />
-        </span>
-      </el-badge>
-      <el-badge class="action__box" :value="19" type="primary">
-        <span class="action__item">
-          <i class="action__icon iconfont icon-pinglun" />
-        </span>
-      </el-badge>
-      <p class="action__title">
-        分享
-      </p>
-      <el-badge class="action__box" :value="0" hidden>
-        <span class="action__item">
-          <i class="action__icon iconfont icon-weibo" />
-        </span>
-      </el-badge>
-      <el-badge class="action__box" :value="0" hidden>
-        <span class="action__item">
-          <i class="action__icon iconfont icon-qq" />
-        </span>
-      </el-badge>
-      <el-badge class="action__box" :value="0" hidden>
-        <span class="action__item">
-          <i class="action__icon iconfont icon-weixin" />
-        </span>
-      </el-badge>
-    </div>
   </div>
 </template>
 
@@ -163,6 +165,7 @@ export default {
       if (getToken()) {
         return
       }
+      console.log(this.$refs.detail)
       // 如果用户没有登录，需要先登录，增加访客接口需要
       try {
         // 游客身份登录
@@ -171,6 +174,18 @@ export default {
       } catch (err) {
         this.$message.error(err)
       }
+    },
+    // 点击评论聚焦
+    goComment() {
+      this.$refs.comment.$refs.input.focus()
+    },
+    // 点赞
+    goFabulous() {
+      this.$api.article.like({
+        topic_id: this.id // 文章id
+      }).then((res) => {
+        this.$message.success('点赞成功')
+      })
     },
     // 增加访客
     addVisitor() {
@@ -281,6 +296,9 @@ export default {
    position: relative;
    margin-top: 30px;
    @include container;
+   &__fix_top{
+     position: fixed;
+   }
   }
   .main {
     &__comment {
@@ -292,9 +310,10 @@ export default {
     }
   }
   .action {
-    position: fixed;
-    top: 20%;
-    left: 80px;
+    // position: fixed;
+    position: absolute;
+    top: 30px;
+    left: -80px;
     &__box {
       display: block;
     }

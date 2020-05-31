@@ -1,6 +1,5 @@
 <template>
   <el-menu
-    router
     :default-active="_active"
     class="navbar-menu"
     mode="horizontal"
@@ -31,7 +30,7 @@ export default {
       return this.data
     },
     _active() {
-      const type = this.$route.params.type
+      const type = this.$route.query.type
       if (type) {
         return String(type)
       } else {

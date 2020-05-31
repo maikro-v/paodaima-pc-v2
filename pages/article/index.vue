@@ -56,6 +56,7 @@ export default {
     try {
       const { data } = await app.$api.article.page({
         classify_id: query.type,
+        keyword: query.keyword,
         page
       })
       // 推荐的文章
@@ -85,11 +86,12 @@ export default {
     }
   },
   methods: {
-    async getData() {
+    async getData(params = {}) {
       try {
         const { data } = await this.$api.article.page({
           classify_id: this.$route.query.type,
-          page: this.page
+          page: this.page,
+          ...params
         })
         this.articleList.push(...data.data)
         return Promise.resolve()
@@ -124,7 +126,9 @@ export default {
   watch: {
     '$route'(val) {
       this.articleList = []
-      this.getData()
+      this.page = 1
+      const params = val.query
+      this.getData(params)
     }
   }
 }
