@@ -115,7 +115,8 @@ export default {
       })
     },
     getUserInfo() {
-      this.$api.user.userInfo().then(({ data }) => {
+      const target = this.$route.query.id ? this.$api.user.userInfoById(this.$route.query.id) : this.$api.user.userInfo()
+      target.then(({ data }) => {
         this.author = data
       }).catch((err) => {
         this.$notify.error({

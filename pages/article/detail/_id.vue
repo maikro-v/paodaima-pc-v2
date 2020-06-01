@@ -165,7 +165,6 @@ export default {
       if (getToken()) {
         return
       }
-      console.log(this.$refs.detail)
       // 如果用户没有登录，需要先登录，增加访客接口需要
       try {
         // 游客身份登录
@@ -183,8 +182,14 @@ export default {
     goFabulous() {
       this.$api.article.like({
         topic_id: this.id // 文章id
-      }).then((res) => {
-        this.$message.success('点赞成功')
+      }).then(({ data }) => {
+        if (data === 1) {
+          this.$message.success('点赞成功')
+          this.info.like_count++
+        } else {
+          this.$message.success('取消点赞')
+          this.info.like_count--
+        }
       })
     },
     // 增加访客
