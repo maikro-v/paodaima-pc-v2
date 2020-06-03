@@ -14,17 +14,23 @@
     <h1 class="title">
       {{ _datas.title }}
     </h1>
-    <article class="content" v-html="_datas.content" />
+    <article v-highlight v-html="_datas.content" class="content" />
   </article>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import showdown from 'showdown'
 export default {
   props: {
     data: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      converter: new showdown.Converter()
     }
   },
   computed: {
@@ -35,7 +41,7 @@ export default {
           name: '',
           avatar: ''
         },
-        content: data.content || '',
+        content: this.converter.makeHtml(data.content) || '',
         time: data.create_time ? dayjs(data.create_time).format('YYYY-MM-DD hh:mm:ss') : '',
         title: data.title || '',
         visitorCount: data.visitor_count || 0
@@ -65,9 +71,10 @@ export default {
   }
   .content {
     margin-top: 20px;
+    line-height: 2;
     & * {
       max-width: 100%;
-      line-height: 1.5;
+      line-height: 2;
       @include fontMain;
     }
   }

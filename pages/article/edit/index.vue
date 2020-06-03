@@ -7,7 +7,8 @@
       <section class="main">
         <el-form-item prop="content" label-width="0" size="small">
           <no-ssr>
-            <mavon-editor v-model="forms.content" class="editor" />
+<!--            <markdown-nice></markdown-nice>-->
+            <mavon-editor v-model="forms.content" v-highlight class="editor" />
           </no-ssr>
         </el-form-item>
         <el-form-item label="封面图：" size="small">
@@ -83,8 +84,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+// import MarkdownNice from 'markdown-nice'
 export default {
   layout: 'common',
+  // components: { MarkdownNice },
   data() {
     return {
       forms: {
@@ -101,7 +104,7 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入文章标题', trigger: 'blur' },
-          { max: 20, message: '标题长度不能大于20个字符', trigger: 'blur' }
+          { max: 50, message: '标题长度不能大于20个字符', trigger: 'blur' }
         ],
         content: [
           { required: true, message: '请输入图文', trigger: 'blur' }
@@ -208,6 +211,10 @@ export default {
   }
   .editor {
     height: 700px;
+    line-height: normal !important;
+    & * {
+      line-height: 2 !important;
+    }
   }
   .form {
     &__item {

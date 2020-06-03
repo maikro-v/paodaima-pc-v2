@@ -36,6 +36,7 @@ module.exports = {
     '@/plugins/element-ui',
     '@/plugins/axios',
     '@/plugins/router',
+    '@/plugins/highlight',
     { src: '@/plugins/vue-mavon-editor', srr: false }
   ],
   /*

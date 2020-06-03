@@ -17,9 +17,12 @@
     "dayjs": "^1.8.27",
     "element-ui": "^2.4.11",
     "express": "^4.16.4",
+    "highlight.js": "^10.0.3",
     "js-cookie": "^2.2.1",
+    "markdown-nice": "^1.8.1",
     "mavon-editor": "^2.9.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "showdown": "^1.9.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
