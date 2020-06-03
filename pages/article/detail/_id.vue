@@ -99,6 +99,16 @@ export default {
   layout: 'common',
   components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem },
   mixins: [scroll],
+  head() {
+    return {
+      title: this.info.title || '',
+      meta: [
+        { hid: 'description', name: 'description', content: this.info.description },
+        { hid: 'description', name: 'keyword', content: this.info.description },
+        { name: 'aplus-xplug', content: 'NONE' }
+      ]
+    }
+  },
   async asyncData({ app, params }) {
     let page = 1
     const articleId = params.id

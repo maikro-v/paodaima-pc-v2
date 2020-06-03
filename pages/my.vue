@@ -39,6 +39,11 @@ export default {
   layout: 'common',
   components: { articleItem, sideAuthor, empty },
   mixins: [scroll],
+  head() {
+    return {
+      title: '个人中心'
+    }
+  },
   // async asyncData({ app, query }) {
   //   let page = 1
   //   try {

@@ -78,6 +78,9 @@
       <el-button type="primary" size="small" @click="submit('form')">
         保存并发布
       </el-button>
+      <el-button type="primary" size="small" @click="save('form')">
+        存至草稿箱
+      </el-button>
     </footer>
   </div>
 </template>
@@ -88,6 +91,11 @@ import { mapState, mapActions } from 'vuex'
 export default {
   layout: 'common',
   // components: { MarkdownNice },
+  head() {
+    return {
+      title: '文章编辑'
+    }
+  },
   data() {
     return {
       forms: {
@@ -149,6 +157,9 @@ export default {
           message: err
         })
       })
+    },
+    // 保存不发布
+    save() {
     },
     submit(formName) {
       this.$refs[formName].validate((valid) => {

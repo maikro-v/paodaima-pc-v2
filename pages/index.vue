@@ -48,6 +48,11 @@ import { throttle } from '@/libs/tools'
 export default {
   layout: 'common',
   components: { articleItem, sideMenu, sideMenuItem },
+  head() {
+    return {
+      title: 'maikro技术博客'
+    }
+  },
   async asyncData({ app }) {
     let page = 1
     try {

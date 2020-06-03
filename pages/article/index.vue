@@ -51,6 +51,11 @@ export default {
   layout: 'common',
   components: { articleItem, sideMenu, empty, sideMenuItem },
   mixins: [scroll],
+  head() {
+    return {
+      title: 'maikro技术博客'
+    }
+  },
   async asyncData({ app, query }) {
     const page = 1
     try {
