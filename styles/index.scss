@@ -75,3 +75,15 @@ a {
   height: 0;
   clear: both;
 }
+
+/* 路由跳转动画 */
+.page-change-entry-active {
+  transition: all .3s ease;
+}
+.page-change-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.page-change-entry, .page-change-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}

@@ -26,7 +26,7 @@
             获赞总数
           </p>
           <p class="statis__number">
-            {{ _author.linkCount }}
+            {{ _author.likeCount }}
           </p>
         </el-col>
       </el-row>
@@ -59,7 +59,7 @@ export default {
         name: author.name || '',
         description: author.description || '',
         articleCount: author.article_count || 0,
-        linkCount: author.link_count || 0
+        likeCount: author.like_count || 0
       }
     }
   },

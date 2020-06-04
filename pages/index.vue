@@ -7,7 +7,13 @@
       <el-row type="flex" :gutter="14">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <section class="article">
-            <article-item v-for="item in articleList" :key="item.id" :data="item" :to="item.id | toPath" target="_blank" />
+            <article-item
+              v-for="item in articleList"
+              :key="item.id"
+              :data="item"
+              :to="item.id | toPath"
+              target="_blank"
+            />
           </section>
         </el-col>
         <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
@@ -46,8 +52,8 @@ import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import { throttle } from '@/libs/tools'
 export default {
-  layout: 'common',
   components: { articleItem, sideMenu, sideMenuItem },
+  layout: 'common',
   head() {
     return {
       title: 'maikro技术博客'

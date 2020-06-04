@@ -13,24 +13,24 @@
             <i class="action__icon iconfont icon-pinglun" />
           </span>
         </el-badge>
-        <p class="action__title">
-          分享
-        </p>
-        <el-badge class="action__box" :value="0" hidden>
-          <span class="action__item">
-            <i class="action__icon iconfont icon-weibo" />
-          </span>
-        </el-badge>
-        <el-badge class="action__box" :value="0" hidden>
-          <span class="action__item">
-            <i class="action__icon iconfont icon-qq" />
-          </span>
-        </el-badge>
-        <el-badge class="action__box" :value="0" hidden>
-          <span class="action__item">
-            <i class="action__icon iconfont icon-weixin" />
-          </span>
-        </el-badge>
+<!--        <p class="action__title">-->
+<!--          分享-->
+<!--        </p>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-weibo" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-qq" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-weixin" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
       </div>
     </div>
     <el-row ref="detail" type="flex" :gutter="14">
@@ -191,14 +191,16 @@ export default {
     // 点赞
     goFabulous() {
       this.$api.article.like({
-        topic_id: this.id // 文章id
+        topic_id: this.id, // 文章id
+        author_id: this.info.author.id
       }).then(({ data }) => {
         if (data === 1) {
           this.$message.success('点赞成功')
           this.info.like_count++
         } else {
-          this.$message.success('取消点赞')
+          this.$message.info('已取消点赞')
           this.info.like_count--
+          this.info.like_count = this.info.like_count < 0 ? 0 : this.info.like_count
         }
       })
     },

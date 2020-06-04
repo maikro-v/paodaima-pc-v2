@@ -64,10 +64,10 @@
           <i class="iconfont icon-xiaoxi footer__action_icon" />
           <span class="footer__action_number">{{ data.comment_count }}</span>
         </span>
-        <!--        <span class="footer__action">-->
-        <!--          <i class="iconfont icon-dianzan footer__action_icon" />-->
-        <!--          <span class="footer__action_number">{{ data.link_count }}</span>-->
-        <!--        </span>-->
+        <span class="footer__action">
+          <i class="iconfont icon-dianzan footer__action_icon" />
+          <span class="footer__action_number">{{ data.like_count }}</span>
+        </span>
         <span class="footer__action">
           <i class="iconfont icon-yulan footer__action_icon" />
           <span class="footer__action_number">{{ data.visitor_count }}</span>

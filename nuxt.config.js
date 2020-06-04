@@ -18,13 +18,14 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: '~/components/page-loading',
   /*
   ** Global CSS
   */
   css: [
     '@/styles/element.scss',
-    '@/styles/index.scss'
+    '@/styles/index.scss',
+    'animate.css'
   ],
   styleResources: {
     scss: './styles/global.scss'

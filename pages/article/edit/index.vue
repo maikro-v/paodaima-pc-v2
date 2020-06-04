@@ -37,9 +37,37 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="tag_id" label="标签：" size="small">
-          <el-select v-model="forms.tag_id" multiple clearable placeholder="选择所属标签" class="form__item">
+          <el-select
+            v-model="forms.tag_id"
+            multiple
+            clearable
+            filterable
+            :multiple-limit="6"
+            placeholder="选择所属标签"
+            class="form__item"
+          >
             <el-option v-for="(item, index) in tagList" :key="index" :label="item.name" :value="item.id" />
           </el-select>
+          <el-popover
+            v-model="isShowAddTag"
+            placement="top"
+            width="240"
+            title="添加标签"
+          >
+            <p class="hint">添加标签前，前先在左侧下拉框中搜索是否有存在的标签，以免重复添加</p>
+            <el-input v-model="tempTag" placeholder="输入标签名称" />
+            <div style="text-align: right; margin: 10px 0;">
+              <el-button size="mini" type="text" @click="isShowAddTag = false">
+                取消
+              </el-button>
+              <el-button type="primary" size="mini" :loading="addTagLoading" @click="handleAddTag">
+                确定
+              </el-button>
+            </div>
+            <el-button slot="reference" type="primary">
+              自定义标签
+            </el-button>
+          </el-popover>
         </el-form-item>
         <el-form-item prop="description" label="文章描述：" size="small">
           <el-input
@@ -51,6 +79,16 @@
             placeholder="输入描述"
             class="form__item"
           />
+        </el-form-item>
+        <el-form-item prop="is_elite" label="状态：" size="small">
+          <el-radio-group v-model="forms.status">
+            <el-radio :label="2">
+              上架
+            </el-radio>
+            <el-radio :label="1">
+              下架
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item prop="is_elite" label="推荐：" size="small">
           <el-radio-group v-model="forms.is_elite">
@@ -78,9 +116,6 @@
       <el-button type="primary" size="small" @click="submit('form')">
         保存并发布
       </el-button>
-      <el-button type="primary" size="small" @click="save('form')">
-        存至草稿箱
-      </el-button>
     </footer>
   </div>
 </template>
@@ -98,6 +133,9 @@ export default {
   },
   data() {
     return {
+      tempTag: '',
+      isShowAddTag: false,
+      addTagLoading: false,
       forms: {
         id: null,
         title: '',
@@ -107,6 +145,7 @@ export default {
         description: '',
         tag_id: [],
         is_top: 1,
+        status: 2,
         is_elite: 1
       },
       rules: {
@@ -121,7 +160,7 @@ export default {
           { type: 'number', required: true, message: '请选择分类', trigger: 'blur' }
         ],
         tag_id: [
-          { type: 'array', required: true, message: '请选择标签', trigger: 'blur' },
+          { type: 'array', required: true, message: '请选择标签', trigger: 'change' },
           { type: 'array', max: 6, min: 1, message: '标签在1 - 6个之间', trigger: 'change' }
         ],
         is_top: [
@@ -148,6 +187,28 @@ export default {
   methods: {
     ...mapActions('classify', ['getClassifyList']),
     ...mapActions('tag', ['getTagList']),
+    handleAddTag() {
+      this.addTagLoading = true
+      this.$api.tag.add({
+        name: this.tempTag
+      }).then(({ data }) => {
+        return this.getTagList().then(() => {
+          return data
+        })
+      }).then((data) => {
+        this.$message.success('标签添加成功')
+        this.forms.tag_id.push(data.id)
+        this.isShowAddTag = false
+        this.tempTag = ''
+      }).catch((err) => {
+        this.$notify.error({
+          title: '错误',
+          message: err
+        })
+      }).finally(() => {
+        this.addTagLoading = false
+      })
+    },
     getData() {
       this.$api.article.detail(this.forms.id).then(({ data }) => {
         this.forms = { ...this.forms, ...data }
@@ -157,9 +218,6 @@ export default {
           message: err
         })
       })
-    },
-    // 保存不发布
-    save() {
     },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -257,5 +315,9 @@ export default {
     box-shadow: 0 0 5px rgba(0, 0, 0, .2);
     text-align: center;
     z-index: 9999;
+  }
+  .hint {
+    font-size: 12px;
+    color: #d53f41;
   }
 </style>

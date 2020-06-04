@@ -134,6 +134,7 @@ export default {
       try {
         const { data } = await this.$api.article.page({
           author_id: this.$route.query.id,
+          status: this.isAdmin ? [1, 2] : [2],
           page: this.page
         })
         this.articleList.push(...data.data)
