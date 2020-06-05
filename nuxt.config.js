@@ -18,7 +18,10 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: '~/components/page-loading',
+  loading: {
+    color: 'rgba(170, 152, 230, 1)',
+    height: '3px'
+  },
   /*
   ** Global CSS
   */
@@ -73,7 +76,6 @@ module.exports = {
   */
   build: {
     transpile: [/^element-ui/],
-    publicPath: '/static',
     /*
     ** You can extend webpack config here
     */

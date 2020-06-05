@@ -50,15 +50,11 @@
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
-import { throttle } from '@/libs/tools'
+import scroll from '@/mixins/scroll'
 export default {
   components: { articleItem, sideMenu, sideMenuItem },
+  mixins: [scroll],
   layout: 'common',
-  head() {
-    return {
-      title: 'maikro技术博客'
-    }
-  },
   async asyncData({ app }) {
     let page = 1
     try {
@@ -95,11 +91,10 @@ export default {
       canScrollLoad: true // 是否可以滚动加载
     }
   },
-  mounted() {
-    const scroll = throttle(this.handleScroll, 100)
-    window.onscroll = scroll
-  },
   methods: {
+    onScrollLoad() {
+      return this.getData()
+    },
     async getData() {
       try {
         const { data } = await this.$api.article.page({
@@ -111,31 +106,6 @@ export default {
         // console.log(err)
         // this.$message.error(err)
       }
-    },
-    handleScroll() {
-      if (!this.canScrollLoad || this.page > this.totalPage) {
-        return false
-      }
-      const distance = 20 // 触发加载的距离阈值
-      const contentHeight = document.documentElement.scrollHeight
-      const viewHeight = document.documentElement.clientHeight
-      const scrollTop = document.documentElement.scrollTop
-
-      if (viewHeight + scrollTop >= contentHeight - distance) {
-        this.canScrollLoad = false
-        this.getData()
-        this.page++
-        this.canScrollLoad = true
-      }
-    },
-    toArticleDetail(id) {
-      const { href } = this.$router.resolve({
-        name: 'article-detail-id',
-        params: {
-          id
-        }
-      })
-      window.open(href, '_blank')
     }
   },
   filters: {
@@ -146,6 +116,11 @@ export default {
           id
         }
       }
+    }
+  },
+  head() {
+    return {
+      title: 'maikro技术博客'
     }
   }
 }
