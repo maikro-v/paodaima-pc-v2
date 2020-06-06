@@ -1,86 +1,88 @@
 <template>
-  <div class="detail">
-    <div class="detail__fix_top">
-      <!-- 操作 -->
-      <div class="action">
-        <el-badge class="action__box" :value="info.like_count || 0" type="primary">
-          <span class="action__item" @click="goFabulous">
-            <i class="action__icon iconfont icon-dianzan" />
-          </span>
-        </el-badge>
-        <el-badge class="action__box" :value="info.comment_count || 0" type="primary">
-          <span class="action__item" @click="goComment">
-            <i class="action__icon iconfont icon-pinglun" />
-          </span>
-        </el-badge>
-<!--        <p class="action__title">-->
-<!--          分享-->
-<!--        </p>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-weibo" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-qq" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-weixin" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
+  <scroll :on-scroll-load="load" :infinite-scroll-disabled="isHideMoreHotArticle">
+    <div class="detail">
+      <div class="detail__fix_top">
+        <!-- 操作 -->
+        <div class="action">
+          <el-badge class="action__box" :value="info.like_count || 0" type="primary">
+            <span class="action__item" @click="goFabulous">
+              <i class="action__icon iconfont icon-dianzan" />
+            </span>
+          </el-badge>
+          <el-badge class="action__box" :value="info.comment_count || 0" type="primary">
+            <span class="action__item" @click="goComment">
+              <i class="action__icon iconfont icon-pinglun" />
+            </span>
+          </el-badge>
+  <!--        <p class="action__title">-->
+  <!--          分享-->
+  <!--        </p>-->
+  <!--        <el-badge class="action__box" :value="0" hidden>-->
+  <!--          <span class="action__item">-->
+  <!--            <i class="action__icon iconfont icon-weibo" />-->
+  <!--          </span>-->
+  <!--        </el-badge>-->
+  <!--        <el-badge class="action__box" :value="0" hidden>-->
+  <!--          <span class="action__item">-->
+  <!--            <i class="action__icon iconfont icon-qq" />-->
+  <!--          </span>-->
+  <!--        </el-badge>-->
+  <!--        <el-badge class="action__box" :value="0" hidden>-->
+  <!--          <span class="action__item">-->
+  <!--            <i class="action__icon iconfont icon-weixin" />-->
+  <!--          </span>-->
+  <!--        </el-badge>-->
+        </div>
       </div>
+      <el-row ref="detail" type="flex" :gutter="14">
+        <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <el-card shadow="hover" class="main">
+            <!-- 文章内容 -->
+            <article-content :data="info" />
+            <!-- 评论 -->
+            <article-comment ref="comment" v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
+            <!-- 评论列表 -->
+            <article-comment-list :loading="isShowReplyLoading" :data="commentList" @on-submit="handleCommentReply" />
+            <!-- 查看更多评论 -->
+            <div class="main__btn">
+              <el-button v-show="!isHideMoreComment" type="primary" size="mini" @click="loadComment">
+                查看更多
+              </el-button>
+              <el-divider v-if="isHideMoreComment">
+                没有更多了
+              </el-divider>
+            </div>
+          </el-card>
+          <side-menu title="热门文章" :show-footer="false" class="mt">
+            <article-item
+              v-for="item in hotArticleList"
+              :key="item.id"
+              :data="item"
+              :show-image="false"
+              class="recommend"
+              :to="item.id | toPath"
+            />
+          </side-menu>
+          <el-divider v-if="isHideMoreHotArticle">
+            没有更多数据了
+          </el-divider>
+        </el-col>
+        <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
+          <!-- 作者信息 -->
+          <side-author :author="info.author || {}" link />
+          <side-menu v-if="articleRecommendList && articleRecommendList.length > 0" title="相关推荐" :show-footer="false" class="mt">
+            <side-menu-item
+              v-for="item in articleRecommendList"
+              :key="item.id"
+              :to="item.id | toPath"
+            >
+              {{ item.title }}
+            </side-menu-item>
+          </side-menu>
+        </el-col>
+      </el-row>
     </div>
-    <el-row ref="detail" type="flex" :gutter="14">
-      <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-        <el-card shadow="hover" class="main">
-          <!-- 文章内容 -->
-          <article-content :data="info" />
-          <!-- 评论 -->
-          <article-comment ref="comment" v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
-          <!-- 评论列表 -->
-          <article-comment-list :loading="isShowReplyLoading" :data="commentList" @on-submit="handleCommentReply" />
-          <!-- 查看更多评论 -->
-          <div class="main__btn">
-            <el-button v-show="!isHideMoreComment" type="primary" size="mini" @click="loadComment">
-              查看更多
-            </el-button>
-            <el-divider v-if="isHideMoreComment">
-              没有更多了
-            </el-divider>
-          </div>
-        </el-card>
-        <side-menu title="热门文章" :show-footer="false" class="mt">
-          <article-item
-            v-for="item in hotArticleList"
-            :key="item.id"
-            :data="item"
-            :show-image="false"
-            class="recommend"
-            :to="item.id | toPath"
-          />
-        </side-menu>
-        <el-divider v-if="isHideMoreHotArticle">
-          没有更多数据了
-        </el-divider>
-      </el-col>
-      <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
-        <!-- 作者信息 -->
-        <side-author :author="info.author || {}" link />
-        <side-menu v-if="articleRecommendList && articleRecommendList.length > 0" title="相关推荐" :show-footer="false" class="mt">
-          <side-menu-item
-            v-for="item in articleRecommendList"
-            :key="item.id"
-            :to="item.id | toPath"
-          >
-            {{ item.title }}
-          </side-menu-item>
-        </side-menu>
-      </el-col>
-    </el-row>
-  </div>
+  </scroll>
 </template>
 
 <script>
@@ -94,11 +96,10 @@ import articleCommentList from '@/components/article-comment-list'
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
-import scroll from '@/mixins/scroll'
+import scroll from '@/components/scroll'
 export default {
   layout: 'common',
-  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem },
-  mixins: [scroll],
+  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, scroll },
   head() {
     return {
       title: this.info.title || '',
@@ -110,7 +111,7 @@ export default {
     }
   },
   async asyncData({ app, params }) {
-    let page = 1
+    const page = 1
     const articleId = params.id
     try {
       // 推荐文章
@@ -129,7 +130,7 @@ export default {
         info: detailData.data,
         articleRecommendList: articleRecommendData.data.data,
         hotArticleList: hotArticleData.data.data,
-        page: ++page,
+        page,
         totalPage: hotArticleData.data.page.total_page
       }
     } catch (err) {
@@ -148,6 +149,8 @@ export default {
       commentPage: 1, // 评论分页
       commentTotalPage: 0, // 评论总分页
       articleRecommendList: [], // 推荐文章
+      page: 0, // 热门文章当前分页
+      totalPage: 0, // 热门文章总分页数
       hotArticleList: [], // 热门文章
       entryTime: new Date().getTime() // 进入时间
     }
@@ -157,10 +160,9 @@ export default {
       return this.commentPage > this.commentTotalPage
     },
     isHideMoreHotArticle() {
-      return this.page > this.totalPage
+      return this.page >= this.totalPage
     }
   },
-  // created也会走服务端渲染，此时没有window对象获取不到token
   created() {
     this.getCommentList()
   },
@@ -170,6 +172,10 @@ export default {
   methods: {
     ...mapActions('user', ['visitorLogin', 'getUserInfo']),
     ...mapMutations('user', ['SET_HAS_LOGIN']),
+    load() {
+      this.page++
+      this.getData()
+    },
     // 初始化
     async init() {
       if (getToken()) {
@@ -279,15 +285,7 @@ export default {
           id
         }
       })
-    },
-    // 滚动加载
-    onScrollLoad({ page, totalPage }) {
-      return this.getData()
-    },
-    // 滚动加载之前
-    scrollBeforeLoad() {},
-    // 滚动加载完成
-    scrollLoadEnd() {}
+    }
   },
   filters: {
     toPath(id) {
@@ -310,12 +308,12 @@ export default {
     margin-top: 16px;
   }
   .detail{
-   position: relative;
-   margin-top: 30px;
-   @include container;
-   &__fix_top{
-     position: fixed;
-   }
+    position: relative;
+    margin-top: 30px;
+    @include container;
+    &__fix_top{
+      position: fixed;
+    }
   }
   .main {
     &__comment {

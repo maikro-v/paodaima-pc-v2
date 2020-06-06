@@ -52,7 +52,18 @@
           </tag>
         </div>
       </el-col>
-      <img v-if="showImage && data.image" :src="data.image" :alt="data.title" class="main__img">
+      <el-image
+        v-if="showImage && data.image"
+        :src="data.image"
+        fit="cover"
+        :lazy="true"
+        :alt="data.title"
+        class="main__img"
+      >
+        <div slot="error">
+          <i class="el-icon-picture-outline" />
+        </div>
+      </el-image>
     </el-row>
     <el-row type="flex" align="middle" class="footer">
       <el-col :span="12">

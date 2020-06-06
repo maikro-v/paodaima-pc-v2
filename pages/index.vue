@@ -1,62 +1,66 @@
 <template>
-  <div class="home">
-    <header class="banner">
-      <img src="@/assets/svg/1.svg" class="banner__img">
-    </header>
-    <main class="main">
-      <el-row type="flex" :gutter="14">
-        <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-          <section class="article">
-            <article-item
-              v-for="item in articleList"
-              :key="item.id"
-              :data="item"
-              :to="item.id | toPath"
-              target="_blank"
-            />
-          </section>
-        </el-col>
-        <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
-          <aside>
-            <!-- <hot-article class="side-menu__list" /> -->
-            <side-menu title="热门" :show-footer="false" class="side-menu__list">
-              <side-menu-item
-                v-for="item in hotArticleList"
+  <scroll :on-scroll-load="load" :infinite-scroll-disabled="isLoadEnd">
+    <div class="home">
+      <header class="banner">
+        <img src="@/assets/svg/1.svg" class="banner__img">
+      </header>
+      <main class="main">
+        <el-row type="flex" :gutter="14">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+            <section class="article">
+              <article-item
+                v-for="item in articleList"
                 :key="item.id"
+                :data="item"
                 :to="item.id | toPath"
                 target="_blank"
-              >
-                {{ item.title }}
-              </side-menu-item>
-            </side-menu>
-            <side-menu title="推荐" :show-footer="false" class="side-menu__list">
-              <side-menu-item
-                v-for="item in recommendArticleList"
-                :key="item.id"
-                :to="item.id | toPath"
-                target="_blank"
-              >
-                {{ item.title }}
-              </side-menu-item>
-            </side-menu>
-          </aside>
-        </el-col>
-      </el-row>
-    </main>
-  </div>
+              />
+              <el-divider v-if="isLoadEnd">
+                没有更多数据了
+              </el-divider>
+            </section>
+          </el-col>
+          <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
+            <aside>
+              <!-- <hot-article class="side-menu__list" /> -->
+              <side-menu title="热门" :show-footer="false" class="side-menu__list">
+                <side-menu-item
+                  v-for="item in hotArticleList"
+                  :key="item.id"
+                  :to="item.id | toPath"
+                  target="_blank"
+                >
+                  {{ item.title }}
+                </side-menu-item>
+              </side-menu>
+              <side-menu title="推荐" :show-footer="false" class="side-menu__list">
+                <side-menu-item
+                  v-for="item in recommendArticleList"
+                  :key="item.id"
+                  :to="item.id | toPath"
+                  target="_blank"
+                >
+                  {{ item.title }}
+                </side-menu-item>
+              </side-menu>
+            </aside>
+          </el-col>
+        </el-row>
+      </main>
+    </div>
+  </scroll>
 </template>
 
 <script>
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
-import scroll from '@/mixins/scroll'
+import scroll from '@/components/scroll'
 export default {
-  components: { articleItem, sideMenu, sideMenuItem },
-  mixins: [scroll],
+  components: { articleItem, sideMenu, sideMenuItem, scroll },
   layout: 'common',
   async asyncData({ app }) {
-    let page = 1
+    const page = 1
     try {
       // 文章列表
       const { data } = await app.$api.article.page({
@@ -71,7 +75,7 @@ export default {
         page
       })
       return {
-        page: ++page,
+        page,
         totalPage: data.page.total_page,
         articleList: data.data,
         recommendArticleList: recommendArticle.data.data,
@@ -91,9 +95,15 @@ export default {
       canScrollLoad: true // 是否可以滚动加载
     }
   },
+  computed: {
+    isLoadEnd() {
+      return this.page >= this.totalPage
+    }
+  },
   methods: {
-    onScrollLoad() {
-      return this.getData()
+    load() {
+      this.page++
+      this.getData()
     },
     async getData() {
       try {

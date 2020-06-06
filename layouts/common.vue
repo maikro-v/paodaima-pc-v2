@@ -11,16 +11,14 @@
             size="small"
             class="search hidden-sm-and-down"
           >
-            <i slot="suffix" @enter="goSearch" @click="goSearch" class="el-input__icon el-icon-search search__icon" />
+            <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
           </el-input>
           <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
           <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
         </el-col>
       </el-row>
     </navbar>
-    <login v-model="canShowLogin" :loading="loginLoading" @on-confirm="handleSubmit" />
     <nuxt />
-    <el-backtop target=".container-wrap" />
   </div>
 </template>
 
@@ -31,9 +29,8 @@ import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'
 import user from '@/components/user'
-import login from '@/components/login'
 export default {
-  components: { navbar, logo, navbarMenu, user, login },
+  components: { navbar, logo, navbarMenu, user },
   data() {
     return {
       menuNavList: [],
@@ -42,41 +39,21 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['name', 'avatar']),
-    canShowLogin: {
-      get() {
-        return this.$store.state.canShowLogin
-      },
-      set(val) {
-        this.SET_CAN_SHOW_LOGIN(val)
-      }
-    },
-    hasLogin() {
-      return getToken()
-    }
+    ...mapState('user', ['name', 'avatar', 'hasLogin'])
   },
   created() {
     this.getMenuNav()
     this.setUserInfo()
   },
-  mounted() {
-    console.log(this)
-    // window.onscroll = () => {
-    //   console.log('滚动')
-    // }
-  },
   methods: {
-    ...mapMutations(['SET_CAN_SHOW_LOGIN']),
     ...mapMutations('user', ['SET_HAS_LOGIN']),
     ...mapActions('user', ['login', 'getUserInfo', 'logout']),
     setUserInfo() {
       if (getToken()) {
-        this.getUserInfo().then(() => {
-          // this.SET_HAS_LOGIN(true)
-        })
+        this.getUserInfo()
       }
     },
-    goSearch() {
+    toSearch() {
       this.$router.push({
         name: 'article',
         query: {
@@ -102,20 +79,8 @@ export default {
       })
     },
     toLogin() {
-      this.SET_CAN_SHOW_LOGIN(true)
-    },
-    handleSubmit({ email, password }) {
-      this.loginLoading = true
-      this.login({
-        email,
-        password
-      }).then((data) => {
-        this.$message.success('登录成功')
-        window.location.reload()
-      }).catch((err) => {
-        this.$message.error(err)
-      }).finally(() => {
-        this.loginLoading = false
+      this.$router.push({
+        name: 'login'
       })
     },
     handlerLogout() {
@@ -130,10 +95,11 @@ export default {
   .container-wrap {
     width: 100%;
     height: calc(100vh - #{$height});
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    margin-top: $height;
+    /*padding-top: $height;*/
+    /*overflow-x: hidden;*/
+    /*overflow-y: auto;*/
+    /*-webkit-overflow-scrolling: touch;*/
+    /*overflow: hidden;*/
   }
   .navbar-wrap {
     height: $height;

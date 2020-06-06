@@ -125,6 +125,7 @@ import { mapState, mapActions } from 'vuex'
 // import MarkdownNice from 'markdown-nice'
 export default {
   layout: 'common',
+  middleware: 'accountVerify',
   // components: { MarkdownNice },
   head() {
     return {
@@ -281,6 +282,7 @@ export default {
   .editor {
     height: 700px;
     line-height: normal !important;
+    z-index: 99;
     & * {
       line-height: 2 !important;
     }

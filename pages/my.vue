@@ -1,49 +1,48 @@
 <template>
-  <div class="my">
-    <main class="main">
-      <el-row type="flex" :gutter="14">
-        <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
-          <!-- 作者信息 -->
-          <side-author :author="author" />
-        </el-col>
-        <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-          <section class="article">
-            <template v-if="articleList && articleList.length > 0">
-              <article-item
-                v-for="(item, index) in articleList"
-                :key="item.id"
-                :data="item"
-                :actions="actions"
-                :show-image="false"
-                @on-active="(row) => handleArticleAction(row, item, index)"
-              />
-            </template>
-            <template v-else>
-              <empty />
-            </template>
-          </section>
-        </el-col>
-      </el-row>
-    </main>
-  </div>
+  <scroll>
+    <div class="my">
+      <main class="main">
+        <el-row type="flex" :gutter="14">
+          <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
+            <!-- 作者信息 -->
+            <side-author :author="author" />
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+            <section class="article">
+              <template v-if="articleList && articleList.length > 0">
+                <article-item
+                  v-for="(item, index) in articleList"
+                  :key="item.id"
+                  :data="item"
+                  :actions="actions"
+                  :show-image="false"
+                  @on-active="(row) => handleArticleAction(row, item, index)"
+                />
+                <el-divider v-if="isLoadEnd">
+                  没有更多数据了
+                </el-divider>
+              </template>
+              <template v-else>
+                <empty />
+              </template>
+            </section>
+          </el-col>
+        </el-row>
+      </main>
+    </div>
+  </scroll>
 </template>
 
 <script>
 import { getToken } from '../libs/utils'
-// import { throttle } from '@/libs/tools'
-import scroll from '@/mixins/scroll'
+import { isEmpty } from '../libs/tools'
+import scroll from '@/components/scroll'
 import articleItem from '@/components/article-item'
 import sideAuthor from '@/components/side-author'
 import empty from '@/components/empty'
 export default {
   layout: 'common',
-  components: { articleItem, sideAuthor, empty },
-  mixins: [scroll],
-  head() {
-    return {
-      title: '个人中心'
-    }
-  },
+  components: { articleItem, sideAuthor, empty, scroll },
   // async asyncData({ app, query }) {
   //   let page = 1
   //   try {
@@ -64,26 +63,35 @@ export default {
   data() {
     return {
       articleList: [],
-      author: {} // 用户信息
+      author: {}, // 用户信息
+      page: 1,
+      totalPage: 0
     }
-  },
-  mounted() {
-    this.getUserInfo()
-    this.getData()
   },
   computed: {
     // 是否管理员，管理员可对文章进行删除编辑等操作 没有指定用户id，并且有token就是管理员状态
     isAdmin() {
-      return (!this.$route.query.id && (getToken() !== '' || getToken() !== null || getToken() !== undefined))
+      return !isEmpty(getToken()) && !this.$route.query.id
     },
     actions() {
       return this.isAdmin && [
         '编辑',
         '删除'
       ]
+    },
+    isLoadEnd() {
+      return this.page >= this.totalPage
     }
   },
+  mounted() {
+    this.getUserInfo()
+    this.getData()
+  },
   methods: {
+    load() {
+      this.page++
+      this.getData()
+    },
     handleArticleAction(row, item, index) {
       if (row === 0) {
         this.toArticleEdit(item)
@@ -133,7 +141,7 @@ export default {
     async getData() {
       try {
         const { data } = await this.$api.article.page({
-          author_id: this.$route.query.id,
+          author_id: this.$route.query.id ? this.$route.query.id : this.isAdmin ? null : -999,
           status: this.isAdmin ? [1, 2] : [2],
           page: this.page
         })
@@ -146,10 +154,11 @@ export default {
           message: err
         })
       }
-    },
-    onScrollLoad({ page, totalPage }) {
-      console.log(page, totalPage)
-      return this.getData()
+    }
+  },
+  head() {
+    return {
+      title: '个人中心'
     }
   }
 }

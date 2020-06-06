@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="article-author" :body-style="{ padding: 0 }">
-    <img class="avatar" :src="_author.avatar" @click="link && toAuthor()">
+    <img class="avatar" :alt="_author.name" :src="_author.avatar" @click="link && toAuthor()">
     <h6 class="title">
       {{ _author.name }}
     </h6>

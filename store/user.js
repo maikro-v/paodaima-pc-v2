@@ -1,4 +1,4 @@
-import { setToken, setVisitorToken } from '@/libs/utils'
+import { setToken, setVisitorToken, removeToken } from '@/libs/utils'
 
 export const state = () => ({
   name: '',
@@ -64,7 +64,7 @@ export const actions = {
   logout({ commit }) {
     return new Promise((resolve, reject) => {
       this.$api.user.userInfo().then(() => {
-        setToken('')
+        removeToken()
         commit('SET_NAME', '')
         commit('SET_AVATAR', '')
         commit('SET_EMAIL', '')
@@ -85,6 +85,7 @@ export const actions = {
         commit('SET_ARTICLE_COUNT', data.articleCount)
         commit('SET_LINK_COUNT', data.linkCount)
         commit('SET_ROLE', data.role)
+        commit('SET_HAS_LOGIN', true)
         resolve(data)
       }).catch(reject)
     })

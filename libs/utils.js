@@ -11,6 +11,10 @@ export function getToken() {
   return Cookies.get(TOKEN)
 }
 
+export function removeToken() {
+  Cookies.remove(TOKEN)
+}
+
 // 设置游客token
 export function setVisitorToken(val) {
   window.localStorage.setItem(TOKEN, val)
@@ -19,4 +23,16 @@ export function setVisitorToken(val) {
 // 获取游客token
 export function getVisitorToken() {
   return window.localStorage.getItem(TOKEN)
+}
+
+// 获取request的cookie
+export function getCookieFromReq(req, name) {
+  if (!req.headers.cookie) {
+    return
+  }
+  const valCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith(`${name}=`))
+  if (!valCookie) {
+    return
+  }
+  return decodeURIComponent(valCookie.split('=')[1])
 }
