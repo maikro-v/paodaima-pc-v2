@@ -1,6 +1,6 @@
 <template>
   <div class="container-wrap">
-    <navbar>
+    <navbar class="navbar">
       <el-row type="flex" align="middle" class="container navbar-wrap">
         <logo class="logo-wrap" />
         <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
@@ -20,6 +20,7 @@
     </navbar>
     <login v-model="canShowLogin" :loading="loginLoading" @on-confirm="handleSubmit" />
     <nuxt />
+    <el-backtop target=".container-wrap" />
   </div>
 </template>
 
@@ -57,6 +58,12 @@ export default {
   created() {
     this.getMenuNav()
     this.setUserInfo()
+  },
+  mounted() {
+    console.log(this)
+    // window.onscroll = () => {
+    //   console.log('滚动')
+    // }
   },
   methods: {
     ...mapMutations(['SET_CAN_SHOW_LOGIN']),
@@ -122,16 +129,18 @@ export default {
   $height: 60px;
   .container-wrap {
     width: 100%;
+    height: calc(100vh - #{$height});
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    margin-top: $height;
+  }
+  .navbar-wrap {
+    height: $height;
   }
   .logo-wrap {
     height: $height;
     line-height: $height;
-  }
-  .navbar-wrap {
-    height: $height;
   }
   .user-wrap {
     vertical-align: middle;
