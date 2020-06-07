@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="empty">
-    <img src="@/assets/images/empty-icon.png" class="empty__img">
+    <img src="./empty.svg" class="empty__img">
     <p class="empty__text">
       暂无数据
     </p>
@@ -11,13 +11,13 @@
   .empty {
     padding: 50px 0;
     &__img {
-      width: 200px;
+      width: 160px;
       margin: 0 auto;
       display: block;
-      animation: scale 1s ease infinite alternate;
+      /*animation: scale 1s ease infinite alternate;*/
     }
     &__text {
-      font-size: 30px;
+      font-size: 16px;
       color: $textColor;
       text-align: center;
       margin-top: 20px;
