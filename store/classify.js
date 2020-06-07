@@ -15,5 +15,14 @@ export const actions = {
         resolve(data)
       })
     })
+  },
+  getClassifyAll({ commit }) {
+    return new Promise((resolve, reject) => {
+      this.$api.classify.all().then(({ data }) => {
+        console.log(data)
+        commit('SET_CLASSIFY_LIST', data)
+        resolve(data)
+      })
+    })
   }
 }

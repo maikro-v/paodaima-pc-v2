@@ -182,11 +182,11 @@ export default {
       this.forms.id = this.$route.query.id
       this.getData()
     }
-    this.getClassifyList()
+    this.getClassifyAll()
     this.getTagList()
   },
   methods: {
-    ...mapActions('classify', ['getClassifyList']),
+    ...mapActions('classify', ['getClassifyAll']),
     ...mapActions('tag', ['getTagList']),
     handleAddTag() {
       this.addTagLoading = true

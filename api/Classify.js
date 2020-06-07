@@ -8,4 +8,8 @@ export default class Classify {
   list(data) {
     return this.http.list(`${this.base}`, data)
   }
+
+  all(data) {
+    return this.http.get(`${this.base}/all`, data)
+  }
 }
