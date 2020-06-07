@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="empty">
-    <img src="./empty.svg" class="empty__img">
+    <img src="@/static/svg/empty.svg" class="empty__img">
     <p class="empty__text">
       暂无数据
     </p>
