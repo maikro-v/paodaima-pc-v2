@@ -1,8 +1,15 @@
 <template>
-  <el-submenu :index="data.id">
-    <template v-for="item in data.children">
-      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item.children" />
-      <navbar-menu-item :key="item.id" :data="item" />
+  <el-submenu
+    :index="menuData.id+''"
+    :show-timeout="0"
+    :hide-timeout="0"
+  >
+    <template slot="title">
+      {{ menuData.name }}
+    </template>
+    <template v-for="(item) in menuData.children">
+      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />
+      <navbar-menu-item v-else :key="item.id" :data="item" />
     </template>
   </el-submenu>
 </template>
@@ -16,6 +23,19 @@ export default {
     data: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      menuData: this.data || {}
+    }
+  },
+  mounted() {
+    if (this.hasChildren(this.menuData.children)) {
+      this.menuData.children.unshift({
+        id: this.data.id,
+        name: '全部'
+      })
     }
   },
   methods: {

@@ -1,7 +1,9 @@
 <template>
   <div class="login">
     <div class="login__container">
-      <h1 class="title">LOGIN</h1>
+      <h1 class="title">
+        LOGIN
+      </h1>
       <el-form ref="form" :model="form" :rules="rules" class="form">
         <el-form-item prop="email">
           <el-input v-model="form.email" placeholder="输入邮箱" />

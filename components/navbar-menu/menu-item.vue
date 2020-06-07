@@ -1,5 +1,8 @@
 <template>
-  <el-menu-item :index="data.id.toString()" @click="toArticleList">
+  <el-menu-item
+    :index="data.id+''"
+    @click="toArticleList"
+  >
     {{ data.name }}
   </el-menu-item>
 </template>

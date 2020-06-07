@@ -9,7 +9,7 @@
   >
     <template v-for="(item) in _menuData">
       <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />
-      <navbar-menu-item :key="item.id" :data="item" />
+      <navbar-menu-item v-else :key="item.id" :data="item" />
     </template>
   </el-menu>
 </template>
