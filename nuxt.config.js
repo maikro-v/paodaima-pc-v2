@@ -9,11 +9,11 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
-      { name: 'baidu-site-verification', content='oqg7LFN6Zw' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '博客，it' },
+      { name: 'baidu-site-verification', content: 'oqg7LFN6Zw' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   /*

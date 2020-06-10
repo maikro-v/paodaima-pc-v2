@@ -91,22 +91,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $height: 60px;
+  $headerHeight: 60px;
   .container-wrap {
     width: 100%;
-    height: calc(100vh - #{$height});
-    /*padding-top: $height;*/
+    height: calc(100vh - #{$headerHeight});
+    // display: flex;
+    // flex-direction: column;
+    /*padding-top: $headerHeight;*/
     /*overflow-x: hidden;*/
     /*overflow-y: auto;*/
     /*-webkit-overflow-scrolling: touch;*/
     /*overflow: hidden;*/
   }
   .navbar-wrap {
-    height: $height;
+    height: $headerHeight;
   }
   .logo-wrap {
-    height: $height;
-    line-height: $height;
+    height: $headerHeight;
+    line-height: $headerHeight;
   }
   .user-wrap {
     vertical-align: middle;
@@ -115,8 +117,8 @@ export default {
     margin-left: 30px;
   }
   .btn {
-    height: $height;
-    line-height: $height;
+    height: $headerHeight;
+    line-height: $headerHeight;
     display: inline-block;
     cursor: pointer;
     color: #e0e3da;

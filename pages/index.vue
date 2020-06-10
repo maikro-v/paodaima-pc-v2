@@ -48,6 +48,7 @@
         </el-row>
       </main>
     </div>
+    <app-footer />
   </scroll>
 </template>
 
@@ -55,9 +56,10 @@
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
+import appFooter from '@/components/app-footer'
 import scroll from '@/components/scroll'
 export default {
-  components: { articleItem, sideMenu, sideMenuItem, scroll },
+  components: { articleItem, sideMenu, sideMenuItem, scroll, appFooter },
   layout: 'common',
   async asyncData({ app }) {
     const page = 1
