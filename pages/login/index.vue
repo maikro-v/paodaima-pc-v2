@@ -9,7 +9,7 @@
           <el-input v-model="form.email" placeholder="输入邮箱" />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="form.password" placeholder="输入密码" />
+          <el-input type="password" v-model="form.password" placeholder="输入密码" />
         </el-form-item>
         <el-form-item>
           <el-button :loading="loginLoading" type="primary" class="form__btn" @click="handleSubmit('form')">

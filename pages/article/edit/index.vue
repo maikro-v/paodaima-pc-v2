@@ -8,7 +8,13 @@
         <el-form-item prop="content" label-width="0" size="small">
           <no-ssr>
 <!--            <markdown-nice></markdown-nice>-->
-            <mavon-editor v-model="forms.content" v-highlight class="editor" />
+            <mavon-editor
+              ref="editor"
+              :tabSize="2"
+              v-model="forms.content"
+              class="editor"
+              @imgAdd="handleImgAdd"
+            />
           </no-ssr>
         </el-form-item>
         <el-form-item label="封面图：" size="small">
@@ -175,7 +181,10 @@ export default {
   },
   computed: {
     ...mapState('classify', ['classifyList']),
-    ...mapState('tag', ['tagList'])
+    ...mapState('tag', ['tagList']),
+    $editor() {
+      return this.$refs.editor
+    }
   },
   created() {
     if (this.$route.query.id) {
@@ -188,6 +197,18 @@ export default {
   methods: {
     ...mapActions('classify', ['getClassifyAll']),
     ...mapActions('tag', ['getTagList']),
+    handleImgAdd(filename, imgfile) {
+      const formData = new FormData()
+      formData.append('files', imgfile)
+      this.$api.upload.upload(formData).then(({ data }) => {
+        this.$editor.$img2Url(filename, data[0].url)
+      }).catch((err) => {
+        this.$notify.error({
+          title: '错误',
+          message: err
+        })
+      })
+    },
     handleAddTag() {
       this.addTagLoading = true
       this.$api.tag.add({
@@ -279,12 +300,13 @@ export default {
     padding-bottom: 70px;
     border-radius: 6px;
   }
-  .editor {
+  /deep/ .editor {
     height: 700px;
     line-height: normal !important;
     z-index: 99;
     & * {
       line-height: 2 !important;
+      max-width: 100%;
     }
   }
   .form {
