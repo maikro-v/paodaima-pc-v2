@@ -24,7 +24,7 @@ const defaults = {
 defaults.highlight = (str, lang) => {
   if (lang && hljs.getLanguage(lang)) {
     try {
-      return `<pre class="hljs"><code>${hljs.highlight(lang, str, true).value}</code></pre>`
+      return `<pre class="custom"><code class="hljs">${hljs.highlight(lang, str, true).value}</code></pre>`
     } catch (__) {}
   }
   return '' // 使用额外的默认转义

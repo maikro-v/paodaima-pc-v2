@@ -14,7 +14,7 @@
     <h1 class="title">
       {{ _datas.title }}
     </h1>
-    <article v-html="_datas.content" class="content" />
+    <article v-html="_datas.content" class="content markdown" />
   </article>
 </template>
 
@@ -51,6 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/styles/markdown.scss";
   .user {
     &__detail {
       margin-left: 10px;
