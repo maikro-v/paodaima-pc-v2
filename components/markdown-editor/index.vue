@@ -107,6 +107,7 @@ export default {
   .markdown-editor {
     line-height: 1.6;
     border: 0;
+    z-index: 10 !important;
     /deep/ img {
       max-width: 100%;
     }
