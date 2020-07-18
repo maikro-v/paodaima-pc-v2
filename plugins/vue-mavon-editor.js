@@ -2,8 +2,8 @@ import Vue from 'vue'
 import hljs from 'highlight.js'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-import 'github-markdown-css'
-import 'highlight.js/styles/monokai.css'
+import 'mavon-editor/dist/markdown/github-markdown.min.css'
+import 'mavon-editor/dist/highlightjs/styles/monokai.min.css'
 
 Vue.use(mavonEditor)
 
