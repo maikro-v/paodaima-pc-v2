@@ -371,4 +371,16 @@ export default {
     border-color: transparent !important;
     border-bottom-color: #EBEEF5 !important;
   }
+  @media screen and (max-width: 750px) {
+    .detail {
+      margin-left: 10px;
+      margin-right: 10px;
+      padding-bottom: 52px;
+    }
+    .main {
+      &__comment {
+        margin-top: 0;
+      }
+    }
+  }
 </style>

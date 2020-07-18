@@ -8,7 +8,7 @@
     class="page-container"
   >
     <slot />
-    <el-backtop target=".page-container" />
+    <el-backtop target=".page-container" :bottom="80" />
   </div>
 </template>
 

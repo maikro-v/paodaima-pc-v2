@@ -13,6 +13,7 @@
         type="textarea"
         resize="none"
         placeholder="说点什么吧..."
+        class="form__input"
       />
       <footer class="form__footer">
         <el-button :loading="_loading" type="primary" size="mini" @click="handlerSubmit">
@@ -71,6 +72,40 @@ export default {
     margin-top: 20px;
     &__footer {
       margin-top: 10px;
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .article-comment {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 9999;
+    }
+    .title {
+      display: none;
+    }
+    .form {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      background: #566270;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, .1);
+      margin-top: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      /deep/ .el-textarea__inner {
+        height: 100%;
+      }
+      &__input {
+        height: 100%;
+        flex: 1;
+      }
+      &__footer {
+        margin-top: 0;
+        margin-left: 10px;
+      }
     }
   }
 </style>

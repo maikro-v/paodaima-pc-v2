@@ -51,6 +51,7 @@ export default {
       box-shadow: 2px 2px 14px rgba(0, 0, 0, .42);
       background: #272822;
       padding: 16px;
+      overflow-x: auto;
       &::before {
         content: '';
         display: block;
