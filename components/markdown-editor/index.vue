@@ -87,7 +87,7 @@ export default {
       this.$emit('imgAdd', filename, imgfile)
     },
     /* 图片名转链接 */
-    $img2url(filename, url) {
+    $img2Url(filename, url) {
       this.$editor.$img2Url(filename, url)
     },
     handleSave(e) {
