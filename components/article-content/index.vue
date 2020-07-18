@@ -14,13 +14,16 @@
     <h1 class="title">
       {{ _datas.title }}
     </h1>
-    <article v-html="_datas.content" class="content markdown" />
+    <markdown-view :value="_datas.content" class="content" />
+<!--    <article v-html="_datas.content" class="content markdown" />-->
   </article>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import markdownView from '@/components/markdown-view2.0'
 export default {
+  components: { markdownView },
   props: {
     data: {
       type: Object,
@@ -40,7 +43,7 @@ export default {
           name: '',
           avatar: ''
         },
-        content: this.$md.render(data.content),
+        content: data.content,
         time: data.create_time ? dayjs(data.create_time).format('YYYY-MM-DD hh:mm:ss') : '',
         title: data.title || '',
         visitorCount: data.visitor_count || 0
@@ -51,7 +54,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/markdown.scss";
   .user {
     &__detail {
       margin-left: 10px;
@@ -71,12 +73,5 @@ export default {
   }
   .content {
     margin-top: 20px;
-    /deep/ & p {
-      line-height: 2;
-      @include fontMain;
-    }
-    /deep/ & img {
-      max-width: 100%;
-    }
   }
 </style>

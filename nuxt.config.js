@@ -1,4 +1,3 @@
-
 module.exports = {
   mode: 'universal',
   /*
@@ -41,7 +40,6 @@ module.exports = {
     '@/plugins/element-ui',
     '@/plugins/axios',
     '@/plugins/router',
-    '@/plugins/markdownIt',
     { src: '@/plugins/vue-mavon-editor', srr: false }
   ],
   /*

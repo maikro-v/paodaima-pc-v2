@@ -7,11 +7,9 @@
       <section class="main">
         <el-form-item prop="content" label-width="0" size="small">
           <no-ssr>
-<!--            <markdown-nice></markdown-nice>-->
-            <mavon-editor
-              ref="editor"
-              :tabSize="2"
+            <markdown-editor
               v-model="forms.content"
+              ref="editor"
               class="editor"
               @imgAdd="handleImgAdd"
             />
@@ -128,11 +126,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import markdownEditor from '@/components/markdown-editor'
 // import MarkdownNice from 'markdown-nice'
 export default {
   layout: 'common',
   middleware: 'accountVerify',
-  // components: { MarkdownNice },
+  components: { markdownEditor },
   head() {
     return {
       title: '文章编辑'
@@ -300,15 +299,15 @@ export default {
     padding-bottom: 70px;
     border-radius: 6px;
   }
-  /deep/ .editor {
-    height: 700px;
-    line-height: normal !important;
-    z-index: 99;
-    & * {
-      line-height: 2 !important;
-      max-width: 100%;
-    }
-  }
+  /*/deep/ .editor {*/
+  /*  height: 700px;*/
+  /*  line-height: normal !important;*/
+  /*  z-index: 99;*/
+  /*  & * {*/
+  /*    line-height: 2 !important;*/
+  /*    max-width: 100%;*/
+  /*  }*/
+  /*}*/
   .form {
     &__item {
       width: 360px;

@@ -14,24 +14,24 @@
               <i class="action__icon iconfont icon-pinglun" />
             </span>
           </el-badge>
-  <!--        <p class="action__title">-->
-  <!--          分享-->
-  <!--        </p>-->
-  <!--        <el-badge class="action__box" :value="0" hidden>-->
-  <!--          <span class="action__item">-->
-  <!--            <i class="action__icon iconfont icon-weibo" />-->
-  <!--          </span>-->
-  <!--        </el-badge>-->
-  <!--        <el-badge class="action__box" :value="0" hidden>-->
-  <!--          <span class="action__item">-->
-  <!--            <i class="action__icon iconfont icon-qq" />-->
-  <!--          </span>-->
-  <!--        </el-badge>-->
-  <!--        <el-badge class="action__box" :value="0" hidden>-->
-  <!--          <span class="action__item">-->
-  <!--            <i class="action__icon iconfont icon-weixin" />-->
-  <!--          </span>-->
-  <!--        </el-badge>-->
+<!--        <p class="action__title">-->
+<!--          分享-->
+<!--        </p>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-weibo" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-qq" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
+<!--        <el-badge class="action__box" :value="0" hidden>-->
+<!--          <span class="action__item">-->
+<!--            <i class="action__icon iconfont icon-weixin" />-->
+<!--          </span>-->
+<!--        </el-badge>-->
         </div>
       </div>
       <el-row ref="detail" type="flex" :gutter="14">
