@@ -1,6 +1,6 @@
 <template>
   <h1 class="logo">
-    LOGO
+    Maikro
   </h1>
 </template>
 

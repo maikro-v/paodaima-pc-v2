@@ -103,6 +103,50 @@ export default {
     }
   },
   methods: {
+    init() {
+      const page = 1
+      this.$api.article.page({
+        page
+      }).then(({ data }) => {
+        this.page = page
+        this.totalPage = data.page.total_page
+        this.articleList = data.data
+      })
+      // Promise.all([
+      //   this.$api.article.page({
+      //     page
+      //   }),
+      //   this.$api.article.recommend({
+      //     page
+      //   }),
+      //   this.$api.article.hot({
+      //     page
+      //   })
+      // ]).then((res) => {
+      //   console.log(res)
+      // })
+      // try {
+      //   // 文章列表
+      //   const { data } = await this.$api.article.page({
+      //     page
+      //   })
+      //   // 推荐的文章
+      //   const recommendArticle = await this.$api.article.recommend({
+      //     page
+      //   })
+      //   // 热门文章
+      //   const hotArticle = await this.$api.article.hot({
+      //     page
+      //   })
+      //   this.page = page
+      //   this.totalPage = data.page.total_page
+      //   this.articleList = data.data
+      //   this.recommendArticleList = recommendArticle.data.data
+      //   this.hotArticleList = hotArticle.data.data
+      // } catch (err) {
+      //   return err
+      // }
+    },
     load() {
       this.page++
       this.getData()
@@ -113,7 +157,7 @@ export default {
           page: this.page
         })
         this.articleList.push(...data.data)
-        return Promise.resolve()
+        return Promise.resolve(data.data)
       } catch (err) {
         // console.log(err)
         // this.$message.error(err)
