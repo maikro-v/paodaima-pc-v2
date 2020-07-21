@@ -3,22 +3,22 @@
     :default-active="_active"
     class="navbar-menu"
     mode="horizontal"
-    background-color="#566270"
-    text-color="#e0e3da"
+    background-color="transparent"
+    text-color="#ffffff"
     active-text-color="#a593e0"
   >
     <template v-for="(item) in _menuData">
-      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />
-      <navbar-menu-item v-else :key="item.id" :data="item" />
+      <navbar-menu-item :key="item.id" :data="item" />
+<!--      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />-->
+<!--      <navbar-menu-item v-else :key="item.id" :data="item" />-->
     </template>
   </el-menu>
 </template>
 
 <script>
 import navbarMenuItem from './menu-item'
-import navbarMenuSub from './menu-sub'
 export default {
-  components: { navbarMenuItem, navbarMenuSub },
+  components: { navbarMenuItem },
   props: {
     data: {
       type: Array,
@@ -52,6 +52,17 @@ export default {
   border-bottom: none;
   /deep/ .el-menu-item.is-active {
     border-bottom-color: transparent !important;
+  }
+  /deep/ .el-submenu__title {
+    background-color: transparent !important;
+  }
+  /deep/ .el-menu-item {
+    font-weight: bold;
+    color: var(--color) !important;
+    &:not(.is-disabled):hover {
+      background-color: transparent !important;
+      color: $primary !important;
+    }
   }
 }
 </style>

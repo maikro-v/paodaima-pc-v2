@@ -1,6 +1,6 @@
 <template>
   <div class="container-wrap">
-    <navbar class="navbar">
+    <navbar class="navbar" :style="navbarStyle">
       <el-row type="flex" align="middle" class="container navbar-wrap">
         <logo class="logo-wrap" />
         <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
@@ -25,6 +25,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { getToken } from '@/libs/utils'
+import { throttle } from '@/libs/tools'
 import navbarMenu from '@/components/navbar-menu'
 import navbar from '@/components/navbar'
 import logo from '@/components/logo'
@@ -35,19 +36,43 @@ export default {
     return {
       menuNavList: [],
       loginLoading: false,
-      keyword: ''
+      keyword: '',
+      scrollTop: 0
     }
   },
   computed: {
-    ...mapState('user', ['name', 'avatar', 'hasLogin'])
+    ...mapState('user', ['name', 'avatar', 'hasLogin']),
+    navbarStyle() {
+      let opacity = this.scrollTop / 300
+      opacity = Math.min(opacity, 1)
+      opacity = Math.max(opacity, 0)
+      const color = 255 / opacity
+      console.log(color)
+      return {
+        backgroundColor: `rgba(255, 255, 255, ${opacity})`,
+        boxShadow: `0px 2px 6px rgba(212, 212, 212, ${opacity})`,
+        '--color': 'rgba(255, 255, 255, 1)'
+      }
+    }
   },
   created() {
     this.getMenuNav()
     this.setUserInfo()
   },
+  mounted() {
+    this.handleScroll()
+    this.throttleFun = throttle(this.handleScroll, 100)
+    document.addEventListener('scroll', this.throttleFun, false)
+  },
+  beforeDestroy() {
+    document.removeEventListener('scroll', this.throttleFun, false)
+  },
   methods: {
     ...mapMutations('user', ['SET_HAS_LOGIN']),
     ...mapActions('user', ['login', 'getUserInfo', 'logout']),
+    handleScroll() {
+      this.scrollTop = document.documentElement.scrollTop
+    },
     setUserInfo() {
       if (getToken()) {
         this.getUserInfo()
@@ -94,14 +119,7 @@ export default {
   $headerHeight: 60px;
   .container-wrap {
     width: 100%;
-    height: calc(100vh - #{$headerHeight});
-    // display: flex;
-    // flex-direction: column;
-    /*padding-top: $headerHeight;*/
-    /*overflow-x: hidden;*/
-    /*overflow-y: auto;*/
-    /*-webkit-overflow-scrolling: touch;*/
-    /*overflow: hidden;*/
+    height: calc(100vh);
   }
   .navbar-wrap {
     height: $headerHeight;
@@ -136,7 +154,7 @@ export default {
       cursor: pointer;
     }
     /deep/ .el-input__inner {
-      background: #677483;
+      background: #3d5265;
       border-color: transparent;
       color: rgb(231, 231, 231);
       &:focus {

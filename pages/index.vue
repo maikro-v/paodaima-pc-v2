@@ -1,9 +1,10 @@
 <template>
   <scroll :on-scroll-load="load" :infinite-scroll-disabled="isLoadEnd">
     <div class="home">
-      <header class="banner">
-        <img src="@/assets/svg/1.svg" class="banner__img">
-      </header>
+      <section class="banner">
+        <div class="banner__overlay"></div>
+<!--        <img src="@/assets/svg/1.svg" class="banner__img">-->
+      </section>
       <main class="main">
         <el-row type="flex" :gutter="14">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
@@ -184,8 +185,20 @@ export default {
 
 <style lang="scss" scoped>
   .banner {
-    height: 400px;
+    position: relative;
+    height: 630px;
     padding: 10px 0;
+    background: url("~@/static/images/hero-bg.jpg") no-repeat top center / cover;
+    &__overlay {
+      background: #123457;
+      background: linear-gradient(to left, #123457 , #123457);
+      opacity: 0.7;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
     &__img {
       width: 100%;
       height: 100%;
@@ -196,6 +209,7 @@ export default {
   .main {
     width: 100%;
     @include container;
+    margin-top: 40px;
   }
   .side-menu__list {
     & + & {

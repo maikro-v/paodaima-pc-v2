@@ -64,7 +64,8 @@ export default {
       line-height: 1.4;
       @include fontMain;
       margin-left: 10px;
-      color: #e0e3da;
+      color: var(--color);
+      font-weight: bold !important;
     }
   }
 </style>

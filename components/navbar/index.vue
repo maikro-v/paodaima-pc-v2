@@ -25,14 +25,12 @@ export default {
 
 <style lang="scss" scoped>
   .navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
     height: var(--height);
-    /*position: fixed;*/
-    /*top: 0;*/
-    /*width: 100%;*/
-    /*height: var(--height);*/
-    /*box-shadow: 0 2px 6px rgba(0, 0, 0, .2);*/
-    /*background: #566270;*/
-    /*z-index: 100;*/
+    z-index: 99999;
     &__block {
       height: 100%;
     }
@@ -41,8 +39,8 @@ export default {
       top: 0;
       width: 100%;
       height: var(--height);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
-      background: #566270;
+      /*box-shadow: 0 2px 6px rgba(0, 0, 0, .2);*/
+      /*background: #566270;*/
       z-index: 100;
     }
     &-wrap {
