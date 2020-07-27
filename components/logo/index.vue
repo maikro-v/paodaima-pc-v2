@@ -11,6 +11,6 @@ export default {
 
 <style lang="scss" scoped>
   .logo {
-    color: #A593E0;
+    color: $titleColor;
   }
 </style>

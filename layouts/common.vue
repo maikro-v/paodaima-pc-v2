@@ -1,21 +1,21 @@
 <template>
   <div class="container-wrap">
     <navbar class="navbar">
-      <el-row type="flex" align="middle" class="container navbar-wrap">
-        <logo class="logo-wrap" />
-        <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
-        <el-col class="col text-right">
-          <el-input
-            v-model="keyword"
-            placeholder="请输入内容"
-            size="small"
-            class="search hidden-sm-and-down"
-          >
-            <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
-          </el-input>
-          <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-          <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
+      <el-row type="flex" align="middle" class="navbar-wrap">
+        <el-col class="col">
+          <logo class="logo-wrap" />
         </el-col>
+        <el-input
+          v-model="keyword"
+          placeholder="搜索文章"
+          size="small"
+          class="search hidden-sm-and-down"
+        >
+          <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
+        </el-input>
+        <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
+        <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
+        <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
       </el-row>
     </navbar>
     <nuxt />
@@ -95,8 +95,8 @@ export default {
   .container-wrap {
     width: 100%;
     height: calc(100vh - #{$headerHeight});
-    // display: flex;
-    // flex-direction: column;
+    /*display: flex;*/
+    /*flex-direction: column;*/
     /*padding-top: $headerHeight;*/
     /*overflow-x: hidden;*/
     /*overflow-y: auto;*/
@@ -105,6 +105,8 @@ export default {
   }
   .navbar-wrap {
     height: $headerHeight;
+    padding: 0 40px;
+    box-sizing: border-box;
   }
   .logo-wrap {
     height: $headerHeight;
@@ -114,33 +116,49 @@ export default {
     vertical-align: middle;
   }
   .menu {
-    margin-left: 30px;
+    margin-right: 50px;
   }
   .btn {
-    height: $headerHeight;
-    line-height: $headerHeight;
+    height: 36px;
+    line-height: 36px;
     display: inline-block;
     cursor: pointer;
-    color: #e0e3da;
-    padding: 0 10px;
+    color: $titleColor;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 30px;
+    @include hover;
   }
   .search {
-    width: 180px;
+    width: 240px;
     display: inline-block;
-    margin-right: 30px;
+    margin-right: 20px;
     margin-left: 30px;
     vertical-align: middle;
+    background: rgba(#F3F7FF, 1);
+    border-radius: 6px;
     &__icon {
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
+      color: $titleColor;
     }
     /deep/ .el-input__inner {
-      background: #677483;
+      background: transparent;
       border-color: transparent;
-      color: rgb(231, 231, 231);
+      color: rgba($titleColor, 1);
+      font-size: 16px;
+      font-weight: bold;
+      &:hover {
+        border-color: #c0c7d5;
+      }
+      &::placeholder {
+        font-weight: normal;
+      }
       &:focus {
-        border-color: white;
+        border-color: #c0c7d5;
       }
     }
   }

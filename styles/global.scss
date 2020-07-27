@@ -1,5 +1,5 @@
-$primary: #aa98e6;
-$titleColor: #566270;
+$primary: #673de6;
+$titleColor: #2f1c6a;
 $textColor: #86858f;
 
 $titleFontSize: 16px;
@@ -45,4 +45,12 @@ $border: 1px solid #dddddd;
 
 @mixin card {
   border-radius: 4px;
+}
+
+@mixin hover {
+  transition: all .3s ease;
+  &:hover {
+    background-color: transparent !important;
+    opacity: .6;
+  }
 }

@@ -2,7 +2,7 @@
   <scroll :on-scroll-load="load" :infinite-scroll-disabled="isLoadEnd">
     <div class="home">
       <header class="banner">
-        <img src="@/assets/svg/1.svg" class="banner__img">
+<!--        <img src="@/assets/svg/1.svg" class="banner__img">-->
       </header>
       <main class="main">
         <el-row type="flex" :gutter="14">
@@ -184,17 +184,20 @@ export default {
 
 <style lang="scss" scoped>
   .banner {
-    height: 400px;
-    padding: 10px 0;
-    &__img {
-      width: 100%;
-      height: 100%;
-      object-position: center;
-      object-fit: contain;
-    }
+    height: 760px;
+    padding: 165px 0 40px;
+    background: url('~@/static/images/background.svg') no-repeat center / cover;
+    box-sizing: content-box;
+    /*&__img {*/
+    /*  width: 100%;*/
+    /*  height: 100%;*/
+    /*  object-position: center;*/
+    /*  object-fit: contain;*/
+    /*}*/
   }
   .main {
     width: 100%;
+    margin-top: 30px;
     @include container;
   }
   .side-menu__list {

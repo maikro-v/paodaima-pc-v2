@@ -3,8 +3,8 @@
     :default-active="_active"
     class="navbar-menu"
     mode="horizontal"
-    background-color="#566270"
-    text-color="#e0e3da"
+    background-color="transparent"
+    text-color="#2f1c6a"
     active-text-color="#a593e0"
   >
     <template v-for="(item) in _menuData">
@@ -50,8 +50,23 @@ export default {
 <style lang="scss" scoped>
 .navbar-menu {
   border-bottom: none;
-  /deep/ .el-menu-item.is-active {
-    border-bottom-color: transparent !important;
+  /deep/ .el-menu-item,
+  /deep/ .el-submenu__title,
+  /deep/ .el-submenu__title i{
+    font-weight: bold;
+    font-size: 16px;
+  }
+  /deep/ .el-menu-item,
+  /deep/ .el-menu--horizontal .el-menu-item,
+  /deep/ .el-submenu__title {
+    transition: all .3s ease;
+    &:not(.is-disabled):hover {
+      background-color: transparent !important;
+      opacity: .6;
+    }
+    &.is-active {
+      border-bottom-color: transparent !important;
+    }
   }
 }
 </style>
