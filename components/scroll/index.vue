@@ -1,18 +1,12 @@
 <template>
-  <div
-    v-infinite-scroll="load"
-    :infinite-scroll-delay="_infiniteScrollDelay"
-    :infinite-scroll-disabled="_infiniteScrollDisabled"
-    :infinite-scroll-distance="_infiniteScrollDistance"
-    :infinite-scroll-immediate="_infiniteScrollImmediate"
-    class="page-container"
-  >
+  <div class="page-container">
     <slot />
     <el-backtop target=".page-container" :bottom="80" />
   </div>
 </template>
 
 <script>
+import { throttle } from '@/libs/tools'
 export default {
   props: {
     onScrollLoad: Function,
@@ -47,17 +41,30 @@ export default {
       return this.infiniteScrollImmediate
     }
   },
+  mounted() {
+    this.throttleFun = throttle(this.handleScroll, 100)
+    document.addEventListener('scroll', this.throttleFun, false)
+  },
   methods: {
+    handleScroll() {
+      if (document.documentElement.clientHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 10 && !this.infiniteScrollDisabled) {
+        this.onScrollLoad && this.onScrollLoad()
+      }
+    },
     load() {
       this.onScrollLoad && this.onScrollLoad()
     }
+  },
+  beforeDestroy() {
+    document.removeEventListener('scroll', this.throttleFun, false)
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .page-container {
-    height: 100%;
-    overflow: auto;
+    /*height: 100%;*/
+    /*overflow: auto;*/
+    /*-webkit-overflow-scrolling: touch;*/
   }
 </style>
