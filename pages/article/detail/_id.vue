@@ -1,5 +1,5 @@
 <template>
-  <scroll :on-scroll-load="load" :infinite-scroll-disabled="isHideMoreHotArticle">
+  <layout @load="load" :scrollDisabled="isHideMoreHotArticle" :headerColoredDistance="10">
     <div class="detail">
       <div class="detail__fix_top">
         <!-- 操作 -->
@@ -34,9 +34,9 @@
 <!--        </el-badge>-->
         </div>
       </div>
-      <el-row ref="detail" type="flex" :gutter="14">
+      <el-row ref="detail" type="flex" :gutter="24">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-          <el-card shadow="hover" class="main">
+          <el-card class="main">
             <!-- 文章内容 -->
             <article-content :data="info" />
             <!-- 评论 -->
@@ -82,7 +82,7 @@
         </el-col>
       </el-row>
     </div>
-  </scroll>
+  </layout>
 </template>
 
 <script>
@@ -96,10 +96,9 @@ import articleCommentList from '@/components/article-comment-list'
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
-import scroll from '@/components/scroll'
+import layout from '@/components/layout'
 export default {
-  layout: 'common',
-  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, scroll },
+  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, layout },
   head() {
     return {
       title: this.info.title || '',
@@ -309,7 +308,7 @@ export default {
   }
   .detail{
     position: relative;
-    margin-top: 30px;
+    padding-top: 100px;
     @include container;
     &__fix_top{
       position: fixed;

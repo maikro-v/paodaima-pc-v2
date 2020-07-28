@@ -1,10 +1,11 @@
 $primary: #673de6;
 $titleColor: #2f1c6a;
-$textColor: #86858f;
+$textColor: #5a5d73;
+$bgColor: #f3f5fb;
 
-$titleFontSize: 16px;
-$mainFontSize: 14px;
-$assistFontSize: 12px;
+$titleFontSize: 20px;
+$mainFontSize: 16px;
+$assistFontSize: 14px;
 
 $transition: all .2s ease;
 
@@ -12,16 +13,25 @@ $border: 1px solid #dddddd;
 
 // 容器
 @mixin container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+  @media screen and (max-width: 1500px) {
+    max-width: 1200px;
+  }
+  @media screen and (max-width: 1260px) {
+    max-width: 960px;
+  }
+  @media screen and (max-width: 1000px) {
+    max-width: 750px;
+  }
 }
 
 // 标题
 @mixin fontTitle {
   font-size: $titleFontSize;
   font-weight: bold;
-  color: #566270;
+  color: $titleColor;
 }
 
 // 正文

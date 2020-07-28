@@ -1,11 +1,11 @@
 <template>
-  <scroll :on-scroll-load="load" :infinite-scroll-disabled="isLoadEnd">
+  <layout @load="load" :scrollDisabled="scrollDisabled">
     <div class="home">
       <header class="banner">
 <!--        <img src="@/assets/svg/1.svg" class="banner__img">-->
       </header>
       <main class="main">
-        <el-row type="flex" :gutter="14">
+        <el-row type="flex" :gutter="24">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <section class="article">
               <article-item
@@ -23,7 +23,7 @@
           <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
             <aside>
               <!-- <hot-article class="side-menu__list" /> -->
-              <side-menu title="热门" :show-footer="false" class="side-menu__list">
+              <side-menu v-if="hotArticleList && hotArticleList.length" title="热门" :show-footer="false" class="side-menu__list">
                 <side-menu-item
                   v-for="item in hotArticleList"
                   :key="item.id"
@@ -33,7 +33,7 @@
                   {{ item.title }}
                 </side-menu-item>
               </side-menu>
-              <side-menu title="推荐" :show-footer="false" class="side-menu__list">
+              <side-menu v-if="recommendArticleList && recommendArticleList.length > 0" title="推荐" :show-footer="false" class="side-menu__list">
                 <side-menu-item
                   v-for="item in recommendArticleList"
                   :key="item.id"
@@ -49,7 +49,7 @@
       </main>
     </div>
     <app-footer />
-  </scroll>
+  </layout>
 </template>
 
 <script>
@@ -57,10 +57,9 @@ import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import appFooter from '@/components/app-footer'
-import scroll from '@/components/scroll'
+import layout from '@/components/layout'
 export default {
-  components: { articleItem, sideMenu, sideMenuItem, scroll, appFooter },
-  layout: 'common',
+  components: { articleItem, sideMenu, sideMenuItem, layout, appFooter },
   async asyncData({ app }) {
     const page = 1
     try {
@@ -94,69 +93,27 @@ export default {
       articleList: [], // 文章列表
       recommendArticleList: [], // 推荐文章列表
       hotArticleList: [], // 热门文章列表
-      canScrollLoad: true // 是否可以滚动加载
+      scrollDisabled: false // 是否禁用滚动加载
     }
   },
   computed: {
     isLoadEnd() {
-      return this.page >= this.totalPage
+      return this.page >= this.totalPage || this.scrollDisabled
     }
   },
   methods: {
-    init() {
-      const page = 1
-      this.$api.article.page({
-        page
-      }).then(({ data }) => {
-        this.page = page
-        this.totalPage = data.page.total_page
-        this.articleList = data.data
-      })
-      // Promise.all([
-      //   this.$api.article.page({
-      //     page
-      //   }),
-      //   this.$api.article.recommend({
-      //     page
-      //   }),
-      //   this.$api.article.hot({
-      //     page
-      //   })
-      // ]).then((res) => {
-      //   console.log(res)
-      // })
-      // try {
-      //   // 文章列表
-      //   const { data } = await this.$api.article.page({
-      //     page
-      //   })
-      //   // 推荐的文章
-      //   const recommendArticle = await this.$api.article.recommend({
-      //     page
-      //   })
-      //   // 热门文章
-      //   const hotArticle = await this.$api.article.hot({
-      //     page
-      //   })
-      //   this.page = page
-      //   this.totalPage = data.page.total_page
-      //   this.articleList = data.data
-      //   this.recommendArticleList = recommendArticle.data.data
-      //   this.hotArticleList = hotArticle.data.data
-      // } catch (err) {
-      //   return err
-      // }
-    },
     load() {
       this.page++
       this.getData()
     },
     async getData() {
+      this.scrollDisabled = true
       try {
         const { data } = await this.$api.article.page({
           page: this.page
         })
         this.articleList.push(...data.data)
+        this.scrollDisabled = false
         return Promise.resolve(data.data)
       } catch (err) {
         // console.log(err)
@@ -184,7 +141,7 @@ export default {
 
 <style lang="scss" scoped>
   .banner {
-    height: 760px;
+    height: 600px;
     padding: 165px 0 40px;
     background: url('~@/static/images/background.svg') no-repeat center / cover;
     box-sizing: content-box;
@@ -202,7 +159,7 @@ export default {
   }
   .side-menu__list {
     & + & {
-      margin-top: 10px;
+      margin-top: 20px;
     }
   }
 </style>

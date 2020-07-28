@@ -1,5 +1,5 @@
 <template>
-  <el-card class="article-item" shadow="hover" :body-style="bodyStyle">
+  <el-card class="article-item" :body-style="bodyStyle">
     <el-row type="flex" justify="center" class="header">
       <el-col>
         <h5 class="header__title" @click="toDetail">
@@ -157,8 +157,10 @@ export default {
 
 <style lang="scss" scoped>
   .article-item{
+    background: #fff;
+    border: 1px solid #fafbff;
     & + & {
-      margin-top: 10px;
+      margin-top: 20px;
     }
   }
   .header {

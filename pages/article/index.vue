@@ -1,5 +1,5 @@
 <template>
-  <scroll :on-scroll-load="load" :infinite-scroll-disabled="isLoadEnd">
+  <layout @load="load" :scrollDisabled="scrollDisabled">
     <div class="article-type">
       <main class="main">
         <el-row type="flex" :gutter="14">
@@ -18,7 +18,7 @@
           </el-col>
           <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
             <aside>
-              <side-menu title="热门" :show-footer="false" class="side-menu__list">
+              <side-menu v-if="hotArticleList && hotArticleList.length" title="热门" :show-footer="false" class="side-menu__list">
                 <side-menu-item
                   v-for="item in hotArticleList"
                   :key="item.id"
@@ -28,7 +28,7 @@
                   {{ item.title }}
                 </side-menu-item>
               </side-menu>
-              <side-menu title="推荐" :show-footer="false" class="side-menu__list">
+              <side-menu v-if="recommendArticleList && recommendArticleList.length" title="推荐" :show-footer="false" class="side-menu__list">
                 <side-menu-item
                   v-for="item in recommendArticleList"
                   :key="item.id"
@@ -43,7 +43,7 @@
         </el-row>
       </main>
     </div>
-  </scroll>
+  </layout>
 </template>
 
 <script>
@@ -51,10 +51,9 @@ import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import empty from '@/components/empty'
-import scroll from '@/components/scroll'
+import layout from '@/components/layout'
 export default {
-  layout: 'common',
-  components: { articleItem, sideMenu, empty, sideMenuItem, scroll },
+  components: { articleItem, sideMenu, empty, sideMenuItem, layout },
   head() {
     return {
       title: 'maikro技术博客'
@@ -93,12 +92,13 @@ export default {
       recommendArticleList: [], // 推荐文章列表
       hotArticleList: [], // 热门文章列表
       page: 0,
-      totalPage: 0
+      totalPage: 0,
+      scrollDisabled: false
     }
   },
   computed: {
     isLoadEnd() {
-      return this.page >= this.totalPage
+      return this.page >= this.totalPage || this.scrollDisabled
     }
   },
   methods: {
@@ -107,6 +107,7 @@ export default {
       this.getData()
     },
     async getData(params = {}) {
+      this.scrollDisabled = true
       try {
         const { data } = await this.$api.article.page({
           classify_id: this.$route.query.type,
@@ -114,6 +115,7 @@ export default {
           ...params
         })
         this.articleList.push(...data.data)
+        this.scrollDisabled = false
         return Promise.resolve()
       } catch (err) {
         // console.log(err)
@@ -153,7 +155,7 @@ export default {
 
 <style lang="scss" scoped>
   .article-type {
-    margin-top: 20px;
+    padding-top: 150px;
   }
   .main {
     width: 100%;

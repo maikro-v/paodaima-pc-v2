@@ -19,14 +19,14 @@ export default {}
 
 <style lang="scss" scoped>
   .app-footer {
+    line-height: 1.6;
     text-align: center;
+    font-weight: bold;
     font-size: 16px;
-    color: #333333;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, .1);
-    padding: 14px 0;
-    background: #566270;
+    padding: 30px 0;
+    background: $bgColor;
     &__text {
-      color: white;
+      color: $titleColor;
     }
     &__author {
       text-decoration: underline;

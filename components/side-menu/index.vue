@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" class="side-menu" :body-style="{ padding: '0px' }">
+  <el-card class="side-menu" :body-style="{ padding: '0px' }">
     <header class="header text-over">
       {{ title }}
     </header>
@@ -40,14 +40,13 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  height: 40px;
-  line-height: 40px;
-  padding: 0 20px;
-  @include fontTitle;
+  padding: 16px 20px 6px;
+  font-size: 20px;
+  font-weight: bold;
+  color: $titleColor;
 }
 .main {
-  padding: 10px 0;
-  border-top: $border;
+  padding-bottom: 10px;
 }
 .footer {
   border-top: $border;

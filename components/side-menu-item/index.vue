@@ -1,6 +1,8 @@
 <template>
-  <div class="side-menu-item text-overs" @click="onClick">
-    <slot />
+  <div class="side-menu-item" @click="onClick">
+    <div class="text-overs">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -41,9 +43,8 @@ export default {
   // min-height: 30px;
   line-height: 1.4;
   cursor: pointer;
-  padding: 0 20px;
-  margin: 10px 0;
-  transition: $transition;
+  padding: 10px 20px;
+  transition: all .2s ease;
   @include fontMain;
   &::before {
     content: '';
@@ -58,10 +59,10 @@ export default {
     transform: translateY(-50%);
   }
   &:hover {
-    color: $primary;
-    &::before {
-      left: 0;
-    }
+    background: $bgColor;
+    /*&::before {*/
+    /*  left: 0;*/
+    /*}*/
   }
 }
 </style>
