@@ -53,7 +53,7 @@
               </el-divider>
             </div>
           </el-card>
-          <side-menu title="热门文章" :show-footer="false" class="mt">
+          <div class="mt">
             <article-item
               v-for="item in hotArticleList"
               :key="item.id"
@@ -62,7 +62,7 @@
               class="recommend"
               :to="item.id | toPath"
             />
-          </side-menu>
+          </div>
           <el-divider v-if="isHideMoreHotArticle">
             没有更多数据了
           </el-divider>
@@ -304,7 +304,7 @@ export default {
 
 <style lang="scss" scoped>
   .mt {
-    margin-top: 16px;
+    margin-top: 30px;
   }
   .detail{
     position: relative;
