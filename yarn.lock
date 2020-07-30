@@ -5579,6 +5579,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+matter-js@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.npm.taobao.org/matter-js/download/matter-js-0.14.2.tgz#8169af9e06fdc356ba9e72b49624eb329839883b"
+  integrity sha1-gWmvngb9w1a6nnK0liTrMpg5iDs=
+
 mavon-editor@^2.9.0:
   version "2.9.0"
   resolved "https://registry.npm.taobao.org/mavon-editor/download/mavon-editor-2.9.0.tgz#e51bbcdcde18b9236333a9ceb12fed2d84542900"

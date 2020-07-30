@@ -62,10 +62,10 @@ export default {
     &__name {
       max-width: 80px;
       line-height: 1.4;
-      @include fontMain;
+      font-size: 16px;
+      font-weight: bold;
       margin-left: 10px;
-      color: var(--color);
-      font-weight: bold !important;
+      color: $titleColor;
     }
   }
 </style>

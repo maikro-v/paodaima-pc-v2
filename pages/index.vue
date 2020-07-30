@@ -1,9 +1,9 @@
 <template>
   <layout @load="load" :scrollDisabled="scrollDisabled">
     <div class="home">
-      <header class="banner">
+      <div class="banner" id="banner">
 <!--        <img src="@/assets/svg/1.svg" class="banner__img">-->
-      </header>
+      </div>
       <main class="main">
         <el-row type="flex" :gutter="24">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import constraints from '@/libs/matter/constraints'
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
@@ -101,7 +102,17 @@ export default {
       return this.page >= this.totalPage || this.scrollDisabled
     }
   },
+  mounted() {
+    // this.renderMatter()
+  },
   methods: {
+    renderMatter() {
+      const dom = document.getElementById('banner')
+      constraints(dom, {
+        width: document.documentElement.clientWidth,
+        height: 600
+      })
+    },
     load() {
       this.page++
       this.getData()

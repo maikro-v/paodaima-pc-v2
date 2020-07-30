@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $headerHeight: 60px;
+  $headerHeight: 70px;
   .navbar {
     position: fixed;
     top: 0;
