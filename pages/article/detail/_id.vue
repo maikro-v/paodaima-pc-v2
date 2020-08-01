@@ -1,7 +1,7 @@
 <template>
   <layout @load="load" :scrollDisabled="isHideMoreHotArticle" :headerColoredDistance="10" class="detail">
     <div class="container">
-      <div class="detail__fix_top">
+      <div class="container__fix_top">
         <!-- 操作 -->
         <div class="action">
           <el-badge class="action__box" :value="info.like_count || 0" type="primary">
