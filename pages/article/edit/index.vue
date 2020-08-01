@@ -1,137 +1,147 @@
 <template>
   <div class="add">
-    <el-form ref="form" :model="forms" :rules="rules" label-width="100px" class="form">
-      <el-form-item prop="title" label-width="0" size="medium" class="title">
-        <el-input v-model="forms.title" placeholder="输入文章标题" />
-      </el-form-item>
-      <section class="main">
-        <el-form-item prop="content" label-width="0" size="small">
-          <no-ssr>
-            <markdown-editor
-              v-model="forms.content"
-              ref="editor"
-              class="editor"
-              @imgAdd="handleImgAdd"
-            />
-          </no-ssr>
+    <header class="header row align-center">
+      <logo />
+      <div class="col text-right">
+        <btn @click="submit('form')">保存并发布</btn>
+        <btn type="text" @click="handleExit">退出</btn>
+      </div>
+    </header>
+    <main class="container">
+      <el-form ref="form" :model="forms" :rules="rules" label-width="100px" class="form">
+        <el-form-item prop="title" label-width="0" size="medium" class="title">
+          <el-input v-model="forms.title" placeholder="输入文章标题" />
         </el-form-item>
-        <el-form-item label="封面图：" size="small">
-          <el-upload
-            drag
-            :show-file-list="false"
-            :before-upload="beforeUpload"
-            action="/api/upload"
-            class="upload-demo"
-          >
-            <img v-if="forms.image" :src="forms.image" class="upload__img">
-            <div v-else class="upload-text">
-              <i class="el-icon-upload" />
-              <div class="el-upload__text">
-                将文件拖到此处，或<em>点击上传</em>
+        <section class="main">
+          <el-form-item prop="content" label-width="0" size="small">
+            <no-ssr>
+              <markdown-editor
+                v-model="forms.content"
+                ref="editor"
+                class="editor"
+                @imgAdd="handleImgAdd"
+              />
+            </no-ssr>
+          </el-form-item>
+          <el-form-item label="封面图：" size="small">
+            <el-upload
+              drag
+              :show-file-list="false"
+              :before-upload="beforeUpload"
+              action="/api/upload"
+              class="upload-demo"
+            >
+              <img v-if="forms.image" :src="forms.image" class="upload__img">
+              <div v-else class="upload-text">
+                <i class="el-icon-upload" />
+                <div class="el-upload__text">
+                  将文件拖到此处，或<em>点击上传</em>
+                </div>
               </div>
-            </div>
-            <div slot="tip" class="el-upload__tip">
-              建议尺寸为320*180像素或同比例的jpg/png/git文件，且不超过500kb
-            </div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item prop="classify_id" label="分类：" size="small">
-          <el-select v-model="forms.classify_id" clearable placeholder="选择文章分类" class="form__item">
-            <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="tag_id" label="标签：" size="small">
-          <el-select
-            v-model="forms.tag_id"
-            multiple
-            clearable
-            filterable
-            :multiple-limit="6"
-            placeholder="选择所属标签"
-            class="form__item"
-          >
-            <el-option v-for="(item, index) in tagList" :key="index" :label="item.name" :value="item.id" />
-          </el-select>
-          <el-popover
-            v-model="isShowAddTag"
-            placement="top"
-            width="240"
-            title="添加标签"
-          >
-            <p class="hint">添加标签前，前先在左侧下拉框中搜索是否有存在的标签，以免重复添加</p>
-            <el-input v-model="tempTag" placeholder="输入标签名称" />
-            <div style="text-align: right; margin: 10px 0;">
-              <el-button size="mini" type="text" @click="isShowAddTag = false">
-                取消
+              <div slot="tip" class="el-upload__tip">
+                建议尺寸为320*180像素或同比例的jpg/png/git文件，且不超过500kb
+              </div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item prop="classify_id" label="分类：" size="small">
+            <el-select v-model="forms.classify_id" clearable placeholder="选择文章分类" class="form__item">
+              <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="tag_id" label="标签：" size="small">
+            <el-select
+              v-model="forms.tag_id"
+              multiple
+              clearable
+              filterable
+              :multiple-limit="6"
+              placeholder="选择所属标签"
+              class="form__item"
+            >
+              <el-option v-for="(item, index) in tagList" :key="index" :label="item.name" :value="item.id" />
+            </el-select>
+            <el-popover
+              v-model="isShowAddTag"
+              placement="top"
+              width="240"
+              title="添加标签"
+            >
+              <p class="hint">添加标签前，前先在左侧下拉框中搜索是否有存在的标签，以免重复添加</p>
+              <el-input v-model="tempTag" placeholder="输入标签名称" />
+              <div style="text-align: right; margin: 10px 0;">
+                <el-button size="mini" type="text" @click="isShowAddTag = false">
+                  取消
+                </el-button>
+                <el-button type="primary" size="mini" :loading="addTagLoading" @click="handleAddTag">
+                  确定
+                </el-button>
+              </div>
+              <el-button slot="reference" type="primary">
+                自定义标签
               </el-button>
-              <el-button type="primary" size="mini" :loading="addTagLoading" @click="handleAddTag">
-                确定
-              </el-button>
-            </div>
-            <el-button slot="reference" type="primary">
-              自定义标签
-            </el-button>
-          </el-popover>
-        </el-form-item>
-        <el-form-item prop="description" label="文章描述：" size="small">
-          <el-input
-            v-model="forms.description"
-            type="textarea"
-            :rows="7"
-            :maxlength="250"
-            show-word-limit
-            placeholder="输入描述"
-            class="form__item"
-          />
-        </el-form-item>
-        <el-form-item prop="is_elite" label="状态：" size="small">
-          <el-radio-group v-model="forms.status">
-            <el-radio :label="2">
-              上架
-            </el-radio>
-            <el-radio :label="1">
-              下架
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item prop="is_elite" label="推荐：" size="small">
-          <el-radio-group v-model="forms.is_elite">
-            <el-radio :label="2">
-              推荐
-            </el-radio>
-            <el-radio :label="1">
-              不推荐
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item prop="is_top" label="顶置：" size="small">
-          <el-radio-group v-model="forms.is_top">
-            <el-radio :label="2">
-              顶置
-            </el-radio>
-            <el-radio :label="1">
-              不顶置
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </section>
-    </el-form>
-    <footer class="footer">
-      <el-button type="primary" size="small" @click="submit('form')">
-        保存并发布
-      </el-button>
-    </footer>
+            </el-popover>
+          </el-form-item>
+          <el-form-item prop="description" label="文章描述：" size="small">
+            <el-input
+              v-model="forms.description"
+              type="textarea"
+              :rows="7"
+              :maxlength="250"
+              show-word-limit
+              placeholder="输入描述"
+              class="form__item"
+            />
+          </el-form-item>
+          <el-form-item prop="is_elite" label="状态：" size="small">
+            <el-radio-group v-model="forms.status">
+              <el-radio :label="2">
+                上架
+              </el-radio>
+              <el-radio :label="1">
+                下架
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item prop="is_elite" label="推荐：" size="small">
+            <el-radio-group v-model="forms.is_elite">
+              <el-radio :label="2">
+                推荐
+              </el-radio>
+              <el-radio :label="1">
+                不推荐
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item prop="is_top" label="顶置：" size="small">
+            <el-radio-group v-model="forms.is_top">
+              <el-radio :label="2">
+                顶置
+              </el-radio>
+              <el-radio :label="1">
+                不顶置
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </section>
+      </el-form>
+    </main>
+<!--    <footer class="footer">-->
+<!--      <el-button type="primary" size="small" @click="submit('form')">-->
+<!--        保存并发布-->
+<!--      </el-button>-->
+<!--    </footer>-->
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import markdownEditor from '@/components/markdown-editor'
+import logo from '@/components/logo'
+import btn from '@/components/btn'
 // import MarkdownNice from 'markdown-nice'
 export default {
-  layout: 'common',
   middleware: 'accountVerify',
-  components: { markdownEditor },
+  components: { markdownEditor, logo, btn },
   head() {
     return {
       title: '文章编辑'
@@ -240,6 +250,9 @@ export default {
         })
       })
     },
+    handleExit() {
+      this.$router.back(-1)
+    },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -291,8 +304,22 @@ export default {
 
 <style lang="scss" scoped>
   .add {
+    padding: 90px 0 50px;
+    background: $bgColor;
+  }
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: white;
+    padding: 0 20px;
+    z-index: 9999;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .1);
+  }
+  .container {
     @include container;
-    padding: 10px 0 70px;
   }
   .main {
     background: white;

@@ -1,11 +1,13 @@
 <template>
-  <scroll>
+  <layout :scroll-disabled="scrollDisabled" @load="load">
     <div class="my">
       <main class="main">
         <el-row type="flex" :gutter="14">
           <el-col :md="6" :lg="6" :xl="6" class="hidden-sm-and-down">
             <!-- 作者信息 -->
-            <side-author :author="author" />
+            <div class="sticky">
+              <side-author :author="author" />
+            </div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <section class="article">
@@ -30,19 +32,18 @@
         </el-row>
       </main>
     </div>
-  </scroll>
+  </layout>
 </template>
 
 <script>
 import { getToken } from '../libs/utils'
 import { isEmpty } from '../libs/tools'
-import scroll from '@/components/scroll'
+import layout from '@/components/layout'
 import articleItem from '@/components/article-item'
 import sideAuthor from '@/components/side-author'
 import empty from '@/components/empty'
 export default {
-  layout: 'common',
-  components: { articleItem, sideAuthor, empty, scroll },
+  components: { articleItem, sideAuthor, empty, layout },
   // async asyncData({ app, query }) {
   //   let page = 1
   //   try {
@@ -65,7 +66,8 @@ export default {
       articleList: [],
       author: {}, // 用户信息
       page: 1,
-      totalPage: 0
+      totalPage: 0,
+      scrollDisabled: false
     }
   },
   computed: {
@@ -140,6 +142,7 @@ export default {
     },
     async getData() {
       try {
+        this.scrollDisabled = true
         const { data } = await this.$api.article.page({
           author_id: this.$route.query.id ? this.$route.query.id : this.isAdmin ? null : -999,
           status: this.isAdmin ? [1, 2] : [2],
@@ -147,6 +150,7 @@ export default {
         })
         this.articleList.push(...data.data)
         this.totalPage = data.page.total_page
+        this.scrollDisabled = false
         return Promise.resolve()
       } catch (err) {
         this.$notify.error({
@@ -166,7 +170,12 @@ export default {
 
 <style lang="scss" scoped>
   .my {
-    margin-top: 20px;
+    padding-top: 100px;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1064' height='1064' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='88' y1='88' x2='0' y2='0'%3E%3Cstop offset='0' stop-color='%2388898d'/%3E%3Cstop offset='1' stop-color='%23d8dadf'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='75' y1='76' x2='168' y2='160'%3E%3Cstop offset='0' stop-color='%238f8f8f'/%3E%3Cstop offset='0.09' stop-color='%23b3b3b3'/%3E%3Cstop offset='0.18' stop-color='%23c9c9c9'/%3E%3Cstop offset='0.31' stop-color='%23dbdbdb'/%3E%3Cstop offset='0.44' stop-color='%23e8e8e8'/%3E%3Cstop offset='0.59' stop-color='%23f2f2f2'/%3E%3Cstop offset='0.75' stop-color='%23fafafa'/%3E%3Cstop offset='1' stop-color='%23FFFFFF'/%3E%3C/linearGradient%3E%3Cfilter id='c' x='0' y='0' width='200%25' height='200%25'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='12' /%3E%3C/filter%3E%3C/defs%3E%3Cpolygon fill='url(%23a)' points='0 174 0 0 174 0'/%3E%3Cpath fill='%23000' fill-opacity='0.35' filter='url(%23c)' d='M121.8 174C59.2 153.1 0 174 0 174s63.5-73.8 87-94c24.4-20.9 87-80 87-80S107.9 104.4 121.8 174z'/%3E%3Cpath fill='url(%23b)' d='M142.7 142.7C59.2 142.7 0 174 0 174s42-66.3 74.9-99.3S174 0 174 0S142.7 62.6 142.7 142.7z'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top left;
   }
   .main {
     width: 100%;
@@ -176,5 +185,9 @@ export default {
     & + & {
       margin-top: 10px;
     }
+  }
+  .sticky {
+    position: sticky;
+    top: 100px;
   }
 </style>

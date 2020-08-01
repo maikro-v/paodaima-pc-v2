@@ -57,7 +57,7 @@ export default {
 
 <style lang="scss" scoped>
   .layout {
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
   }
   .navbar_colored {
     background: rgba(255, 255, 255, 0.98);

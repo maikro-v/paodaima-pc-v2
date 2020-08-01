@@ -1,5 +1,16 @@
 <template>
-  <el-card class="side-menu" :body-style="{ padding: '0px' }">
+  <el-card
+    class="side-menu"
+    :class="[
+      { 'sticky': sticky }
+    ]"
+    :body-style="{
+      padding: '0px'
+    }"
+    :style="{
+      top: `${stickyTop}px`
+    }"
+  >
     <header class="header text-over">
       {{ title }}
     </header>
@@ -28,6 +39,14 @@ export default {
     footerText: {
       type: String,
       default: '查看更多'
+    },
+    sticky: {
+      type: Boolean,
+      default: false
+    },
+    stickyTop: {
+      type: [Number, String],
+      default: 0
     }
   },
   methods: {
@@ -39,6 +58,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.sticky {
+  position: sticky;
+}
 .header {
   padding: 16px 20px 6px;
   font-size: 20px;

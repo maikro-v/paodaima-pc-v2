@@ -1477,6 +1477,11 @@ animate.css@^4.1.0, animate.css@latest:
   resolved "https://registry.npm.taobao.org/animate.css/download/animate.css-4.1.0.tgz#dec2aabe4babfc6f6777f9a5cccd132838729b50"
   integrity sha1-3sKqvkur/G9nd/mlzM0TKDhym1A=
 
+animejs@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npm.taobao.org/animejs/download/animejs-3.2.0.tgz#2daea7365983249022cc454fa726acdb4a84345d"
+  integrity sha1-La6nNlmDJJAizEVPpyas20qENF0=
+
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/ansi-align/download/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
@@ -5579,6 +5584,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-it-container@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/markdown-it-container/download/markdown-it-container-3.0.0.tgz#1d19b06040a020f9a827577bb7dbf67aa5de9a5b"
+  integrity sha1-HRmwYECgIPmoJ1d7t9v2eqXemls=
+
 matter-js@^0.14.2:
   version "0.14.2"
   resolved "https://registry.npm.taobao.org/matter-js/download/matter-js-0.14.2.tgz#8169af9e06fdc356ba9e72b49624eb329839883b"
@@ -8334,6 +8344,11 @@ stdout-stream@^1.4.0:
   integrity sha1-WsF0zdXNcmEEqgwLK9g4FdjVNd4=
   dependencies:
     readable-stream "^2.0.1"
+
+stickyfilljs@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npm.taobao.org/stickyfilljs/download/stickyfilljs-2.1.0.tgz#46dabb599d8275d185bdb97db597f86a2e3afa7b"
+  integrity sha1-Rtq7WZ2CddGFvbl9tZf4ai46+ns=
 
 stream-browserify@^2.0.1:
   version "2.0.2"

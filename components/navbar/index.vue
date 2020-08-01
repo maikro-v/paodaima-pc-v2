@@ -13,8 +13,8 @@
         <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
       </el-input>
       <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
-      <user v-show="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-      <a v-show="!hasLogin" class="btn" @click="toLogin">登录</a>
+      <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
+      <btn v-else @click="toLogin">登录</btn>
     </el-row>
   </div>
 </template>
@@ -25,8 +25,9 @@ import { getToken } from '@/libs/utils'
 import navbarMenu from '@/components/navbar-menu'
 import logo from '@/components/logo'
 import user from '@/components/user'
+import btn from '@/components/btn'
 export default {
-  components: { logo, navbarMenu, user },
+  components: { logo, navbarMenu, user, btn },
   props: {
     hideHead: {
       type: Boolean,
@@ -113,19 +114,6 @@ export default {
   }
   .menu {
     margin-right: 50px;
-  }
-  .btn {
-    height: 36px;
-    line-height: 36px;
-    display: inline-block;
-    cursor: pointer;
-    color: $titleColor;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 0 20px;
-    border: 1px solid #dee2e6;
-    border-radius: 30px;
-    @include hover;
   }
   .search {
     width: 240px;
