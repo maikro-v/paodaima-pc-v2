@@ -306,6 +306,10 @@ export default {
   .mt {
     margin-top: 30px;
   }
+  .sticky {
+    position: sticky;
+    top: 100px;
+  }
   .banner {
     height: 400px;
     /*background: red;*/
