@@ -1,22 +1,20 @@
 <template>
-  <div class="navbar">
-    <el-row type="flex" align="middle">
-      <el-col class="col">
-        <logo class="logo-wrap" />
-      </el-col>
-      <el-input
-        v-model="keyword"
-        placeholder="搜索文章"
-        size="small"
-        class="search hidden-sm-and-down"
-      >
-        <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
-      </el-input>
-      <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
-      <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-      <btn v-else @click="toLogin">登录</btn>
-    </el-row>
-  </div>
+  <el-row type="flex" align="middle" class="navbar">
+    <el-col class="col">
+      <logo class="logo-wrap" />
+    </el-col>
+    <el-input
+      v-model="keyword"
+      placeholder="搜索文章"
+      size="small"
+      class="search hidden-sm-and-down"
+    >
+      <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
+    </el-input>
+    <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
+    <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
+    <btn v-else @click="toLogin">登录</btn>
+  </el-row>
 </template>
 
 <script>
@@ -104,10 +102,6 @@ export default {
     padding: 0 40px;
     box-sizing: border-box;
     transition: background 150ms linear;
-  }
-  .logo-wrap {
-    height: $headerHeight;
-    line-height: $headerHeight;
   }
   .user-wrap {
     vertical-align: middle;

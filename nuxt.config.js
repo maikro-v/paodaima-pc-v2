@@ -12,7 +12,7 @@ module.exports = {
       { name: 'baidu-site-verification', content: 'oqg7LFN6Zw' }
     ],
     link: [
-      // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ]
   },
   /*
