@@ -1,6 +1,6 @@
 <template>
   <el-menu-item
-    :index="data.id+''"
+    :index="data.path"
     @click="toArticleList"
   >
     {{ data.name }}
@@ -18,18 +18,10 @@ export default {
   },
   methods: {
     toArticleList() {
-      if (this.data.id === 0) {
-        this.$router.push({
-          name: 'index'
-        })
-      } else {
-        this.$router.push({
-          name: 'article',
-          query: {
-            type: this.data.id
-          }
-        })
-      }
+      this.$router.push({
+        name: this.data.path,
+        query: this.$route.query
+      })
     }
   }
 }

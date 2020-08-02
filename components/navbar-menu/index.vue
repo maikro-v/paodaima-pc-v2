@@ -7,9 +7,9 @@
     text-color="#2f1c6a"
     active-text-color="#a593e0"
   >
-    <template v-for="(item) in _menuData">
-      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />
-      <navbar-menu-item v-else :key="item.id" :data="item" />
+    <template v-for="(item, index) in _menuData">
+      <navbar-menu-sub v-if="hasChildren(item.children)" :key="index" :data="item" />
+      <navbar-menu-item v-else :key="index" :data="item" />
     </template>
   </el-menu>
 </template>
@@ -30,12 +30,7 @@ export default {
       return this.data
     },
     _active() {
-      const type = this.$route.query.type
-      if (type) {
-        return String(type)
-      } else {
-        return ''
-      }
+      return this.$route.name
     }
   },
   methods: {

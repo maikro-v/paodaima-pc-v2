@@ -7,9 +7,9 @@
     <template slot="title">
       {{ menuData.name }}
     </template>
-    <template v-for="(item) in menuData.children">
-      <navbar-menu-sub v-if="hasChildren(item.children)" :key="item.id" :data="item" />
-      <navbar-menu-item v-else :key="item.id" :data="item" />
+    <template v-for="(item, index) in menuData.children">
+      <navbar-menu-sub v-if="hasChildren(item.children)" :key="index" :data="item" />
+      <navbar-menu-item v-else :key="index" :data="item" />
     </template>
   </el-submenu>
 </template>

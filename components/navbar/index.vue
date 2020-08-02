@@ -34,7 +34,20 @@ export default {
   },
   data() {
     return {
-      menuNavList: [],
+      menuNavList: [
+        {
+          name: '首页',
+          path: 'index'
+        },
+        {
+          name: '文章分享',
+          path: 'article'
+        },
+        {
+          name: '专栏',
+          path: 'special'
+        }
+      ],
       loginLoading: false,
       keyword: ''
     }
@@ -43,7 +56,7 @@ export default {
     ...mapState('user', ['name', 'avatar', 'hasLogin'])
   },
   created() {
-    this.getMenuNav()
+    // this.getMenuNav()
     this.setUserInfo()
   },
   methods: {
