@@ -1,7 +1,7 @@
 <template>
   <h1 class="logo">
     <nuxt-link to="/">
-      <img src="@/static/logo.png" alt="maikro" class="logo__img">
+      <img src="~/assets/logo.png" alt="maikro" class="logo__img">
     </nuxt-link>
   </h1>
 </template>
