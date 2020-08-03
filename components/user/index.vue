@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown trigger="hover" :show-timeout="50" @command="action">
+  <el-dropdown trigger="click" :show-timeout="50" @command="action">
     <div class="user row align-center">
       <div class="col">
         <el-avatar :src="_avatar" size="medium" />

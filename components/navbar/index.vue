@@ -1,20 +1,35 @@
 <template>
-  <el-row type="flex" align="middle" class="navbar">
-    <el-col class="col">
-      <logo class="logo-wrap" />
-    </el-col>
-    <el-input
-      v-model="keyword"
-      placeholder="搜索文章"
-      size="small"
-      class="search hidden-sm-and-down"
+  <div
+    class="navbar"
+    :class="[
+      { 'navbar_fixed': fixed }
+    ]"
+    :style="_headerStyle"
+  >
+    <el-row
+      type="flex"
+      align="middle"
+      class="navbar__container"
+      :class="[bodyClass ? bodyClass : '']"
     >
-      <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
-    </el-input>
-    <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
-    <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-    <btn v-else @click="toLogin">登录</btn>
-  </el-row>
+      <el-col class="col">
+        <logo class="logo-wrap" />
+      </el-col>
+      <el-input
+        v-model="keyword"
+        placeholder="搜索文章"
+        size="small"
+        class="search hidden-sm-and-down"
+      >
+        <i slot="suffix" class="el-input__icon el-icon-search search__icon" @click="toSearch" @enter="toSearch" />
+      </el-input>
+      <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
+      <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
+      <btn v-else @click="toLogin" class="btn-login">
+        登录
+      </btn>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -27,9 +42,17 @@ import btn from '@/components/btn'
 export default {
   components: { logo, navbarMenu, user, btn },
   props: {
-    hideHead: {
+    fixed: {
       type: Boolean,
       default: false
+    },
+    theme: {
+      type: String,
+      default: 'white'
+    },
+    bodyClass: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -53,7 +76,25 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['name', 'avatar', 'hasLogin'])
+    ...mapState('user', ['name', 'avatar', 'hasLogin']),
+    _theme() {
+      return this.theme
+    },
+    _headerStyle() {
+      let color = ''
+      let activeColor = ''
+      if (this._theme === 'white') {
+        color = '#2f1c6a'
+        activeColor = '#a593e0'
+      } else if (this._theme === 'black') {
+        color = '#ffffff'
+        activeColor = '#f4f4f4'
+      }
+      return {
+        '--color': color,
+        '--activeColor': activeColor
+      }
+    }
   },
   created() {
     // this.getMenuNav()
@@ -81,17 +122,6 @@ export default {
       //     }
       // })
     },
-    getMenuNav() {
-      this.$api.classify.list().then(({ data }) => {
-        data.unshift({
-          name: '首页',
-          id: 0
-        })
-        this.menuNavList = data
-      }).catch((err) => {
-        this.$message.error(err)
-      })
-    },
     toLogin() {
       this.$router.push({
         name: 'login'
@@ -107,14 +137,19 @@ export default {
 <style lang="scss" scoped>
   $headerHeight: 70px;
   .navbar {
-    position: fixed;
-    top: 0;
-    z-index: 2000;
     width: 100%;
     height: $headerHeight;
     padding: 0 40px;
     box-sizing: border-box;
     transition: background 150ms linear;
+    &_fixed {
+      position: fixed;
+      top: 0;
+      z-index: 2000;
+    }
+    &__container {
+      height: 100%;
+    }
   }
   .user-wrap {
     vertical-align: middle;
@@ -152,5 +187,9 @@ export default {
         border-color: #c0c7d5;
       }
     }
+  }
+  .btn-login,
+  /deep/ .user__name {
+    color: var(--color);
   }
 </style>

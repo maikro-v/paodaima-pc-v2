@@ -1,8 +1,14 @@
 <template>
   <div class="layout">
-    <navbar :class="{ navbar_colored: navbarColored }" />
+    <navbar
+      :class="{ navbar_colored: navbarColored }"
+      :style="headerStyle"
+      :theme="headerTheme"
+      :fixed="headerFixed"
+      :body-class="headerBodyClass"
+    />
     <slot />
-    <backtop :show="navbarColored"></backtop>
+    <backtop :show="navbarColored" />
   </div>
 </template>
 
@@ -24,6 +30,24 @@ export default {
     scrollDisabled: {
       type: Boolean,
       default: false
+    },
+    headerStyle: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    headerTheme: {
+      type: String,
+      default: 'white'
+    },
+    headerFixed: {
+      type: Boolean,
+      default: true
+    },
+    headerBodyClass: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -34,6 +58,9 @@ export default {
   mounted() {
     this.throttleFun = throttle(this.onScroll, 100)
     document.addEventListener('scroll', this.throttleFun)
+  },
+  beforeDestroy() {
+    document.removeEventListener('scroll', this.throttleFun)
   },
   methods: {
     onScroll() {
@@ -48,9 +75,6 @@ export default {
     onScrollEnd() {
       this.$emit('load')
     }
-  },
-  beforeDestroy() {
-    document.removeEventListener('scroll', this.throttleFun)
   }
 }
 </script>
