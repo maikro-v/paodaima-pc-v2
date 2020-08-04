@@ -1,15 +1,33 @@
 <template>
   <layout
-    @load="load"
-    :scrollDisabled="scrollDisabled"
+    :scroll-disabled="scrollDisabled"
     header-theme="white"
     :header-fixed="false"
     :header-style="{
       background: '#ffffff',
-      boxShadow: '0 0 0 rgba(0, 0, 0, 0)'
+      boxShadow: '0 0 10px rgba(0, 0, 0, .1)'
     }"
     header-body-class="header-nav"
+    @load="load"
+    @scroll="handleScroll"
   >
+    <transition name="header-fixed">
+      <div v-show="showSubHeader" class="header-fixed">
+        <div class="header-fixed__container">
+          <logo />
+          <div class="header-fixed__search">
+            <el-input
+              v-model="search"
+              placeholder="搜索文章"
+              size="small"
+              class="search"
+            >
+              <i slot="suffix" class="el-icon-search header-fixed__icon" @click="handleSearch" @enter="handleSearch" />
+            </el-input>
+          </div>
+        </div>
+      </div>
+    </transition>
     <header class="header">
       <nav class="header__container nav">
         <nuxt-link
@@ -73,8 +91,9 @@ import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import empty from '@/components/empty'
 import layout from '@/components/layout'
+import logo from '@/components/logo'
 export default {
-  components: { articleItem, sideMenu, empty, sideMenuItem, layout },
+  components: { articleItem, sideMenu, empty, sideMenuItem, layout, logo },
   head() {
     return {
       title: 'maikro技术博客'
@@ -98,6 +117,10 @@ export default {
       })
       // 分类
       const menu = await app.$api.classify.list()
+      menu.data.unshift({
+        id: 0,
+        name: '全部'
+      })
       return {
         page,
         totalPage: data.page.total_page,
@@ -116,9 +139,11 @@ export default {
       articleList: [],
       recommendArticleList: [], // 推荐文章列表
       hotArticleList: [], // 热门文章列表
+      search: '',
       page: 0,
       totalPage: 0,
-      scrollDisabled: false
+      scrollDisabled: false,
+      showSubHeader: false
     }
   },
   computed: {
@@ -126,20 +151,41 @@ export default {
       return this.page >= this.totalPage || this.scrollDisabled
     },
     _type() {
-      return Number(this.$route.query.type)
+      return Number(this.$route.query.type) || 0
+    }
+  },
+  created() {
+    if (this.$route.query.keyword) {
+      this.search = this.$route.query.keyword
     }
   },
   methods: {
+    handleScroll(scrollTop) {
+      this.showSubHeader = scrollTop > 350
+    },
     load() {
       this.page++
       this.getData()
+    },
+    handleSearch() {
+      this.page = 0
+      this.articleList = []
+      const params = {
+        keyword: this.search,
+        ...this.$route.query
+      }
+      this.$router.push({
+        name: 'article',
+        query: params
+      })
     },
     async getData(params = {}) {
       this.scrollDisabled = true
       try {
         const { data } = await this.$api.article.page({
-          classify_id: this.$route.query.type,
+          classify_id: this._type,
           page: this.page,
+          keyword: this.search,
           ...params
         })
         this.articleList.push(...data.data)
@@ -175,6 +221,7 @@ export default {
       this.articleList = []
       this.page = 1
       const params = val.query
+      this.search = params.keyword || ''
       this.getData(params)
     }
   }
@@ -195,18 +242,38 @@ export default {
     background-attachment: fixed;
     background-size: cover;
   }
-  .header {
-    position: sticky;
-    top: 0;
+  .header-fixed {
+    position: fixed;
     left: 0;
-    width: 100%;
-    background: white;
+    top: 0;
     z-index: 100;
-    border-top: 1px solid #f1f1f1;
-    border-bottom: 1px solid #f1f1f1;
+    width: 100%;
+    background: rgba(255, 255, 255, .9);
     &__container {
       @include container;
     }
+    &__search {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 300px;
+      transform: translate(-50%, -50%);
+    }
+    &__icon {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+  .header {
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #f1f1f1;
+    @include container;
+    margin-top: 20px;
   }
   .nav {
     &__item {
@@ -215,22 +282,25 @@ export default {
       line-height: 40px;
       font-size: 16px;
       color: #86858F;
-      font-weight: bold;
       padding: 0 20px;
       display: inline-block;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 30px;
+        height: 2px;
+        background: transparent;
+        display: block;
+        transform: translate(-50%, 0);
+      }
+      &:hover,
       &_active {
-        color: $titleColor;
-        &::before {
-          content: '';
-          position: absolute;
-          left: 50%;
-          bottom: 0;
-          width: 30px;
-          height: 2px;
-          background: $titleColor;
-          display: block;
-          transform: translate(-50%, 0);
-        }
+        color: $primary;
+      }
+      &_active::before {
+        background: $primary;
       }
     }
   }
@@ -242,5 +312,12 @@ export default {
     & + & {
       margin-top: 10px;
     }
+  }
+
+  .header-fixed-enter-active, .header-fixed-leave-active {
+    transition: transform .5s ease;
+  }
+  .header-fixed-enter, .header-fixed-leave-to {
+    transform: translateY(-100px);
   }
 </style>

@@ -3,8 +3,8 @@
     <header class="header row align-center">
       <logo />
       <div class="col text-right">
-        <btn @click="submit('form')">保存并发布</btn>
-        <btn type="text" @click="handleExit">退出</btn>
+        <btn round @click="submit('form')">保存并发布</btn>
+        <btn round type="text" @click="handleExit">退出</btn>
       </div>
     </header>
     <main class="container">

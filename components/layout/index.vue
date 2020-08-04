@@ -27,6 +27,10 @@ export default {
       type: Number,
       default: 10
     },
+    scrollFrequency: {
+      type: Number,
+      default: 30
+    },
     scrollDisabled: {
       type: Boolean,
       default: false
@@ -56,7 +60,7 @@ export default {
     }
   },
   mounted() {
-    this.throttleFun = throttle(this.onScroll, 100)
+    this.throttleFun = throttle(this.onScroll, this.scrollFrequency)
     document.addEventListener('scroll', this.throttleFun)
   },
   beforeDestroy() {
@@ -68,12 +72,16 @@ export default {
       const totalHeight = document.documentElement.scrollHeight
       const height = document.documentElement.clientHeight
       this.navbarColored = scrollTop > this.headerColoredDistance
+      this.onScrollMove(scrollTop, totalHeight)
       if (Math.ceil(scrollTop + height) >= totalHeight - this.threshold && !this.scrollDisabled) {
         this.onScrollEnd()
       }
     },
     onScrollEnd() {
       this.$emit('load')
+    },
+    onScrollMove(scrollTop, total) {
+      this.$emit('scroll', scrollTop, total)
     }
   }
 }

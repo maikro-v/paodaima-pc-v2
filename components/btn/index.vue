@@ -1,7 +1,7 @@
 <template>
-  <div class="btn" :class="[_type]" @click="handleClick">
+  <button class="btn" :class="[_type, { btn_round: round }]" @click="handleClick">
     <slot />
-  </div>
+  </button>
 </template>
 
 <script>
@@ -11,6 +11,10 @@ export default {
     type: {
       type: String,
       default: 'default'
+    },
+    round: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -31,20 +35,22 @@ export default {
 <style lang="scss" scoped>
   .btn {
     height: 36px;
-    line-height: 36px;
     display: inline-block;
     cursor: pointer;
     font-weight: bold;
     font-size: 16px;
     padding: 0 20px;
-    border-radius: 30px;
     @include hover;
     color: $titleColor;
+    background: transparent;
     &_default {
       border: 1px solid #dee2e6;
     }
     &_text {
       border: 1px solid transparent;
+    }
+    &_round {
+      border-radius: 30px;
     }
   }
 </style>

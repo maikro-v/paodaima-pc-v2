@@ -25,7 +25,7 @@
       </el-input>
       <navbar-menu :data="menuNavList" class="menu hidden-xs-only" />
       <user v-if="hasLogin" :avatar="avatar" :user-name="name" class="user-wrap" @on-logout="handlerLogout" />
-      <btn v-else @click="toLogin" class="btn-login">
+      <btn v-else round class="btn-login" @click="toLogin">
         登录
       </btn>
     </el-row>
@@ -99,6 +99,16 @@ export default {
   created() {
     // this.getMenuNav()
     this.setUserInfo()
+    if (this.$route.query.keyword) {
+      this.keyword = this.$route.query.keyword
+    }
+  },
+  watch: {
+    '$route'(val) {
+      if (val.query.keyword) {
+        this.keyword = val.query.keyword
+      }
+    }
   },
   methods: {
     ...mapMutations('user', ['SET_HAS_LOGIN']),
@@ -111,9 +121,9 @@ export default {
     toSearch() {
       this.$router.push({
         name: 'article',
-        query: {
+        query: Object.assign(this.$route.query, {
           keyword: this.keyword
-        }
+        })
       })
       // this.$router.push({
       //     name:'article',
