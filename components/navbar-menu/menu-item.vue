@@ -19,8 +19,7 @@ export default {
   methods: {
     toArticleList() {
       this.$router.push({
-        name: this.data.path,
-        query: this.$route.query
+        name: this.data.path
       })
     }
   }

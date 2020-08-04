@@ -1,6 +1,7 @@
 <template>
   <div class="layout">
     <navbar
+      v-if="!hideHeader"
       :class="{ navbar_colored: navbarColored }"
       :style="headerStyle"
       :theme="headerTheme"
@@ -52,6 +53,10 @@ export default {
     headerBodyClass: {
       type: String,
       default: ''
+    },
+    hideHeader: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
