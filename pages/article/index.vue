@@ -102,7 +102,7 @@ export default {
     const page = 1
     try {
       const { data } = await app.$api.article.page({
-        classify_id: query.type,
+        classify_id: query.type === 0 || query.type === '0' || !query.type ? '' : query.type,
         keyword: query.keyword,
         page
       })
@@ -169,6 +169,7 @@ export default {
     handleSearch() {
       this.page = 0
       this.articleList = []
+      this.getData()
       const params = {
         keyword: this.search,
         ...this.$route.query
@@ -182,17 +183,16 @@ export default {
       this.scrollDisabled = true
       try {
         const { data } = await this.$api.article.page({
-          classify_id: this._type,
+          classify_id: this._type === 0 || this._type === '0' || !this._type ? '' : this._type,
           page: this.page,
           keyword: this.search,
           ...params
         })
         this.articleList.push(...data.data)
         this.scrollDisabled = false
-        return Promise.resolve()
+        return Promise.resolve(data.data)
       } catch (err) {
-        // console.log(err)
-        // this.$message.error(err)
+        this.$notify.error(err)
       }
     },
     toArticleDetail(id) {
@@ -217,11 +217,12 @@ export default {
   },
   watch: {
     '$route'(val) {
-      this.articleList = []
       this.page = 1
       const params = val.query
       this.search = params.keyword || ''
-      this.getData(params)
+      this.getData(params).then((res) => {
+        this.articleList = res || []
+      })
     }
   }
 }
