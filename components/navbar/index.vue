@@ -65,11 +65,11 @@ export default {
         {
           name: '文章分享',
           path: 'article'
-        },
-        {
-          name: '专栏',
-          path: 'special'
         }
+        // {
+        //   name: '专栏',
+        //   path: 'special'
+        // }
       ],
       loginLoading: false,
       keyword: ''
@@ -137,8 +137,17 @@ export default {
         name: 'login'
       })
     },
-    handlerLogout() {
-      this.logout()
+    async handlerLogout() {
+      try {
+        await this.logout()
+        if (this.$route.name === 'my') {
+          this.$router.replace({
+            name: 'index'
+          })
+        }
+      } catch (e) {
+        this.$notify.error('退出失败')
+      }
     }
   }
 }
