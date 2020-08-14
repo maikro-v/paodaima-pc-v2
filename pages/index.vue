@@ -1,12 +1,12 @@
 <template>
-  <layout :scroll-disabled="scrollDisabled" @load="load">
+  <layout :scroll-disabled="isLoadEnd" @load="load">
     <div class="home">
       <div id="banner" class="banner">
       </div>
       <main class="main">
         <el-row type="flex" :gutter="24">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-            <section class="article">
+            <section v-loading="scrollDisabled" class="article">
               <article-item
                 v-for="item in articleList"
                 :key="item.id"
@@ -111,6 +111,7 @@ export default {
   },
   computed: {
     isLoadEnd() {
+      console.log(this.page >= this.totalPage)
       return this.page >= this.totalPage || this.scrollDisabled
     }
   },

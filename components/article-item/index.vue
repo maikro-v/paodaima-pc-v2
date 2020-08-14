@@ -41,17 +41,7 @@
         <i slot="reference" class="el-icon-more more__icon" />
       </el-popover>
     </el-row>
-    <el-row type="flex" class="main" @click.native="toDetail">
-      <el-col class="row column justify-between">
-        <p class="text-overs main__text">
-          {{ data.description }}
-        </p>
-        <div v-if="data.tag_name && data.tag_name.length" class="main__tag">
-          <tag v-for="(item, index) in data.tag_name" :key="index">
-            {{ item }}
-          </tag>
-        </div>
-      </el-col>
+    <div class="main">
       <el-image
         v-if="showImage && data.image"
         :src="data.image"
@@ -64,7 +54,39 @@
           <i class="el-icon-picture-outline" />
         </div>
       </el-image>
-    </el-row>
+      <p class="text-overs main__text">
+        {{ data.description }}
+      </p>
+      <div v-if="data.tag_name && data.tag_name.length" class="main__tag">
+        <tag v-for="(item, index) in data.tag_name" :key="index">
+          {{ item }}
+        </tag>
+      </div>
+    </div>
+<!--    <el-row type="flex" class="main" @click.native="toDetail">-->
+<!--      <el-col class="row column justify-between">-->
+<!--        <p class="text-overs main__text">-->
+<!--          {{ data.description }}-->
+<!--        </p>-->
+<!--        <div v-if="data.tag_name && data.tag_name.length" class="main__tag">-->
+<!--          <tag v-for="(item, index) in data.tag_name" :key="index">-->
+<!--            {{ item }}-->
+<!--          </tag>-->
+<!--        </div>-->
+<!--      </el-col>-->
+<!--      <el-image-->
+<!--        v-if="showImage && data.image"-->
+<!--        :src="data.image"-->
+<!--        fit="cover"-->
+<!--        :lazy="true"-->
+<!--        :alt="data.title"-->
+<!--        class="main__img"-->
+<!--      >-->
+<!--        <div slot="error">-->
+<!--          <i class="el-icon-picture-outline" />-->
+<!--        </div>-->
+<!--      </el-image>-->
+<!--    </el-row>-->
     <el-row type="flex" align="middle" class="footer">
       <el-col :span="12">
         <span class="footer__username">{{ data.author.name }}</span>
@@ -192,16 +214,21 @@ export default {
     @include fontMain;
     padding-top: 20px;
     cursor: pointer;
+    font-size: 16px;
     &__text {
       line-height: 1.4;
       text-align: justify;
     }
     &__img {
-      width: 100px;
-      height: 70px;
-      object-fit: cover;
-      object-position: center;
-      margin-left: 10px;
+      width: 100%;
+      max-height: 500px;
+      margin-bottom: 10px;
+      @media screen and (max-width: 1500px) {
+        max-height: 440px;
+      }
+      @media screen and (max-width: 1260px) {
+        max-height: 380px;
+      }
     }
     &__tag {
       margin-top: 20px;

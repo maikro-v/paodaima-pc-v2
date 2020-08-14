@@ -1,8 +1,8 @@
 <template>
   <layout
-    :scroll-disabled="scrollDisabled"
+    :scroll-disabled="isLoadEnd"
     header-theme="white"
-    :header-fixed="false"
+    :header-fixed="true"
     :header-style="{
       background: '#ffffff',
       boxShadow: '0 0 10px rgba(0, 0, 0, .1)'
@@ -11,40 +11,40 @@
     @load="load"
     @scroll="handleScroll"
   >
-    <transition name="header-fixed">
-      <div v-show="showSubHeader" class="header-fixed">
-        <div class="header-fixed__container">
-          <logo />
-          <div class="header-fixed__search">
-            <el-input
-              v-model="search"
-              placeholder="搜索文章"
-              size="small"
-              class="search"
-            >
-              <i slot="suffix" class="el-icon-search header-fixed__icon" @click="handleSearch" @enter="handleSearch" />
-            </el-input>
-          </div>
-        </div>
-      </div>
-    </transition>
+<!--    <transition name="header-fixed">-->
+<!--      <div v-show="showSubHeader" class="header-fixed">-->
+<!--        <div class="header-fixed__container">-->
+<!--          <logo />-->
+<!--          <div class="header-fixed__search">-->
+<!--            <el-input-->
+<!--              v-model="search"-->
+<!--              placeholder="搜索文章"-->
+<!--              size="small"-->
+<!--              class="search"-->
+<!--            >-->
+<!--              <i slot="suffix" class="el-icon-search header-fixed__icon" @click="handleSearch" @enter="handleSearch" />-->
+<!--            </el-input>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </transition>-->
 
     <section class="tag-wrap container">
-      <nuxt-link
+      <div
         v-for="item in menuNavList"
         :key="item.id"
-        :to="`/article?type=${item.id}`"
         class="tag"
-        :class="{ 'tag_active': _type === item.id }"
+        :class="{ 'tag_active': classify === item.id }"
+        @click="handleChangeType(item)"
       >
         {{ item.name }}
-      </nuxt-link>
+      </div>
     </section>
     <div class="article-type">
       <main class="main">
         <el-row type="flex" :gutter="14">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-            <section class="article">
+            <section v-loading="scrollDisabled" class="article">
               <template v-if="articleList && articleList.length > 0">
                 <article-item v-for="item in articleList" :key="item.id" :data="item" :to="item.id | toPath" target="_blank" />
                 <el-divider v-if="isLoadEnd">
@@ -90,9 +90,8 @@ import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import empty from '@/components/empty'
 import layout from '@/components/layout'
-import logo from '@/components/logo'
 export default {
-  components: { articleItem, sideMenu, empty, sideMenuItem, layout, logo },
+  components: { articleItem, sideMenu, empty, sideMenuItem, layout },
   head() {
     return {
       title: 'maikro技术博客'
@@ -138,11 +137,12 @@ export default {
       articleList: [],
       recommendArticleList: [], // 推荐文章列表
       hotArticleList: [], // 热门文章列表
-      search: '',
+      keyword: '',
       page: 0,
       totalPage: 0,
       scrollDisabled: false,
-      showSubHeader: false
+      showSubHeader: false,
+      classify: 0
     }
   },
   computed: {
@@ -155,10 +155,19 @@ export default {
   },
   created() {
     if (this.$route.query.keyword) {
-      this.search = this.$route.query.keyword
+      this.keyword = this.$route.query.keyword
     }
   },
   methods: {
+    handleChangeType(item) {
+      this.page = 1
+      this.classify = item.id
+      this.keyword = ''
+      this.articleList = []
+      this.$nextTick(() => {
+        this.getData()
+      })
+    },
     handleScroll(scrollTop) {
       this.showSubHeader = scrollTop > 350
     },
@@ -167,11 +176,11 @@ export default {
       this.getData()
     },
     handleSearch() {
-      this.page = 0
+      this.page = 1
       this.articleList = []
       this.getData()
       const params = {
-        keyword: this.search,
+        keyword: this.keyword,
         ...this.$route.query
       }
       this.$router.push({
@@ -183,9 +192,9 @@ export default {
       this.scrollDisabled = true
       try {
         const { data } = await this.$api.article.page({
-          classify_id: this._type === 0 || this._type === '0' || !this._type ? '' : this._type,
           page: this.page,
-          keyword: this.search,
+          keyword: this.keyword,
+          classify_id: this.classify === 0 ? '' : this.classify,
           ...params
         })
         this.articleList.push(...data.data)
@@ -219,7 +228,7 @@ export default {
     '$route'(val) {
       this.page = 1
       const params = val.query
-      this.search = params.keyword || ''
+      this.keyword = params.keyword || ''
       this.getData(params).then((res) => {
         this.articleList = res || []
       })
@@ -269,8 +278,9 @@ export default {
   }
 
   .tag-wrap {
-    margin: 40px auto;
+    margin: 0 auto 40px;
     font-size: 0;
+    padding-top: 100px;
   }
   .tag {
     height: 28px;

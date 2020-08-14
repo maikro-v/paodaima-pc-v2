@@ -121,9 +121,9 @@ export default {
     toSearch() {
       this.$router.push({
         name: 'article',
-        query: Object.assign(this.$route.query, {
+        query: {
           keyword: this.keyword
-        })
+        }
       })
       // this.$router.push({
       //     name:'article',

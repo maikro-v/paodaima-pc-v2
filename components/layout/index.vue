@@ -10,6 +10,12 @@
     />
     <slot />
     <backtop :show="navbarColored" />
+    <div
+      v-show="showProgress"
+      class="progress"
+    >
+      {{ progress }}%
+    </div>
   </div>
 </template>
 
@@ -61,7 +67,14 @@ export default {
   },
   data() {
     return {
-      navbarColored: false
+      navbarColored: false,
+      progress: 0,
+      progressTop: 0
+    }
+  },
+  computed: {
+    showProgress() {
+      return this.progress > 2
     }
   },
   mounted() {
@@ -77,6 +90,8 @@ export default {
       const totalHeight = document.documentElement.scrollHeight
       const height = document.documentElement.clientHeight
       this.navbarColored = scrollTop > this.headerColoredDistance
+      this.progress = Math.ceil((scrollTop / (totalHeight - height)) * 100)
+      this.progressTop = scrollTop
       this.onScrollMove(scrollTop, totalHeight)
       if (Math.ceil(scrollTop + height) >= totalHeight - this.threshold && !this.scrollDisabled) {
         this.onScrollEnd()
@@ -99,5 +114,21 @@ export default {
   .navbar_colored {
     background: rgba(255, 255, 255, 0.98);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+  .progress {
+    position: fixed;
+    right: 60px;
+    bottom: 30px;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 2px 2px 8px rgba(103, 61, 230, 0.3);
+    text-align: center;
+    cursor: pointer;
+    color: $primary;
+    font-weight: bold;
+    font-size: 16px;
   }
 </style>

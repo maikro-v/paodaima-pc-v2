@@ -43,7 +43,7 @@ export default {
   .backtop {
     position: fixed;
     right: 60px;
-    bottom: 80px;
+    bottom: 90px;
     width: 44px;
     height: 44px;
     line-height: 40px;

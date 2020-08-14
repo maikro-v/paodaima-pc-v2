@@ -1,5 +1,5 @@
 <template>
-  <layout :scroll-disabled="scrollDisabled" @load="load">
+  <layout :scroll-disabled="isLoadEnd" @load="load">
     <div class="my">
       <main class="main">
         <el-row type="flex" :gutter="14">
@@ -10,7 +10,7 @@
             </div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-            <section class="article">
+            <section v-loading="scrollDisabled" class="article">
               <template v-if="articleList && articleList.length > 0">
                 <article-item
                   v-for="(item, index) in articleList"
@@ -20,9 +20,6 @@
                   :show-image="false"
                   @on-active="(row) => handleArticleAction(row, item, index)"
                 />
-                <el-divider v-if="isLoadEnd">
-                  没有更多数据了
-                </el-divider>
               </template>
               <template v-else>
                 <empty />
@@ -82,7 +79,7 @@ export default {
       ]
     },
     isLoadEnd() {
-      return this.page >= this.totalPage
+      return this.page >= this.totalPage || this.scrollDisabled
     }
   },
   mounted() {
