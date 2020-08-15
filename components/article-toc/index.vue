@@ -35,7 +35,7 @@ export default {
   .article-toc {
     padding: 0 6px;
     &__title {
-      font-size: 14px;
+      font-size: 16px;
       margin-bottom: 6px;
     }
   }

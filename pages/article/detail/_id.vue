@@ -313,7 +313,7 @@ export default {
   },
   head() {
     return {
-      title: this.info.title || '',
+      title: this.info.title || 'maikro技术博客',
       meta: [
         { hid: 'description', name: 'description', content: this.info.description },
         { hid: 'description', name: 'keyword', content: this.info.description },

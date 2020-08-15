@@ -34,7 +34,7 @@ export default {
   &-el {
     position: relative;
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     color: $titleColor;
     line-height: 1.9;
     &::before {
