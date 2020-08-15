@@ -96,18 +96,18 @@ export default {
       }
     }
   },
-  created() {
-    // this.getMenuNav()
-    this.setUserInfo()
-    if (this.$route.query.keyword) {
-      this.keyword = this.$route.query.keyword
-    }
-  },
   watch: {
     '$route'(val) {
       if (val.query.keyword) {
         this.keyword = val.query.keyword
       }
+    }
+  },
+  created() {
+    // this.getMenuNav()
+    this.setUserInfo()
+    if (this.$route.query.keyword) {
+      this.keyword = this.$route.query.keyword
     }
   },
   methods: {

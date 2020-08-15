@@ -63,30 +63,30 @@
         </tag>
       </div>
     </div>
-<!--    <el-row type="flex" class="main" @click.native="toDetail">-->
-<!--      <el-col class="row column justify-between">-->
-<!--        <p class="text-overs main__text">-->
-<!--          {{ data.description }}-->
-<!--        </p>-->
-<!--        <div v-if="data.tag_name && data.tag_name.length" class="main__tag">-->
-<!--          <tag v-for="(item, index) in data.tag_name" :key="index">-->
-<!--            {{ item }}-->
-<!--          </tag>-->
-<!--        </div>-->
-<!--      </el-col>-->
-<!--      <el-image-->
-<!--        v-if="showImage && data.image"-->
-<!--        :src="data.image"-->
-<!--        fit="cover"-->
-<!--        :lazy="true"-->
-<!--        :alt="data.title"-->
-<!--        class="main__img"-->
-<!--      >-->
-<!--        <div slot="error">-->
-<!--          <i class="el-icon-picture-outline" />-->
-<!--        </div>-->
-<!--      </el-image>-->
-<!--    </el-row>-->
+    <!--    <el-row type="flex" class="main" @click.native="toDetail">-->
+    <!--      <el-col class="row column justify-between">-->
+    <!--        <p class="text-overs main__text">-->
+    <!--          {{ data.description }}-->
+    <!--        </p>-->
+    <!--        <div v-if="data.tag_name && data.tag_name.length" class="main__tag">-->
+    <!--          <tag v-for="(item, index) in data.tag_name" :key="index">-->
+    <!--            {{ item }}-->
+    <!--          </tag>-->
+    <!--        </div>-->
+    <!--      </el-col>-->
+    <!--      <el-image-->
+    <!--        v-if="showImage && data.image"-->
+    <!--        :src="data.image"-->
+    <!--        fit="cover"-->
+    <!--        :lazy="true"-->
+    <!--        :alt="data.title"-->
+    <!--        class="main__img"-->
+    <!--      >-->
+    <!--        <div slot="error">-->
+    <!--          <i class="el-icon-picture-outline" />-->
+    <!--        </div>-->
+    <!--      </el-image>-->
+    <!--    </el-row>-->
     <el-row type="flex" align="middle" class="footer">
       <el-col :span="12">
         <span class="footer__username">{{ data.author.name }}</span>
@@ -142,7 +142,8 @@ export default {
       default: 'push'
     },
     to: {
-      type: [String, Object]
+      type: [String, Object],
+      default: ''
     },
     actions: {
       type: Array,
@@ -151,7 +152,8 @@ export default {
       }
     },
     actionKey: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   computed: {

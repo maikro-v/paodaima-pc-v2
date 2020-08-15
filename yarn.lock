@@ -2681,11 +2681,6 @@ core-js@^2.4.0, core-js@^2.6.5:
   resolved "https://registry.npm.taobao.org/core-js/download/core-js-2.6.11.tgz?cache=0&sync_timestamp=1586450269267&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcore-js%2Fdownload%2Fcore-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha1-OIMUafmSK97Y7iHJ3EaYXgOZMIw=
 
-core-js@^3.6.5:
-  version "3.6.5"
-  resolved "https://registry.npm.taobao.org/core-js/download/core-js-3.6.5.tgz?cache=0&sync_timestamp=1589682726446&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcore-js%2Fdownload%2Fcore-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
-  integrity sha1-c5XcJzrzf7LlDpvT2f6EEoUjHRo=
-
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -3310,7 +3305,7 @@ electron-to-chromium@^1.3.413:
   resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.448.tgz#682831ecf3ce505231978f7c795a2813740cae7c"
   integrity sha1-aCgx7PPOUFIxl498eVooE3QMrnw=
 
-element-ui@^2.13.2, element-ui@^2.4.11:
+element-ui@^2.4.11:
   version "2.13.2"
   resolved "https://registry.npm.taobao.org/element-ui/download/element-ui-2.13.2.tgz?cache=0&sync_timestamp=1589795164194&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felement-ui%2Fdownload%2Felement-ui-2.13.2.tgz#582bf47aaaaaafe23ea1958fae217a687ad06447"
   integrity sha1-WCv0eqqqr+I+oZWPriF6aHrQZEc=
@@ -8350,6 +8345,11 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
+stickybits@^3.7.7:
+  version "3.7.7"
+  resolved "https://registry.npm.taobao.org/stickybits/download/stickybits-3.7.7.tgz#4e644022e7e7ce924d34fbbf7eff7d2f5d8c5dd3"
+  integrity sha1-TmRAIufnzpJNNPu/fv99L12MXdM=
+
 stickyfilljs@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/stickyfilljs/download/stickyfilljs-2.1.0.tgz#46dabb599d8275d185bdb97db597f86a2e3afa7b"
@@ -9150,16 +9150,10 @@ uuid@^3.3.2:
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
 
-v-animation@^0.2.1, v-animation@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.npm.taobao.org/v-animation/download/v-animation-0.2.3.tgz#e390459cbbdf2c777fb6c81e26015a3ef52d1e67"
-  integrity sha1-45BFnLvfLHd/tsgeJgFaPvUtHmc=
-  dependencies:
-    animate.css "^4.1.0"
-    core-js "^3.6.5"
-    element-ui "^2.13.2"
-    v-animation "^0.2.1"
-    vue "^2.6.11"
+uuid@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-8.3.0.tgz?cache=0&sync_timestamp=1595885088251&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
+  integrity sha1-q3OAhcoi3JqMknJeRZsdUH311uo=
 
 v8-compile-cache@^2.0.3:
   version "2.1.0"

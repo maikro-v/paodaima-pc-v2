@@ -3,8 +3,12 @@
     <header class="header row align-center">
       <logo />
       <div class="col text-right">
-        <btn round @click="submit('form')">保存并发布</btn>
-        <btn round type="text" @click="handleExit">退出</btn>
+        <btn round @click="submit('form')">
+          保存并发布
+        </btn>
+        <btn round type="text" @click="handleExit">
+          退出
+        </btn>
       </div>
     </header>
     <main class="container">
@@ -16,8 +20,8 @@
           <el-form-item prop="content" label-width="0" size="small">
             <no-ssr>
               <markdown-editor
-                v-model="forms.content"
                 ref="editor"
+                v-model="forms.content"
                 class="editor"
                 @imgAdd="handleImgAdd"
               />
@@ -31,7 +35,7 @@
               action="/api/upload"
               class="upload-demo"
             >
-              <img v-if="forms.image" :src="forms.image" class="upload__img">
+              <img v-if="forms.image" :src="forms.image" class="upload__img" alt="图片上传">
               <div v-else class="upload-text">
                 <i class="el-icon-upload" />
                 <div class="el-upload__text">
@@ -66,7 +70,9 @@
               width="240"
               title="添加标签"
             >
-              <p class="hint">添加标签前，前先在左侧下拉框中搜索是否有存在的标签，以免重复添加</p>
+              <p class="hint">
+                添加标签前，前先在左侧下拉框中搜索是否有存在的标签，以免重复添加
+              </p>
               <el-input v-model="tempTag" placeholder="输入标签名称" />
               <div style="text-align: right; margin: 10px 0;">
                 <el-button size="mini" type="text" @click="isShowAddTag = false">
@@ -125,11 +131,11 @@
         </section>
       </el-form>
     </main>
-<!--    <footer class="footer">-->
-<!--      <el-button type="primary" size="small" @click="submit('form')">-->
-<!--        保存并发布-->
-<!--      </el-button>-->
-<!--    </footer>-->
+    <!--    <footer class="footer">-->
+    <!--      <el-button type="primary" size="small" @click="submit('form')">-->
+    <!--        保存并发布-->
+    <!--      </el-button>-->
+    <!--    </footer>-->
   </div>
 </template>
 
@@ -142,11 +148,6 @@ import btn from '@/components/btn'
 export default {
   middleware: 'accountVerify',
   components: { markdownEditor, logo, btn },
-  head() {
-    return {
-      title: '文章编辑'
-    }
-  },
   data() {
     return {
       tempTag: '',
@@ -297,6 +298,11 @@ export default {
           message: err
         })
       })
+    }
+  },
+  head() {
+    return {
+      title: '文章编辑'
     }
   }
 }

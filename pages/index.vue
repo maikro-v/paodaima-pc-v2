@@ -1,8 +1,7 @@
 <template>
   <layout :scroll-disabled="isLoadEnd" @load="load">
     <div class="home">
-      <div id="banner" class="banner">
-      </div>
+      <div id="banner" class="banner" />
       <main class="main">
         <el-row type="flex" :gutter="24">
           <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">

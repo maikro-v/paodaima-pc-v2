@@ -2,10 +2,10 @@
   <mavon-editor
     :ref="ref"
     v-model="_value"
-    :tabSize="2"
     :toolbars="toolbars"
     :subfield="true"
-    codeStyle="monokai"
+    code-style="monokai"
+    :tab-size="2"
     class="markdown-editor"
     @save="handleSave"
     @fullScreen="handleFullScreen"
@@ -16,7 +16,7 @@
 <script>
 // import markdownView from '@/components/markdown-view'
 export default {
-  name: 'markdown-editor',
+  name: 'MarkdownEditor',
   // components: { markdownView },
   props: {
     value: {

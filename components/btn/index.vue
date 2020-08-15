@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'btn',
+  name: 'Btn',
   props: {
     type: {
       type: String,
@@ -43,6 +43,7 @@ export default {
     @include hover;
     color: $titleColor;
     background: transparent;
+    outline: none;
     &_default {
       border: 1px solid #dee2e6;
     }

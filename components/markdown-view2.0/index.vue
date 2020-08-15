@@ -1,22 +1,24 @@
 <template>
   <no-ssr>
     <mavon-editor
+      :id="id"
       :value="_value"
       :subfield="false"
-      :toolbarsFlag="false"
+      :toolbars-flag="false"
       :editable="false"
-      :boxShadow="false"
-      previewBackground="transparent"
-      defaultOpen="preview"
-      codeStyle="monokai"
+      :box-shadow="false"
+      preview-background="transparent"
+      default-open="preview"
+      code-style="monokai"
       class="markdown-view"
     />
   </no-ssr>
 </template>
 
 <script>
+import { v4 } from 'uuid'
 export default {
-  name: 'markdown-view',
+  name: 'MarkdownView',
   props: {
     value: {
       type: String,
@@ -25,12 +27,46 @@ export default {
   },
   data() {
     return {
-      ref: `markdown-view-${Math.floor(new Date().getTime() + Math.random() * 10000).toFixed(0)}`
+      id: `markdown-view-${Math.floor(new Date().getTime() + Math.random() * 10000).toFixed(0)}`
     }
   },
   computed: {
     _value() {
       return this.value
+    }
+  },
+  methods: {
+    getTocItem(domData = []) {
+      const array = []
+      const reg = /^<.*>.*<\/.*>/ // 去除标签，只保留第一级的字符串文本
+      domData.forEach((ele) => {
+        const id = v4()
+        ele.id = id
+        array.push({
+          title: ele.innerHTML.replace(reg, ''),
+          id,
+          tag: ele.nodeName.toLowerCase()
+        })
+      })
+      return array
+    },
+    getToc() {
+      return new Promise((resolve) => {
+        this.$nextTick(() => {
+          const array = []
+          let domStr = ''
+          for (let i = 1; i <= 6; i++) {
+            domStr += `#${this.id} .v-show-content h${i}`
+            if (i < 6) {
+              domStr += ','
+            }
+            // array.push(Object.assign(this.getTocItem(dom), { tag: `h${i}` }))
+          }
+          const dom = document.querySelectorAll(domStr)
+          array.push(...this.getTocItem(dom))
+          resolve(array)
+        })
+      })
     }
   }
 }

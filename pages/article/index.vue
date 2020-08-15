@@ -11,23 +11,23 @@
     @load="load"
     @scroll="handleScroll"
   >
-<!--    <transition name="header-fixed">-->
-<!--      <div v-show="showSubHeader" class="header-fixed">-->
-<!--        <div class="header-fixed__container">-->
-<!--          <logo />-->
-<!--          <div class="header-fixed__search">-->
-<!--            <el-input-->
-<!--              v-model="search"-->
-<!--              placeholder="搜索文章"-->
-<!--              size="small"-->
-<!--              class="search"-->
-<!--            >-->
-<!--              <i slot="suffix" class="el-icon-search header-fixed__icon" @click="handleSearch" @enter="handleSearch" />-->
-<!--            </el-input>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </transition>-->
+    <!--    <transition name="header-fixed">-->
+    <!--      <div v-show="showSubHeader" class="header-fixed">-->
+    <!--        <div class="header-fixed__container">-->
+    <!--          <logo />-->
+    <!--          <div class="header-fixed__search">-->
+    <!--            <el-input-->
+    <!--              v-model="search"-->
+    <!--              placeholder="搜索文章"-->
+    <!--              size="small"-->
+    <!--              class="search"-->
+    <!--            >-->
+    <!--              <i slot="suffix" class="el-icon-search header-fixed__icon" @click="handleSearch" @enter="handleSearch" />-->
+    <!--            </el-input>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </transition>-->
 
     <section class="tag-wrap container">
       <div
@@ -92,9 +92,14 @@ import empty from '@/components/empty'
 import layout from '@/components/layout'
 export default {
   components: { articleItem, sideMenu, empty, sideMenuItem, layout },
-  head() {
-    return {
-      title: 'maikro技术博客'
+  filters: {
+    toPath(id) {
+      return {
+        name: 'article-detail-id',
+        params: {
+          id
+        }
+      }
     }
   },
   async asyncData({ app, query }) {
@@ -151,6 +156,16 @@ export default {
     },
     _type() {
       return Number(this.$route.query.type) || 0
+    }
+  },
+  watch: {
+    '$route'(val) {
+      this.page = 1
+      const params = val.query
+      this.keyword = params.keyword || ''
+      this.getData(params).then((res) => {
+        this.articleList = res || []
+      })
     }
   },
   created() {
@@ -214,24 +229,9 @@ export default {
       window.open(href, '_blank')
     }
   },
-  filters: {
-    toPath(id) {
-      return {
-        name: 'article-detail-id',
-        params: {
-          id
-        }
-      }
-    }
-  },
-  watch: {
-    '$route'(val) {
-      this.page = 1
-      const params = val.query
-      this.keyword = params.keyword || ''
-      this.getData(params).then((res) => {
-        this.articleList = res || []
-      })
+  head() {
+    return {
+      title: 'maikro技术博客'
     }
   }
 }

@@ -1,8 +1,10 @@
 <template>
   <transition name="fade">
-    <div class="backtop" v-show="_show" @click="handleClick" title="返回顶部">
-      <i class="el-icon-caret-top backtop__icon"></i>
-      <span class="backtop__text"><slot /></span>
+    <div v-show="_show" class="backtop" title="返回顶部" @click="handleClick">
+      <i class="el-icon-caret-top backtop__icon" />
+      <span class="backtop__text">
+        <slot />
+      </span>
     </div>
   </transition>
 </template>

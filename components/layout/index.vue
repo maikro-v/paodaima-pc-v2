@@ -12,12 +12,12 @@
     <backtop :show="navbarColored">
       {{ progress }}%
     </backtop>
-<!--    <div-->
-<!--      v-show="showProgress"-->
-<!--      class="progress"-->
-<!--    >-->
-<!--      {{ progress }}%-->
-<!--    </div>-->
+    <!--    <div-->
+    <!--      v-show="showProgress"-->
+    <!--      class="progress"-->
+    <!--    >-->
+    <!--      {{ progress }}%-->
+    <!--    </div>-->
   </div>
 </template>
 

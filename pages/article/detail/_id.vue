@@ -1,5 +1,10 @@
 <template>
-  <layout @load="load" :scrollDisabled="isHideMoreHotArticle" :headerColoredDistance="10" class="detail">
+  <layout
+    :scroll-disabled="isHideMoreHotArticle"
+    :header-colored-distance="10"
+    class="detail"
+    @load="load"
+  >
     <div class="container">
       <div class="container__fix_top">
         <!-- 操作 -->
@@ -14,31 +19,31 @@
               <i class="action__icon iconfont icon-pinglun" />
             </span>
           </el-badge>
-<!--        <p class="action__title">-->
-<!--          分享-->
-<!--        </p>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-weibo" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-qq" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
-<!--        <el-badge class="action__box" :value="0" hidden>-->
-<!--          <span class="action__item">-->
-<!--            <i class="action__icon iconfont icon-weixin" />-->
-<!--          </span>-->
-<!--        </el-badge>-->
+          <!--        <p class="action__title">-->
+          <!--          分享-->
+          <!--        </p>-->
+          <!--        <el-badge class="action__box" :value="0" hidden>-->
+          <!--          <span class="action__item">-->
+          <!--            <i class="action__icon iconfont icon-weibo" />-->
+          <!--          </span>-->
+          <!--        </el-badge>-->
+          <!--        <el-badge class="action__box" :value="0" hidden>-->
+          <!--          <span class="action__item">-->
+          <!--            <i class="action__icon iconfont icon-qq" />-->
+          <!--          </span>-->
+          <!--        </el-badge>-->
+          <!--        <el-badge class="action__box" :value="0" hidden>-->
+          <!--          <span class="action__item">-->
+          <!--            <i class="action__icon iconfont icon-weixin" />-->
+          <!--          </span>-->
+          <!--        </el-badge>-->
         </div>
       </div>
       <el-row ref="detail" type="flex" :gutter="24">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
           <el-card class="main">
             <!-- 文章内容 -->
-            <article-content :data="info" />
+            <article-content ref="articleContent" :data="info" />
             <!-- 评论 -->
             <article-comment ref="comment" v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
             <!-- 评论列表 -->
@@ -79,6 +84,7 @@
               {{ item.title }}
             </side-menu-item>
           </side-menu>
+          <article-toc :toc="tocList" class="side-article-toc" />
         </el-col>
       </el-row>
     </div>
@@ -87,6 +93,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import stickybits from 'stickybits'
 import { mapActions, mapMutations } from 'vuex'
 import { getToken } from '@/libs/utils'
 import sideAuthor from '@/components/side-author'
@@ -94,19 +101,20 @@ import articleContent from '@/components/article-content'
 import articleComment from '@/components/article-comment'
 import articleCommentList from '@/components/article-comment-list'
 import articleItem from '@/components/article-item'
+import articleToc from '@/components/article-toc'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import layout from '@/components/layout'
 export default {
-  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, layout },
-  head() {
-    return {
-      title: this.info.title || '',
-      meta: [
-        { hid: 'description', name: 'description', content: this.info.description },
-        { hid: 'description', name: 'keyword', content: this.info.description },
-        { name: 'aplus-xplug', content: 'NONE' }
-      ]
+  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, articleToc, layout },
+  filters: {
+    toPath(id) {
+      return {
+        name: 'article-detail-id',
+        params: {
+          id
+        }
+      }
     }
   },
   async asyncData({ app, params }) {
@@ -151,7 +159,8 @@ export default {
       page: 0, // 热门文章当前分页
       totalPage: 0, // 热门文章总分页数
       hotArticleList: [], // 热门文章
-      entryTime: new Date().getTime() // 进入时间
+      entryTime: new Date().getTime(), // 进入时间
+      tocList: [] // 文章目录列表
     }
   },
   computed: {
@@ -168,6 +177,9 @@ export default {
   mounted() {
     this.init()
   },
+  beforeDestroy() {
+    this.addVisitor()
+  },
   methods: {
     ...mapActions('user', ['visitorLogin', 'getUserInfo']),
     ...mapMutations('user', ['SET_HAS_LOGIN']),
@@ -177,6 +189,7 @@ export default {
     },
     // 初始化
     async init() {
+      this.setToc()
       if (getToken()) {
         return
       }
@@ -188,6 +201,18 @@ export default {
       } catch (err) {
         this.$message.error(err)
       }
+    },
+    // 获取目录
+    setToc() {
+      // 获取目录列表
+      this.$refs.articleContent.getToc().then((toc) => {
+        this.tocList = toc
+      })
+      // 设置沾性定位
+      stickybits('.side-article-toc', {
+        stickyBitStickyOffset: 100,
+        useStickyClasses: true
+      })
     },
     // 点击评论聚焦
     goComment() {
@@ -286,18 +311,15 @@ export default {
       })
     }
   },
-  filters: {
-    toPath(id) {
-      return {
-        name: 'article-detail-id',
-        params: {
-          id
-        }
-      }
+  head() {
+    return {
+      title: this.info.title || '',
+      meta: [
+        { hid: 'description', name: 'description', content: this.info.description },
+        { hid: 'description', name: 'keyword', content: this.info.description },
+        { name: 'aplus-xplug', content: 'NONE' }
+      ]
     }
-  },
-  beforeDestroy() {
-    this.addVisitor()
   }
 }
 </script>
@@ -325,7 +347,6 @@ export default {
     }
   }
   .detail {
-    padding-top: 100px;
     background-color: #ffffff;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='1' y2='0' gradientTransform='rotate(0,0.5,0.5)'%3E%3Cstop offset='0' stop-color='%230FF'/%3E%3Cstop offset='1' stop-color='%23CF6'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' x2='0' y1='0' y2='1' gradientTransform='rotate(0,0.5,0.5)'%3E%3Cstop offset='0' stop-color='%23F00'/%3E%3Cstop offset='1' stop-color='%23FC0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23FFF' fill-opacity='0' stroke-miterlimit='10'%3E%3Cg stroke='url(%23a)' stroke-width='8.58'%3E%3Cpath transform='translate(-4.9 -2.8) rotate(-2.8 1409 581) scale(0.979)' d='M1409 581 1450.35 511 1490 581z'/%3E%3Ccircle stroke-width='2.8600000000000003' transform='translate(-17.5 7) rotate(-1.4 800 450) scale(0.997)' cx='500' cy='100' r='40'/%3E%3Cpath transform='translate(-4.9 10.5) rotate(-17.5 401 736) scale(0.997)' d='M400.86 735.5h-83.73c0-23.12 18.74-41.87 41.87-41.87S400.86 712.38 400.86 735.5z'/%3E%3C/g%3E%3Cg stroke='url(%23b)' stroke-width='2.6'%3E%3Cpath transform='translate(42 4.2) rotate(-1.05 150 345) scale(1.007)' d='M149.8 345.2 118.4 389.8 149.8 434.4 181.2 389.8z'/%3E%3Crect stroke-width='5.720000000000001' transform='translate(10.5 -21) rotate(-25.2 1089 759)' x='1039' y='709' width='100' height='100'/%3E%3Cpath transform='translate(-2.8 -2.8) rotate(-4.2 1400 132) scale(0.965)' d='M1426.8 132.4 1405.7 168.8 1363.7 168.8 1342.7 132.4 1363.7 96 1405.7 96z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed;
@@ -334,6 +355,7 @@ export default {
   .container{
     position: relative;
     @include container;
+    margin-top: 100px;
     &__fix_top{
       position: fixed;
     }
@@ -389,6 +411,9 @@ export default {
   }
   .side__list {
     margin-top: 16px;
+  }
+  .side-article-toc {
+    margin-top: 20px;
   }
   /deep/ .recommend.article-item {
     border-color: transparent !important;

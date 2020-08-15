@@ -14,8 +14,8 @@
     <h1 class="title">
       {{ _datas.title }}
     </h1>
-    <markdown-view :value="_datas.content" class="content" />
-<!--    <article v-html="_datas.content" class="content markdown" />-->
+    <markdown-view :ref="markdownView" :value="_datas.content" class="content" />
+    <!--    <article v-html="_datas.content" class="content markdown" />-->
   </article>
 </template>
 
@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-
+      markdownView: `ref-${(new Date().getTime() + Math.random() * 10000).toFixed(0)}`
     }
   },
   computed: {
@@ -48,6 +48,11 @@ export default {
         title: data.title || '',
         visitorCount: data.visitor_count || 0
       }
+    }
+  },
+  methods: {
+    getToc() {
+      return this.$refs[this.markdownView].getToc()
     }
   }
 }
