@@ -55,14 +55,14 @@ export default {
   /deep/ .el-menu--horizontal .el-menu-item,
   /deep/ .el-submenu__title {
     transition: all .3s ease;
-    color: var(--color, #2f1c6a) !important;
+    color: var(--color, #2f1d5d) !important;
     &:not(.is-disabled):hover {
       background-color: transparent !important;
       opacity: .6;
     }
     &.is-active {
       border-bottom-color: transparent !important;
-      color: var(--activeColor, #a593e0) !important;
+      color: var(--activeColor, #7e8dce) !important;
     }
   }
 }

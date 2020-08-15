@@ -9,13 +9,15 @@
       :body-class="headerBodyClass"
     />
     <slot />
-    <backtop :show="navbarColored" />
-    <div
-      v-show="showProgress"
-      class="progress"
-    >
+    <backtop :show="navbarColored">
       {{ progress }}%
-    </div>
+    </backtop>
+<!--    <div-->
+<!--      v-show="showProgress"-->
+<!--      class="progress"-->
+<!--    >-->
+<!--      {{ progress }}%-->
+<!--    </div>-->
   </div>
 </template>
 

@@ -84,8 +84,8 @@ export default {
       let color = ''
       let activeColor = ''
       if (this._theme === 'white') {
-        color = '#2f1c6a'
-        activeColor = '#a593e0'
+        color = '#2f1d5d'
+        activeColor = '#7e8dce'
       } else if (this._theme === 'black') {
         color = '#ffffff'
         activeColor = '#f4f4f4'

@@ -1,7 +1,8 @@
 <template>
   <transition name="fade">
-    <div class="backtop" v-show="_show" @click="handleClick">
+    <div class="backtop" v-show="_show" @click="handleClick" title="返回顶部">
       <i class="el-icon-caret-top backtop__icon"></i>
+      <span class="backtop__text"><slot /></span>
     </div>
   </transition>
 </template>
@@ -46,16 +47,36 @@ export default {
     bottom: 90px;
     width: 44px;
     height: 44px;
-    line-height: 40px;
+    line-height: 44px;
     border-radius: 50%;
     background: rgba(white, .8);
     box-shadow: 2px 2px 8px rgba($primary, .3);
     text-align: center;
     cursor: pointer;
     &__icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       font-size: 26px;
-      vertical-align: middle;
       color: $titleColor;
+      opacity: 0;
+      transition: all .2s ease;
+    }
+    &__text {
+      color: $titleColor;
+      font-weight: bold;
+      font-size: 16px;
+      opacity: 1;
+      transition: all .2s ease;
+    }
+    &:hover {
+      .backtop__icon {
+        opacity: 1;
+      }
+      .backtop__text {
+        opacity: 0;
+      }
     }
   }
 
