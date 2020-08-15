@@ -41,7 +41,7 @@
         <i slot="reference" class="el-icon-more more__icon" />
       </el-popover>
     </el-row>
-    <div class="main">
+    <div class="main" @click="toDetail">
       <el-image
         v-if="showImage && data.image"
         :src="data.image"
