@@ -44,7 +44,7 @@ export default {
           avatar: ''
         },
         content: data.content,
-        time: data.create_time ? dayjs(data.create_time).format('YYYY-MM-DD hh:mm:ss') : '',
+        time: data.create_time ? dayjs(data.create_time).format('YYYY-MM-DD HH:mm:ss') : '',
         title: data.title || '',
         visitorCount: data.visitor_count || 0
       }
