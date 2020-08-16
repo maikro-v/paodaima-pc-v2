@@ -94,7 +94,7 @@ export default {
       localStorage.setItem('markdownContent', e)
     },
     handleFullScreen(status, value) {
-      console.log(status, value)
+      // console.log(status, value)
     }
   }
 }

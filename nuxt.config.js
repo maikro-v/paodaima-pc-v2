@@ -40,7 +40,8 @@ module.exports = {
     '@/plugins/element-ui',
     '@/plugins/axios',
     '@/plugins/router',
-    { src: '@/plugins/vue-mavon-editor', srr: false }
+    { src: '@/plugins/vue-mavon-editor', srr: false },
+    { src: '@/plugins/vue-cropper', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules

@@ -141,7 +141,6 @@ export default {
         totalPage: hotArticleData.data.page.total_page
       }
     } catch (err) {
-      console.log(err)
       return err
     }
   },

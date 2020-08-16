@@ -110,7 +110,6 @@ export default {
   },
   computed: {
     isLoadEnd() {
-      console.log(this.page >= this.totalPage)
       return this.page >= this.totalPage || this.scrollDisabled
     }
   },
@@ -139,7 +138,6 @@ export default {
         this.scrollDisabled = false
         return Promise.resolve(data.data)
       } catch (err) {
-        // console.log(err)
         // this.$message.error(err)
       }
     }

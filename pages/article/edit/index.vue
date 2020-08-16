@@ -33,7 +33,7 @@
               :show-file-list="false"
               :before-upload="beforeUpload"
               action="/api/upload"
-              class="upload-demo"
+              class="upload"
             >
               <img v-if="forms.image" :src="forms.image" class="upload__img" alt="图片上传">
               <div v-else class="upload-text">
@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div slot="tip" class="el-upload__tip">
-                建议尺寸为320*180像素或同比例的jpg/png/git文件，且不超过500kb
+                建议尺寸为320*198像素或同比例的jpg/png/git文件，且不超过500kb
               </div>
             </el-upload>
           </el-form-item>
@@ -131,6 +131,15 @@
         </section>
       </el-form>
     </main>
+    <image-cropper
+      ref="imageCropper"
+      v-model="showCropper"
+      :img="cropperImg"
+      :crop-width="320"
+      :crop-height="198"
+      @confirm="cropConfirm"
+      @cancel="cropCancel"
+    />
     <!--    <footer class="footer">-->
     <!--      <el-button type="primary" size="small" @click="submit('form')">-->
     <!--        保存并发布-->
@@ -144,15 +153,18 @@ import { mapState, mapActions } from 'vuex'
 import markdownEditor from '@/components/markdown-editor'
 import logo from '@/components/logo'
 import btn from '@/components/btn'
+import imageCropper from '@/components/image-cropper'
 // import MarkdownNice from 'markdown-nice'
 export default {
   middleware: 'accountVerify',
-  components: { markdownEditor, logo, btn },
+  components: { markdownEditor, logo, btn, imageCropper },
   data() {
     return {
       tempTag: '',
       isShowAddTag: false,
       addTagLoading: false,
+      showCropper: false,
+      cropperImg: '',
       forms: {
         id: null,
         title: '',
@@ -287,17 +299,31 @@ export default {
     resetForm(name) {
       this.$refs[name].resetFields()
     },
+    cropConfirm(res) {
+      this.forms.image = res
+      this.cropperImg = ''
+    },
+    cropCancel() {
+      this.cropperImg = ''
+    },
     beforeUpload(res) {
-      const formdata = new FormData()
-      formdata.append('files', res)
-      this.$api.upload.upload(formdata).then(({ data }) => {
-        this.forms.image = data[0].url
-      }).catch((err) => {
-        this.$notify.error({
-          title: '错误',
-          message: err
-        })
-      })
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.cropperImg = e.target.result
+        this.showCropper = true
+      }
+      reader.readAsDataURL(res)
+      // const formdata = new FormData()
+      // formdata.append('files', res)
+      // this.$api.upload.upload(formdata).then(({ data }) => {
+      //   this.forms.image = data[0].url
+      // }).catch((err) => {
+      //   this.$notify.error({
+      //     title: '错误',
+      //     message: err
+      //   })
+      // })
+      return false
     }
   },
   head() {
@@ -321,7 +347,7 @@ export default {
     height: 60px;
     background: white;
     padding: 0 20px;
-    z-index: 9999;
+    z-index: 300;
     box-shadow: 0 0 8px rgba(0, 0, 0, .1);
   }
   .container {
@@ -343,7 +369,7 @@ export default {
   /*}*/
   .form {
     &__item {
-      width: 360px;
+      width: 320px;
     }
     & .title {
       margin-bottom: 18px;
@@ -358,6 +384,10 @@ export default {
     &__img {
       width: 100%;
       height: 100%;
+    }
+    /deep/ .el-upload-dragger {
+      width: 320px;
+      height: 198px;
     }
   }
   .footer {

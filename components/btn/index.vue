@@ -44,11 +44,19 @@ export default {
     color: $titleColor;
     background: transparent;
     outline: none;
+    border: none;
     &_default {
       border: 1px solid #dee2e6;
     }
     &_text {
       border: 1px solid transparent;
+    }
+    &_primary {
+      background: $primary;
+      color: white;
+      &:hover {
+        background-color: $primary !important;
+      }
     }
     &_round {
       border-radius: 30px;
