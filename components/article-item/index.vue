@@ -223,14 +223,7 @@ export default {
     }
     &__img {
       width: 100%;
-      max-height: 500px;
       margin-bottom: 10px;
-      @media screen and (max-width: 1500px) {
-        max-height: 440px;
-      }
-      @media screen and (max-width: 1260px) {
-        max-height: 380px;
-      }
     }
     &__tag {
       margin-top: 20px;
