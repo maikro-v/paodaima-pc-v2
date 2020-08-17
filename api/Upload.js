@@ -8,4 +8,8 @@ export default class Upload {
   upload(data) {
     return this.http.post(`${this.base}`, data)
   }
+
+  uploadBase(data) {
+    return this.http.post(`${this.base}/base`, data)
+  }
 }

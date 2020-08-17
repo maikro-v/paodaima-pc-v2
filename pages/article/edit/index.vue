@@ -302,6 +302,16 @@ export default {
     cropConfirm(res) {
       this.forms.image = res
       this.cropperImg = ''
+      this.$api.upload.uploadBase({
+        base: res
+      }).then(({ data }) => {
+        this.forms.image = data[0].url
+      }).catch((err) => {
+        this.$notify.error({
+          title: '错误',
+          message: err
+        })
+      })
     },
     cropCancel() {
       this.cropperImg = ''
@@ -313,16 +323,6 @@ export default {
         this.showCropper = true
       }
       reader.readAsDataURL(res)
-      // const formdata = new FormData()
-      // formdata.append('files', res)
-      // this.$api.upload.upload(formdata).then(({ data }) => {
-      //   this.forms.image = data[0].url
-      // }).catch((err) => {
-      //   this.$notify.error({
-      //     title: '错误',
-      //     message: err
-      //   })
-      // })
       return false
     }
   },
