@@ -136,7 +136,7 @@
       v-model="showCropper"
       :img="cropperImg"
       :crop-width="320"
-      :crop-height="198"
+      :crop-height="180"
       @confirm="cropConfirm"
       @cancel="cropCancel"
     />

@@ -21,6 +21,7 @@
             <vue-cropper
               :ref="ref"
               :img="img"
+              :enlarge="2"
               :auto-crop="true"
               :fixed-box="true"
               :auto-crop-width="cropWidth"
