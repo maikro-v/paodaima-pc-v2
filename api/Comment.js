@@ -2,11 +2,11 @@ import Api from './Api'
 export default class Comment {
   constructor(http) {
     this.http = new Api(http)
-    this.base = '/api/comment'
+    this.base = '/api/v2/comment'
   }
 
-  page(data) {
-    return this.http.page(`${this.base}/page`, data)
+  list(data) {
+    return this.http.get(`${this.base}`, data)
   }
 
   add(data) {

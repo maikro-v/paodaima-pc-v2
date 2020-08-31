@@ -45,9 +45,20 @@
             <!-- 文章内容 -->
             <article-content ref="articleContent" :data="info" />
             <!-- 评论 -->
-            <article-comment ref="comment" v-model="commentContent" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
+            <div class="comment">
+              <p class="comment__title">
+                评论
+              </p>
+              <article-comment ref="comment" :loading="isShowCommentLoading" class="main__comment" @on-submit="handleComment" />
+            </div>
             <!-- 评论列表 -->
-            <article-comment-list :loading="isShowReplyLoading" :data="commentList" @on-submit="handleCommentReply" />
+            <div class="comment-list">
+              <article-comment-item
+                v-for="item in commentList"
+                :key="item.id"
+                :item="item"
+              />
+            </div>
             <!-- 查看更多评论 -->
             <div class="main__btn">
               <el-button v-show="!isHideMoreComment" type="primary" size="mini" @click="loadComment">
@@ -95,18 +106,18 @@
 import dayjs from 'dayjs'
 import stickybits from 'stickybits'
 import { mapActions, mapMutations } from 'vuex'
-import { getToken } from '@/libs/utils'
 import sideAuthor from '@/components/side-author'
 import articleContent from '@/components/article-content'
 import articleComment from '@/components/article-comment'
-import articleCommentList from '@/components/article-comment-list'
+import articleCommentItem from '@/components/article-comment-item'
 import articleItem from '@/components/article-item'
 import articleToc from '@/components/article-toc'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import layout from '@/components/layout'
 export default {
-  components: { sideAuthor, articleContent, articleComment, articleCommentList, sideMenu, sideMenuItem, articleItem, articleToc, layout },
+  components: { sideAuthor, articleContent, articleComment, articleCommentItem, sideMenu, sideMenuItem, articleItem, articleToc, layout },
+  // components: { sideAuthor, articleContent, sideMenu, sideMenuItem, articleItem, articleToc, layout },
   filters: {
     toPath(id) {
       return {
@@ -159,7 +170,8 @@ export default {
       totalPage: 0, // 热门文章总分页数
       hotArticleList: [], // 热门文章
       entryTime: new Date().getTime(), // 进入时间
-      tocList: [] // 文章目录列表
+      tocList: [], // 文章目录列表
+      commentReplyTarget: null // 回复评论的对象
     }
   },
   computed: {
@@ -176,9 +188,9 @@ export default {
   mounted() {
     this.init()
   },
-  beforeDestroy() {
-    this.addVisitor()
-  },
+  // beforeDestroy() {
+  //   this.addVisitor()
+  // },
   methods: {
     ...mapActions('user', ['visitorLogin', 'getUserInfo']),
     ...mapMutations('user', ['SET_HAS_LOGIN']),
@@ -187,19 +199,8 @@ export default {
       this.getData()
     },
     // 初始化
-    async init() {
+    init() {
       this.setToc()
-      if (getToken()) {
-        return
-      }
-      // 如果用户没有登录，需要先登录，增加访客接口需要
-      try {
-        // 游客身份登录
-        await this.visitorLogin()
-        // await this.getUserInfo()
-      } catch (err) {
-        this.$message.error(err)
-      }
     },
     // 获取目录
     setToc() {
@@ -229,7 +230,7 @@ export default {
         } else {
           this.$message.info('已取消点赞')
           this.info.like_count--
-          this.info.like_count = this.info.like_count < 0 ? 0 : this.info.like_count
+          this.info.like_count = Math.max(this.info.like_count, 0)
         }
       })
     },
@@ -242,45 +243,34 @@ export default {
       })
     },
     // 评论
-    handleComment() {
+    handleComment(data) {
       this.isShowCommentLoading = true
-      this.handleCommentSubmit({
+      this.$api.comment.add({
         topic_id: this.id,
-        content: this.commentContent
-      })
-    },
-    // 回复评论
-    handleCommentReply(row) {
-      this.isShowReplyLoading = true
-      this.handleCommentSubmit({
-        topic_id: this.id,
-        content: row.value,
-        target_id: row.target.id,
-        target_user_id: row.target.user_id,
-        comment_id: row.root
-      })
-    },
-    // 提交评论
-    handleCommentSubmit(data) {
-      this.$api.comment.add(data).then(() => {
-        this.$message.success('评论成功')
-        this.commentContent = ''
-        // this.getCommentList()
+        username: data.name,
+        email: data.email,
+        content: data.context
+      }).then(({ data }) => {
+        this.$notify.success('留言成功')
+        this.commentList.unshift(data)
       }).catch((err) => {
-        this.$message.error(err)
+        this.$notify.error(err)
       }).finally(() => {
         this.isShowCommentLoading = false
-        this.isShowReplyLoading = false
       })
+    },
+    handleReply(item) {
+      this.commentReplyTarget = item.id
     },
     // 获取评论列表
     getCommentList() {
-      this.$api.comment.page({
-        page: this.commentPage,
+      this.$api.comment.list({
+        isPage: 1,
+        pageNum: this.commentPage,
         topic_id: this.id
       }).then(({ data }) => {
         this.commentList.push(...data.data)
-        this.commentTotalPage = data.page.total_page
+        this.commentTotalPage = data.page.totalPage
       }).catch((err) => {
         this.$message.error(err)
       })
@@ -367,6 +357,16 @@ export default {
       text-align: center;
       margin-top: 20px;
     }
+  }
+  .comment {
+    &__title {
+      @include fontMain;
+      text-align: center;
+    }
+  }
+  .comment-list {
+    margin-top: 10px;
+    display: block;
   }
   .action {
     // position: fixed;

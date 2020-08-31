@@ -1,5 +1,5 @@
 import api from '@/api'
-import { getToken, getVisitorToken, setVisitorToken } from '@/libs/utils'
+import { getToken, getVisitorToken } from '@/libs/utils'
 
 export default ({ $axios, redirect, store, app }, inject) => {
   const isClient = process.client // 是否客户端环境
@@ -18,7 +18,7 @@ export default ({ $axios, redirect, store, app }, inject) => {
     return config
   })
   $axios.onResponse((response) => {
-    if (response.data.status === 200) {
+    if (response.data.status === 200 || response.data.code === 200) {
       return response.data
     } else {
       return Promise.reject(response)
@@ -26,19 +26,8 @@ export default ({ $axios, redirect, store, app }, inject) => {
   })
   $axios.onError(({ response, data }) => {
     if (response.status === 401) {
-      if (getToken()) {
-        // 用户身份登录失效
-        store.dispatch('logout')
-        return Promise.resolve(data)
-      } else {
-        // 游客身份登录失效，自动登录
-        return app.$api.user.visitorLogin().then(({ data }) => {
-          setVisitorToken(data)
-          return Promise.resolve(data)
-        }).catch((err) => {
-          return Promise.reject(err)
-        })
-      }
+      store.dispatch('logout')
+      return Promise.resolve(data)
     } else if (data.status === 400) {
       return Promise.reject(data.msg)
     } else {

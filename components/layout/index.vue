@@ -92,7 +92,7 @@ export default {
       const totalHeight = document.documentElement.scrollHeight
       const height = document.documentElement.clientHeight
       this.navbarColored = scrollTop > this.headerColoredDistance
-      this.progress = Math.ceil((scrollTop / (totalHeight - height)) * 100)
+      this.progress = Math.min(Math.ceil((scrollTop / (totalHeight - height)) * 100), 100)
       this.progressTop = scrollTop
       this.onScrollMove(scrollTop, totalHeight)
       if (Math.ceil(scrollTop + height) >= totalHeight - this.threshold && !this.scrollDisabled) {
