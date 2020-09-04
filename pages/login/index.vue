@@ -1,10 +1,11 @@
 <template>
   <div class="login">
+    <div id="bg" class="login__bg" />
     <div class="login__container">
       <h1 class="title">
         LOGIN
       </h1>
-      <el-form ref="form" :model="form" :rules="rules" class="form">
+      <el-form ref="form" :model="form" :rules="rules" class="form" @submit.native.prevent="handleSubmit('form')">
         <el-form-item prop="email">
           <el-input v-model="form.email" placeholder="输入邮箱" />
         </el-form-item>
@@ -12,7 +13,7 @@
           <el-input v-model="form.password" type="password" placeholder="输入密码" />
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loginLoading" type="primary" class="form__btn" @click="handleSubmit('form')">
+          <el-button :loading="loginLoading" type="primary" native-type="submit" class="form__btn" @click="handleSubmit('form')">
             登录
           </el-button>
         </el-form-item>
@@ -23,6 +24,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import particleLogin from '@/assets/particles/login.json'
 export default {
   data() {
     return {
@@ -43,8 +45,14 @@ export default {
       }
     }
   },
+  mounted() {
+    this.createBg()
+  },
   methods: {
     ...mapActions('user', ['login']),
+    createBg() {
+      particlesJS('bg', particleLogin)
+    },
     handleSubmit(name) {
       this.loginLoading = true
       this.$refs[name].validate((valid) => {
@@ -84,22 +92,34 @@ export default {
 
 <style lang="scss" scoped>
   .login {
-    /*background: ;*/
+    position: relative;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
+    background: rgb(35, 39, 65);
     &__container {
+      position: absolute;
+      left: 50%;
+      top: 50%;
       width: 80%;
       max-width: 380px;
       padding: 10px 20px 30px;
-      background: white;
-      margin: 100px auto;
+      background: rgba(97, 109, 143, .9);
       box-shadow: 0 0 10px rgba($primary, .3);
       border-radius: 4px;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+    &__bg {
+      width: 100%;
+      height: 100%;
     }
   }
   .title {
     font-size: 30px;
     text-align: center;
     margin: 20px 0;
+    color: white;
   }
   .form {
     /deep/ .el-form-item {

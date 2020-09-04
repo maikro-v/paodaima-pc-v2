@@ -59,7 +59,7 @@ import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import appFooter from '@/components/app-footer'
 import layout from '@/components/layout'
-import particleJson from '@/assets/particles.json'
+import particleHome from '@/assets/particles/home.json'
 export default {
   components: { articleItem, sideMenu, sideMenuItem, layout, appFooter },
   filters: {
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     particle() {
-      particlesJS('banner', particleJson)
+      particlesJS('banner', particleHome)
     },
     load() {
       this.page++
