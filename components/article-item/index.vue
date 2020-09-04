@@ -3,13 +3,13 @@
     <el-row type="flex" justify="center" class="header">
       <el-col>
         <h5 class="header__title" @click="toDetail">
-          <el-tag
-            v-if="data.classify"
-            effect="dark"
-            size="mini"
-          >
-            {{ data.classify }}
-          </el-tag>
+<!--          <el-tag-->
+<!--            v-if="data.classify"-->
+<!--            effect="dark"-->
+<!--            size="mini"-->
+<!--          >-->
+<!--            {{ data.classify }}-->
+<!--          </el-tag>-->
           {{ data.title }}
         </h5>
       </el-col>

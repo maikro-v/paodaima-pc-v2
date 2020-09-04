@@ -54,12 +54,12 @@
 </template>
 
 <script>
-import constraints from '@/libs/matter/constraints'
 import articleItem from '@/components/article-item'
 import sideMenu from '@/components/side-menu'
 import sideMenuItem from '@/components/side-menu-item'
 import appFooter from '@/components/app-footer'
 import layout from '@/components/layout'
+import particleJson from '@/assets/particles.json'
 export default {
   components: { articleItem, sideMenu, sideMenuItem, layout, appFooter },
   filters: {
@@ -114,15 +114,11 @@ export default {
     }
   },
   mounted() {
-    // this.renderMatter()
+    this.particle()
   },
   methods: {
-    renderMatter() {
-      const dom = document.getElementById('banner')
-      constraints(dom, {
-        width: document.documentElement.clientWidth,
-        height: 600
-      })
+    particle() {
+      particlesJS('banner', particleJson)
     },
     load() {
       this.page++

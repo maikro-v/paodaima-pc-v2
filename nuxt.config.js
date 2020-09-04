@@ -41,7 +41,8 @@ module.exports = {
     '@/plugins/axios',
     '@/plugins/router',
     { src: '@/plugins/vue-mavon-editor', srr: false },
-    { src: '@/plugins/vue-cropper', ssr: false }
+    { src: '@/plugins/vue-cropper', ssr: false },
+    { src: '@/plugins/particles', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules

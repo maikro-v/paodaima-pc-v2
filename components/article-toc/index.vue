@@ -3,7 +3,7 @@
     <div class="article-toc__title">
       目录
     </div>
-    <article-toc-el v-for="item in _toc" :key="item.id" :tag="item.tag" :url="`#${item.id}`">
+    <article-toc-el v-for="item in _toc" :key="item.id" :tag="item.tag" @click="toFocus(item.id)">
       {{ item.title }}
     </article-toc-el>
   </div>
@@ -26,6 +26,11 @@ export default {
   computed: {
     _toc() {
       return this.toc || []
+    }
+  },
+  methods: {
+    toFocus(id) {
+      console.log(id)
     }
   }
 }
