@@ -3,7 +3,7 @@
     <div class="article-toc__title">
       目录
     </div>
-    <article-toc-el v-for="item in _toc" :key="item.id" :tag="item.tag" @click="toFocus(item.id)">
+    <article-toc-el v-for="item in _toc" :key="item.id" :tag="item.tag" @click.native="toFocus(item.id)">
       {{ item.title }}
     </article-toc-el>
   </div>
@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     toFocus(id) {
-      console.log(id)
+      const scrollTop = document.documentElement.scrollTop
+      const top = document.querySelector(`#${id}`).getBoundingClientRect().top + scrollTop - 90
+      window.scrollTo(0, top)
     }
   }
 }

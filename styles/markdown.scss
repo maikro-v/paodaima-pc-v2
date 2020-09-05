@@ -23,4 +23,8 @@
       background: url("~@/static/images/mac-navbar.png") no-repeat 14px 14px / 40px;
     }
   }
+  img {
+    max-width: 100% !important;
+    margin-bottom: 16px !important;
+  }
 }

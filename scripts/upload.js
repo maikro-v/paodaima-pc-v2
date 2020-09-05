@@ -16,9 +16,9 @@ ftp.connect({
   try {
     const remoteRoot = '/home/www/paodaima/views/pc/'
     await ftp.removeFile(remoteRoot, ['.nuxt', 'server', 'static', 'nuxt.config.js', 'package.json'])
+    await ftp.uploadDir('server', remoteRoot + 'server')
     await ftp.uploadDir('.nuxt', remoteRoot + '.nuxt')
     await ftp.uploadDir('static', remoteRoot + 'static')
-    await ftp.uploadDir('server', remoteRoot + 'server')
     await ftp.uploadFile('nuxt.config.js', remoteRoot + 'nuxt.config.js')
     await ftp.uploadFile('package.json', remoteRoot + 'package.json')
     ftp.end()

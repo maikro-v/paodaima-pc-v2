@@ -5,7 +5,7 @@
     class="detail"
     @load="load"
   >
-    <div class="container">
+    <div class="container" id="detailContainer">
       <div class="container__fix_top">
         <!-- 操作 -->
         <div class="action">

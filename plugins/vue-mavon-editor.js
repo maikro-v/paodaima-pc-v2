@@ -10,7 +10,7 @@ Vue.use(mavonEditor)
 mavonEditor.markdownIt.options.highlight = (str, lang) => {
   if (lang && hljs.getLanguage(lang)) {
     try {
-      return `<pre class="custom"><code class="hljs">${hljs.highlight(lang, str, true).value}</code></pre>`
+      return `<pre class="custom"><div class="custom__code"><code class="hljs">${hljs.highlight(lang, str, true).value}</code></div></pre>`
     } catch (__) {}
   }
   return '<pre><code class="hljs">' + mavonEditor.markdownIt.utils.escapeHtml(str) + '</code></pre>' // 使用额外的默认转义

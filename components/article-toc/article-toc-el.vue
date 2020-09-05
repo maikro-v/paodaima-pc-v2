@@ -1,13 +1,12 @@
 <template>
-  <a
-    :href="url"
+  <span
     class="article-toc-el text-over"
     :class="[`article-toc-${tag}`, {
       'article-toc-el_active': active
     }]"
   >
     <slot />
-  </a>
+  </span>
 </template>
 
 <script>
@@ -37,6 +36,7 @@ export default {
     font-size: 16px;
     color: $titleColor;
     line-height: 1.9;
+    cursor: pointer;
     &::before {
       content: '';
       position: absolute;

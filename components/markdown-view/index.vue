@@ -71,6 +71,7 @@ export default {
     }
     /deep/ img {
       max-width: 100%;
+      margin-bottom: 16px;
     }
     /deep/ pre {
       margin: 12px auto;
@@ -89,10 +90,10 @@ export default {
     /deep/ .custom {
       position: relative;
       border-radius: 6px;
-      overflow: hidden;
       box-shadow: 2px 2px 14px rgba(0, 0, 0, .42);
       padding-bottom: 10px;
       background: #272822;
+      overflow: hidden !important;
       &::before {
         content: '';
         display: block;
