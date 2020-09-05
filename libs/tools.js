@@ -6,14 +6,14 @@
  */
 export function throttle(callback, time) {
   let vaild = false
-  return function() {
+  return function(arg) {
     if (vaild) {
       return
     }
     vaild = true
     setTimeout(() => {
       vaild = false
-      callback && callback()
+      callback && callback(arg)
     }, time)
   }
 }

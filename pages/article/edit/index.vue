@@ -4,7 +4,10 @@
       <logo />
       <div class="col text-right">
         <btn round @click="submit('form')">
-          保存并发布
+          保存
+        </btn>
+        <btn round type="text" @click="handleSave">
+          存至草稿箱并退出
         </btn>
         <btn round type="text" @click="handleExit">
           退出
@@ -22,6 +25,7 @@
               <markdown-editor
                 ref="editor"
                 v-model="forms.content"
+                :auto-save-key="autoSaveKey"
                 class="editor"
                 @imgAdd="handleImgAdd"
               />
@@ -165,6 +169,7 @@ export default {
       addTagLoading: false,
       showCropper: false,
       cropperImg: '',
+      autoSaveKey: 'markdown-default',
       forms: {
         id: null,
         title: '',
@@ -209,16 +214,48 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.id) {
-      this.forms.id = this.$route.query.id
-      this.getData()
-    }
     this.getClassifyAll()
     this.getTagList()
+  },
+  mounted() {
+    try {
+      if (this.$route.query.id) {
+        this.forms.id = this.$route.query.id
+        this.autoSaveKey = `markdown-${this.forms.id}`
+        // 恢复自动保存的数据,是数据始终获取缓存中的
+        this.editorRecover(async(res) => {
+          await this.getData()
+          if (res) {
+            this.forms.content = res
+          }
+        })
+      } else {
+        // 恢复自动保存的数据
+        this.editorRecover()
+      }
+    } catch (err) {
+      this.$notify.error({
+        title: '错误',
+        message: err
+      })
+    }
   },
   methods: {
     ...mapActions('classify', ['getClassifyAll']),
     ...mapActions('tag', ['getTagList']),
+    // 恢复自动保存的数据
+    editorRecover(callback) {
+      this.$nextTick(() => {
+        const data = this.$refs.editor.recover()
+        callback && callback(data)
+      })
+    },
+    // 删除自动保存的数据
+    editorRemoveRecord() {
+      this.$nextTick(() => {
+        this.$refs.editor.remove()
+      })
+    },
     handleImgAdd(filename, imgfile) {
       const formData = new FormData()
       formData.append('files', imgfile)
@@ -254,23 +291,37 @@ export default {
       })
     },
     getData() {
-      this.$api.article.detail(this.forms.id).then(({ data }) => {
+      return this.$api.article.detail(this.forms.id).then(({ data }) => {
         this.forms = { ...this.forms, ...data }
+        return Promise.resolve()
       }).catch((err) => {
         this.$notify.error({
           title: '错误',
           message: err
         })
+        return Promise.reject(err)
       })
     },
-    handleExit() {
+    handleSave() {
       this.$router.back(-1)
+    },
+    handleExit() {
+      this.$confirm('数据还未保存，退出后将不能恢复数据，是继续退出?', '提示', {
+        confirmButtonText: '退出',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.editorRemoveRecord()
+        this.$router.back(-1)
+      })
     },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const target = this.forms.id ? this.$api.article.update(this.forms) : this.$api.article.add(this.forms)
-          target.then((res) => {
+          target.then(() => {
+            // 清除自动保存的富文本记录
+            this.editorRemoveRecord()
             if (this.forms.id) {
               this.$message.success('修改成功')
               this.$router.go(-1)

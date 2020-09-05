@@ -1,71 +1,70 @@
+/*
+ * localStorage 一个有过期特性的localStorage类
+ */
+
 class Storage {
-  /**
-   * 判断目标是否存在
-   * @param value
-   * @returns {boolean}
-   */
-  isNotExist(value) {
-    return value === null || typeof (value) === 'undefined'
-  }
-
-  /**
-   * set 方法，设置
-   * @param key String 键
-   * @param value 值
-   * @param expired writeTime 写入时间，单位：ms
-   */
-  set(key, value, expired) {
-    const data = {
-      value,
-      writeTime: Number(new Date()), // 写入时间
-      expired
-    }
-    // 值是数组，不能直接存储，需要转换 JSON.stringify
-    localStorage.setItem(key, JSON.stringify(data))
-  }
-
-  /**
-   * 获取
-   * @param key 键
+  /*
+   * 获取缓存
+   * @param { String } key 本地缓存中的指定的 key
    */
   get(key) {
-    const dataJSON = localStorage.getItem(key)
-    // 当目标不存在时直接结束
-    if (this.isNotExist(dataJSON)) {
+    let data = window.localStorage.getItem(key)
+    if (!data) {
       return null
     }
-    const data = JSON.parse(dataJSON)
-    // 当数据的存在周期未定义时，它被认为是永久的
-    if (this.isNotExist(data.expired)) {
-      return data.value
-    }
-    // 数据声明期结束时释放数据
-    if (this.isOutPeriod(data)) {
-      this.del(key)
+
+    data = JSON.parse(data)
+    // 已过期
+    if (this.validExpire(new Date().getTime(), data.writeTime, data.durationTime)) {
+      this.remove(key)
       return null
+    } else {
+      return data.data
     }
-    return data.value
   }
 
-  /**
-   * del 方法，删除
-   * @param key 键
+  /*
+   * 将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容
+   * @param { String } key 本地缓存中的指定的 key
+   * @param { Any } data 需要存储的内容，只支持原生类型、及能够通过 JSON.stringify 序列化的对象
+   * @param { Number } duration 有效时长，单位毫秒
    */
-  del(key) {
-    localStorage.removeItem(key)
+  set(key, data, duration) {
+    const obj = {
+      data, // 存储数据
+      writeTime: new Date().getTime(), // 写入时间
+      durationTime: duration // 有效时长 单位毫秒
+    }
+    window.localStorage.setItem(key, JSON.stringify(obj))
   }
 
-  /**
-   * isOutPeriod 方法，判断 value 值是否过期
-   * @param value 值
+  /*
+   * 从本地缓存中异步移除指定 key
+   * @param { String } key 本地缓存中的指定的 key
    */
-  isOutPeriod(value) {
-    if (!value.value) {
-      return true
+  remove(key) {
+    window.localStorage.removeItem(key)
+  }
+
+  /*
+   * 清理本地数据缓存
+   */
+  clear() {
+    window.localStorage.clear()
+  }
+
+  /*
+   * 验证是否过期
+   * @param { Number } nowTime 当前时间
+   * @param { Number } writeTime 缓存写入时间
+   * @param { Number } expireTime 缓存有效时长
+   */
+  validExpire(nowTime, writeTime, durationTime) {
+    if (!durationTime && durationTime !== 0) {
+      return false
     }
-    const readTime = Number(new Date())
-    return (readTime - value.writeTime) > value.expired
+    return nowTime > writeTime + durationTime
   }
 }
 
-export default Storage
+export default new Storage()
