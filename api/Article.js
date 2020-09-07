@@ -32,7 +32,7 @@ export default class Article {
 
   // 增加访客
   addVisitor(data) {
-    return this.http.post(`${this.base}/visitor`, data)
+    return this.http.post('/api/v2/visitor', data)
   }
 
   // 增加文章

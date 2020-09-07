@@ -117,7 +117,6 @@ import sideMenuItem from '@/components/side-menu-item'
 import layout from '@/components/layout'
 export default {
   components: { sideAuthor, articleContent, articleComment, articleCommentItem, sideMenu, sideMenuItem, articleItem, articleToc, layout },
-  // components: { sideAuthor, articleContent, sideMenu, sideMenuItem, articleItem, articleToc, layout },
   filters: {
     toPath(id) {
       return {
@@ -169,9 +168,9 @@ export default {
       page: 0, // 热门文章当前分页
       totalPage: 0, // 热门文章总分页数
       hotArticleList: [], // 热门文章
-      entryTime: new Date().getTime(), // 进入时间
       tocList: [], // 文章目录列表
-      commentReplyTarget: null // 回复评论的对象
+      commentReplyTarget: null, // 回复评论的对象
+      entryTime: new Date().getTime() // 进入时间
     }
   },
   computed: {
@@ -188,9 +187,9 @@ export default {
   mounted() {
     this.init()
   },
-  // beforeDestroy() {
-  //   this.addVisitor()
-  // },
+  beforeDestroy() {
+    this.addVisitor()
+  },
   methods: {
     ...mapActions('user', ['visitorLogin', 'getUserInfo']),
     ...mapMutations('user', ['SET_HAS_LOGIN']),
@@ -236,8 +235,15 @@ export default {
     },
     // 增加访客
     addVisitor() {
+      let device = ''
+      if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i))) {
+        device = 'mobile'
+      } else {
+        device = 'pc'
+      }
       this.$api.article.addVisitor({
         origin: 0, // 来源
+        device,
         stay_time: dayjs().$s - dayjs(this.entryTime).$s, // 停留时长 单位：秒
         topic_id: this.id // 文章id
       })
