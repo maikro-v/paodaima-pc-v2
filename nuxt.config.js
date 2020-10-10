@@ -8,7 +8,8 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || 'maikro,博客,it,前端' },
+      { name: 'keywords', content: 'maikro,maikro技术博客,迈克,迈克技术博客,博客,前端博客,前端教程,前端开发,前端技术,web前端,javascript,jquery,css,html,vue,react,nodejs' },
+      { hid: 'description', name: 'description', content: 'maikro技术博客，致力于分享前端学习路上的第一手资料，专注于Web开发，移动端开发、混合应用开发、前端自动化、前端工程化、NodeJs' },
       { name: 'baidu-site-verification', content: 'oqg7LFN6Zw' }
     ],
     link: [

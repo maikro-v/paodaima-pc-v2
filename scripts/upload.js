@@ -15,12 +15,13 @@ ftp.connect({
 }).then(async(conn) => {
   try {
     const remoteRoot = '/home/www/paodaima/views/pc/'
-    await ftp.removeFile(remoteRoot, ['.nuxt', 'server', 'static', 'nuxt.config.js', 'package.json'])
+    await ftp.removeFile(remoteRoot, ['.nuxt', 'server', 'static'])
     await ftp.uploadDir('server', remoteRoot + 'server')
     await ftp.uploadDir('.nuxt', remoteRoot + '.nuxt')
     await ftp.uploadDir('static', remoteRoot + 'static')
     await ftp.uploadFile('nuxt.config.js', remoteRoot + 'nuxt.config.js')
     await ftp.uploadFile('package.json', remoteRoot + 'package.json')
+    await ftp.uploadFile('pm2.json', remoteRoot + 'pm2.json')
     ftp.end()
   } catch (e) {
     console.log(e)
